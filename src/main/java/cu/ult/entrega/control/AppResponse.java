@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cu.ult.entrega.control;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -23,18 +18,6 @@ public class AppResponse<T> {
     private Collection<T> elementos;
 
     private long total;
-
-    public AppResponse(boolean success) {
-        this(success, "", null, null, 0);
-    }
-
-    public AppResponse(boolean success, String msg) {
-        this(success, msg, null, null, 0);
-    }
-
-    public AppResponse(boolean success, String msg, Collection elementos) {
-        this(success, msg, null, elementos, 0);
-    }
 
     public AppResponse(boolean success, String msg, T elemento, Collection<T> elementos, long total) {
         this.success = success;
