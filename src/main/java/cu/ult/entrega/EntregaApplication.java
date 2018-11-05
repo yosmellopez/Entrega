@@ -1,4 +1,4 @@
-package com.ult.entrega;
+package cu.ult.entrega;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

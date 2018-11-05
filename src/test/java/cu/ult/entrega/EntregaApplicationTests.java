@@ -1,4 +1,4 @@
-package com.ult.entrega;
+package cu.ult.entrega;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
