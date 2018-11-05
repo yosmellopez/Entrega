@@ -9,7 +9,7 @@
     <packaging>war</packaging>
 
     <name>Entrega</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Proyecto para el sistema de entrega</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
