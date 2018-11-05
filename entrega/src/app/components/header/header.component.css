@@ -1,0 +1,22 @@
+.example-container {
+  height: 100%;
+}
+
+.example-sidenav-content {
+
+  height: 100%;
+  padding: 20px;
+}
+
+.example-sidenav {
+  padding: 10px;
+}
+
+.text-menu {
+  color: darkgrey;
+  align-content: left;
+}
+
+.spacer {
+  width: 100%;
+}

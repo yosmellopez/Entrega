@@ -1,0 +1,29 @@
+<form class="form" [formGroup]="form"  (submit)="insertarProvincia()">
+  <h1 mat-dialog-title style="margin: 0 0">{{insertar?'Nueva Provincia':'Modificar Provincia'}}
+    <button type="button" mat-icon-button class="close-button" (click)="onNoClick()">
+      <mat-icon style="font-size: 25px">close</mat-icon>
+    </button>
+    <hr>
+  </h1>
+  <div mat-dialog-content style="min-height: 7em;">
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Codigo de la provincia" formControlName="codigo" type="number">
+      <mat-error *ngIf="form.controls['codigo'].errors?.required">Debe insertar el codigo la provincia</mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Nombre de la provincia" formControlName="nombre">
+      <mat-error *ngIf="form.controls['nombre'].errors?.required">Debe insertar el nombre de la provincia</mat-error>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions class="boton-theme">
+    <span class="spacer"></span>
+    <button type="submit" mat-raised-button cdkFocusInitial color="primary">
+      <mat-icon>check_circle</mat-icon>
+      {{insertar?'Guardar':'Modificar'}}
+    </button>
+    <button type="button" mat-raised-button (click)="onNoClick()" color="warn">
+      <mat-icon>cancel</mat-icon>
+      Cancelar
+    </button>
+  </div>
+</form>
