@@ -86,43 +86,43 @@ export class MunicipioComponent implements OnInit {
                 console.log(result);
                 this.dialog.open(Information, {
                     width: '400px',
-                    data: {mensaje: 'Se ha insertardo la Municipio:' + result.elemento.nombre}
+                    data: {mensaje: 'Se ha insertardo el municipio: ' + result.elemento.nombre}
                 });
                 this.paginator.page.emit();
             }
         });
     }
 
-    editarMunicipio(event: Event, Municipio: Municipio): void {
+    editarMunicipio(event: Event, municipio: Municipio): void {
         event.stopPropagation();
         let editDialogRef = this.dialog.open(MunicipioWindowComponent, {
-            width: '400px', data: Municipio, disableClose: true
+            width: '400px', data: municipio, disableClose: true
         });
 
         editDialogRef.afterClosed().subscribe(result => {
             if (result != false && result.success) {
                 this.dialog.open(Information, {
                     width: '400px',
-                    data: {mensaje: 'Se ha modificado la Municipio.'}
+                    data: {mensaje: 'Se ha modificado el municipio.'}
                 });
                 this.paginator.page.emit();
             }
         });
     }
 
-    eliminarMunicipio(event: Event, Municipio: Municipio): void {
+    eliminarMunicipio(event: Event, municipio: Municipio): void {
         event.stopPropagation();
         let dialogRef = this.dialog.open(Confirm, {
             width: '400px',
-            data: {mensaje: 'Desea eliminar la Municipio:<br>- ' + Municipio.nombre},
+            data: {mensaje: 'Desea eliminar los Municipio:<br>- ' + municipio.nombre},
         });
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                this.servicio.eliminarMunicipio(Municipio.id).subscribe(resp => {
+                this.servicio.eliminarMunicipio(municipio.id).subscribe(resp => {
                     if (resp.body.success) {
                         this.dialog.open(Information, {
                             width: '400px',
-                            data: {mensaje: 'Se ha eliminado el hotel.'}
+                            data: {mensaje: 'Se ha eliminado el municipio.'}
                         });
                         this.selection.clear();
                         this.paginator.page.emit();
