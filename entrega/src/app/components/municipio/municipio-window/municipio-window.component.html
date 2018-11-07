@@ -21,7 +21,9 @@
         </mat-form-field>
         <mat-form-field class="full-width">
             <mat-select matInput placeholder="Seleccione la provincia" formControlName="provincia" [compareWith]="compararProvincias">
-                <mat-option *ngFor="let provincia of provincias" [value]="provincia">{{provincia.nombre}}</mat-option>
+                <mat-option *ngFor="let provincia of provincias" [value]="provincia">
+                    {{provincia|provincia}}
+                </mat-option>
             </mat-select>
             <mat-error *ngIf="form.controls['provincia'].errors?.required">Debe seleccionar la provincia.</mat-error>
         </mat-form-field>

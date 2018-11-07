@@ -44,3 +44,7 @@ tr.element-row:not(.expanded-row):active {
 .element-description-attribution {
     opacity: 0.5;
 }
+
+.mat-column-provincia {
+    max-width: 100px;
+}

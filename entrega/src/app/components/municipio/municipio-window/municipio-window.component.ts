@@ -5,6 +5,8 @@ import {MunicipioService} from "../../../Servicios/municipio.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MensajeError} from "../../../mensaje/window.mensaje";
 import {ProvinciaService} from "../../../Servicios/provincia.service";
+import {takeUntil} from "rxjs/internal/operators";
+import {ReplaySubject} from "rxjs/index";
 
 
 @Component({
@@ -20,6 +22,7 @@ export class MunicipioWindowComponent implements OnInit {
     insertar = false;
     municipio: Municipio;
     provincias: Provincia[] = [];
+    public provinciasFiltradas: ReplaySubject<Provincia[]> = new ReplaySubject<Provincia[]>(1);
 
     constructor(public dialogRef: MatDialogRef<MunicipioWindowComponent>, @Inject(MAT_DIALOG_DATA) {id, codigo, nombre, provincia}: Municipio,
                 private service: MunicipioService, private dialog: MatDialog, private provinciaService: ProvinciaService) {
@@ -29,9 +32,7 @@ export class MunicipioWindowComponent implements OnInit {
             codigo: new FormControl(codigo, [Validators.required, Validators.maxLength(2)]),
             nombre: new FormControl(nombre, [Validators.required]),
             provincia: new FormControl(provincia, [Validators.required]),
-
         });
-
     }
 
     onNoClick(): void {
@@ -40,8 +41,10 @@ export class MunicipioWindowComponent implements OnInit {
 
     ngOnInit() {
         this.provinciaService.listarTodasProvincia().subscribe(resp => {
-            if (resp.body.success)
+            if (resp.body.success) {
                 this.provincias = resp.body.elementos;
+                this.provinciasFiltradas.next(this.provincias);
+            }
         });
     }
 

@@ -29,3 +29,7 @@ table {
     right: -6px;
     top: -7px;
 }
+
+.mat-column-acciones button:first-child {
+    margin-right: 5px;
+}
