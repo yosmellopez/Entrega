@@ -6,6 +6,7 @@
 package cu.ult.entrega.control;
 
 import cu.ult.entrega.clases.Municipio;
+import cu.ult.entrega.excepcion.ProvinciaException;
 import cu.ult.entrega.repositorio.MunicipioRepositorio;
 import cu.ult.entrega.repositorio.ProvinciaRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
+import static cu.ult.entrega.control.AppResponse.failure;
+
 
 @Controller
 public class MunicipioControler {
@@ -33,7 +36,7 @@ public class MunicipioControler {
     @Autowired
     ProvinciaRepositorio provinciaRepositorio;
 
-    @RequestMapping(value = "/municipio/")
+    @RequestMapping(value = "/municipio")
     public ModelAndView listarMunicipios(ModelMap map) {
         List<Municipio> municipios = municipioRepositorio.findAll();
         map.put("municipios", municipios);
@@ -53,7 +56,7 @@ public class MunicipioControler {
      * @param result
      * @return
      */
-    @RequestMapping(value = "/municipio/nuevo", method = RequestMethod.POST)
+    @PostMapping(value = "/municipio")
     public ResponseEntity<Municipio> insertarMunicipio(@RequestBody Municipio municipio, BindingResult result) {
         municipioRepositorio.saveAndFlush(municipio);
         return ResponseEntity.ok(municipio);
@@ -84,48 +87,11 @@ public class MunicipioControler {
         return new ResponseEntity<Municipio>(HttpStatus.NO_CONTENT);
     }
 
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorMuni> mostrarError(Exception e) {
-        String mensaje = e.getLocalizedMessage();
-
-        if (e instanceof DataIntegrityViolationException) {
-            DataIntegrityViolationException exception = (DataIntegrityViolationException) e;
-            mensaje = exception.getMostSpecificCause().getLocalizedMessage();
-        }
-        if (mensaje.contains("municipio_unico")) {
-            mensaje = "No se puede insertar este municipio porque ya existe";
-        }
-        ErrorMuni errorm = new ErrorMuni(false, mensaje);
-        return ResponseEntity.ok(errorm);
-    }
-
-}
-
-final class ErrorMuni {
-
-    private boolean success;
-
-    private String mensaje;
-
-    public ErrorMuni(boolean success, String mensaje) {
-        this.success = success;
-        this.mensaje = mensaje;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public String getMensaje() {
-        return mensaje;
-    }
-
-    public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
+    public ResponseEntity<AppResponse> mostrarError(Exception e) {
+        ProvinciaException generalException = new ProvinciaException(e);
+        return ResponseEntity.ok(failure(generalException.tratarExcepcion()).build());
     }
 
 }

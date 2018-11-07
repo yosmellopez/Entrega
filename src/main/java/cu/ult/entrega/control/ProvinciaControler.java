@@ -23,6 +23,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,31 +51,20 @@ public class ProvinciaControler {
         return ResponseEntity.ok(success(provincia).build());
     }
 
-    @PutMapping(value = "/provincia/mod/{id}")
-    public ResponseEntity<AppResponse<Provincia>> actualizarProvincia(@PathVariable("id") long id, @RequestBody Provincia provincia) {
-        System.out.println("Updating User");
-
-        Provincia currentProvinc = provinciaRepositorio.findById(id).orElseThrow(() -> new EntityNotFoundException("Provincia no encontrado"));
-
+    @PutMapping(value = "/provincia/{id}")
+    public ResponseEntity<AppResponse<Provincia>> actualizarProvincia(@PathVariable("id") Optional<Provincia> optional, @Valid @RequestBody Provincia provincia) {
+        Provincia currentProvinc = optional.orElseThrow(() -> new EntityNotFoundException("Provincia no encontrado"));
         currentProvinc.setCodigo(provincia.getCodigo());
         currentProvinc.setNombre(provincia.getNombre());
-
         provinciaRepositorio.saveAndFlush(currentProvinc);
         return ResponseEntity.ok(success(provincia).build());
     }
 
     @DeleteMapping(value = "/provincia/{id}")
-    public ResponseEntity<Provincia> deleteUser(@PathVariable("id") long id) {
-        System.out.println("Fetching & Deleting User with id " + id);
-
-        Provincia provincia = provinciaRepositorio.findById(id).orElseThrow(() -> new EntityNotFoundException("Municipio no encontrado"));
-        if (provincia == null) {
-            System.out.println("Unable to delete. User with id " + id + " not found");
-            return new ResponseEntity<Provincia>(HttpStatus.NOT_FOUND);
-        }
-
-        provinciaRepositorio.deleteById(id);
-        return new ResponseEntity<Provincia>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<AppResponse> deleteProvincia(@PathVariable("id") Optional<Provincia> optional) {
+        Provincia provincia = optional.orElseThrow(() -> new EntityNotFoundException("Provinca no encontrada."));
+        provinciaRepositorio.delete(provincia);
+        return ResponseEntity.ok(AppResponse.success("Provincia eliminada exitosamente.").build());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
