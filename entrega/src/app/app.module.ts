@@ -27,6 +27,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MensajeModule} from "./mensaje/mensaje.module";
 import { LoginComponent } from './components/login/login.component';
 import {MunicipioWindowComponent} from "./components/municipio/municipio-window/municipio-window.component";
+import { ProvinciaPipe } from './pipes/provincia.pipe';
 
 
 const rutas: Routes = [
@@ -61,7 +62,8 @@ const rutas: Routes = [
     UserMenuComponent,
     ProvinciaWindowComponent,
     LoginComponent,
-    MunicipioWindowComponent
+    MunicipioWindowComponent,
+    ProvinciaPipe
   ],
   imports: [
     BrowserModule,
@@ -76,6 +78,6 @@ const rutas: Routes = [
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents:[ProvinciaWindowComponent]
+  entryComponents:[ProvinciaWindowComponent, MunicipioWindowComponent]
 })
 export class AppModule { }

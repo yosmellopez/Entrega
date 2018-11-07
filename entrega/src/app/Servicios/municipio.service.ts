@@ -26,7 +26,7 @@ export class MunicipioService {
     }
 
     insertarMunicipio(municipio: Municipio): Observable<Respuesta<Municipio>> {
-        return this.http.post<AppResponse<Municipio>>(this.municipioUrl, Municipio, {
+        return this.http.post<AppResponse<Municipio>>(this.municipioUrl, municipio, {
             observe: "response",
             headers: {"Authorization": this.token}
         });

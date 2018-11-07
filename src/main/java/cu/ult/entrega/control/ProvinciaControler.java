@@ -45,6 +45,12 @@ public class ProvinciaControler {
         return ResponseEntity.ok(success(provincias).total(page.getTotalElements()).build());
     }
 
+    @RequestMapping(value = "/provincia/todas")
+    public ResponseEntity<AppResponse<Provincia>> listarTodasProvincias() {
+        List<Provincia> provincias = provinciaRepositorio.findAll();
+        return ResponseEntity.ok(success(provincias).total(provincias.size()).build());
+    }
+
     @PostMapping(value = "/provincia/nueva")
     public ResponseEntity<AppResponse<Provincia>> insertarProvincia(@Valid @RequestBody Provincia provincia) {
         provinciaRepositorio.saveAndFlush(provincia);

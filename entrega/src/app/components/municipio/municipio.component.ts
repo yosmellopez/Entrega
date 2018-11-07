@@ -28,7 +28,7 @@ export class MunicipioComponent implements OnInit {
     dataSource: MatTableDataSource<Municipio> = new MatTableDataSource<Municipio>();
     total: number = 0;
     pageSize: number = 10;
-    displayedColumns = ['codigo', 'nombre', 'acciones'];
+    displayedColumns = ['codigo', 'nombre', 'provincia', 'acciones'];
     selection = new SelectionModel<Municipio>(true, []);
     url: string = '';
     nombre: string = '';

@@ -25,6 +25,14 @@ export class ProvinciaService {
         });
     }
 
+    listarTodasProvincia(): Observable<Respuesta<Provincia>> {
+        let constUrl = `${this.provinciaUrl}/todas`;
+        return this.http.get<AppResponse<Provincia>>(constUrl, {
+            observe: "response",
+            headers: {"Authorization": this.token}
+        });
+    }
+
     insertarProvincia(provincia: Provincia): Observable<Respuesta<Provincia>> {
         return this.http.post<AppResponse<Provincia>>(this.provinciaUrl + "/nueva", provincia, {
             observe: "response",
