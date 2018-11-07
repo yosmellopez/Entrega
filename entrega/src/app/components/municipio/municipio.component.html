@@ -42,7 +42,7 @@
 
                             <ng-container matColumnDef="provincia">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Provincia</th>
-                                <td mat-cell *matCellDef="let element"> {{element.provincia}}</td>
+                                <td mat-cell *matCellDef="let element"> {{element.provincia|provincia}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="acciones" stickyEnd>

@@ -1,12 +1,14 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import {Pipe, PipeTransform} from '@angular/core';
+import {Provincia} from "../modelo";
 
 @Pipe({
-  name: 'provincia'
+    name: 'provincia'
 })
 export class ProvinciaPipe implements PipeTransform {
 
-  transform(value: any, args?: any): any {
-    return null;
-  }
-
+    transform(value: Provincia, args?: any): any {
+        if (value)
+            return value.nombre;
+        return "";
+    }
 }
