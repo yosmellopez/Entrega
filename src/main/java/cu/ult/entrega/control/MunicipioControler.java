@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cu.ult.entrega.control;
 
 import cu.ult.entrega.clases.Municipio;
@@ -11,7 +6,6 @@ import cu.ult.entrega.repositorio.MunicipioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,41 +24,41 @@ import java.util.stream.Collectors;
 import static cu.ult.entrega.control.AppResponse.failure;
 import static cu.ult.entrega.control.AppResponse.success;
 
-
 @RestController
 @RequestMapping("/api")
 public class MunicipioControler {
 
     @Autowired
-    MunicipioRepositorio MunicipioRepositorio;
+    MunicipioRepositorio municipioRepositorio;
 
-    @RequestMapping(value = "/Municipio")
+    @RequestMapping(value = "/municipio")
     public ResponseEntity<AppResponse<Municipio>> listarMunicipios(Pageable p) {
-        Page<Municipio> page = MunicipioRepositorio.findAll(p);
+        Page<Municipio> page = municipioRepositorio.findAll(p);
         List<Municipio> Municipios = page.getContent();
         return ResponseEntity.ok(success(Municipios).total(page.getTotalElements()).build());
     }
 
-    @PostMapping(value = "/Municipio/nueva")
+    @PostMapping(value = "/municipio")
     public ResponseEntity<AppResponse<Municipio>> insertarMunicipio(@Valid @RequestBody Municipio Municipio) {
-        MunicipioRepositorio.saveAndFlush(Municipio);
+        municipioRepositorio.saveAndFlush(Municipio);
         return ResponseEntity.ok(success(Municipio).build());
     }
 
-    @PutMapping(value = "/Municipio/{id}")
-    public ResponseEntity<AppResponse<Municipio>> actualizarMunicipio(@PathVariable("id") Optional<Municipio> optional, @Valid @RequestBody Municipio Municipio) {
-        Municipio currentProvinc = optional.orElseThrow(() -> new EntityNotFoundException("Municipio no encontrado"));
-        currentProvinc.setCodigo(Municipio.getCodigo());
-        currentProvinc.setNombre(Municipio.getNombre());
-        MunicipioRepositorio.saveAndFlush(currentProvinc);
-        return ResponseEntity.ok(success(Municipio).build());
+    @PutMapping(value = "/municipio/{id}")
+    public ResponseEntity<AppResponse<Municipio>> actualizarMunicipio(@PathVariable("id") Optional<Municipio> optional, @Valid @RequestBody Municipio municipio) {
+        Municipio currentProvinc = optional.orElseThrow(() -> new EntityNotFoundException("municipio no encontrado"));
+        currentProvinc.setCodigo(municipio.getCodigo());
+        currentProvinc.setNombre(municipio.getNombre());
+        currentProvinc.setProvincia(municipio.getProvincia());
+        municipioRepositorio.saveAndFlush(currentProvinc);
+        return ResponseEntity.ok(success(municipio).build());
     }
 
-    @DeleteMapping(value = "/Municipio/{id}")
+    @DeleteMapping(value = "/municipio/{id}")
     public ResponseEntity<AppResponse> deleteMunicipio(@PathVariable("id") Optional<Municipio> optional) {
-        Municipio Municipio = optional.orElseThrow(() -> new EntityNotFoundException("Provinca no encontrada."));
-        MunicipioRepositorio.delete(Municipio);
-        return ResponseEntity.ok(AppResponse.success("Municipio eliminada exitosamente.").build());
+        Municipio Municipio = optional.orElseThrow(() -> new EntityNotFoundException("Municipio no encontrada."));
+        municipioRepositorio.delete(Municipio);
+        return ResponseEntity.ok(AppResponse.success("Municipio eliminado exitosamente.").build());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
