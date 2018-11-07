@@ -26,6 +26,7 @@ import {ProvinciaWindowComponent} from "./components/provincia/provincia-window/
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MensajeModule} from "./mensaje/mensaje.module";
 import { LoginComponent } from './components/login/login.component';
+import { MunicipioWindowComponent } from './components/municipio-window/municipio-window.component';
 
 
 const rutas: Routes = [
@@ -59,7 +60,8 @@ const rutas: Routes = [
     SearchBarComponent,
     UserMenuComponent,
     ProvinciaWindowComponent,
-    LoginComponent
+    LoginComponent,
+    MunicipioWindowComponent
   ],
   imports: [
     BrowserModule,
