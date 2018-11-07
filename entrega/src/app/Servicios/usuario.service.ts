@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from "@angular/common/http";
-import {SERVER_API_URL} from "../app.constants";
 import {Observable} from "rxjs/index";
-import {AppResponse, Usuario, LoginStatus, Respuesta} from "../app.model";
 import {SERVER_URL} from "../contantes";
+import {AppResponse, Respuesta, Usuario} from "../modelo";
 
 @Injectable()
 export class UsuarioService {
@@ -14,10 +13,6 @@ export class UsuarioService {
 
     constructor(private http: HttpClient) {
         this.token = localStorage.getItem("user_token");
-    }
-
-    iniciarSesion(usuario: any): Observable<HttpResponse<LoginStatus>> {
-        return this.http.post<LoginStatus>(this.loginUrl, usuario, {observe: 'response'});
     }
 
     listarUsuarios(sort: string, order: string, page: number, limit: number): Observable<Respuesta<Usuario>> {

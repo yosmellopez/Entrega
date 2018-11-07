@@ -25,12 +25,12 @@ export class InicioComponent implements OnInit {
 
     iniciarSesion(event: Event) {
         event.preventDefault();
-        this.service.iniciarSesion(this.form.value).subscribe(response => {
-            if (response.body.loggedIn) {
-                localStorage.setItem("user_token", response.body.token);
-                this.principal.authenticate(response.body.username);
-                this.router.navigate([response.body.page]);
-            }
-        });
+        // this.service.iniciarSesion(this.form.value).subscribe(response => {
+        //     if (response.body.loggedIn) {
+        //         localStorage.setItem("user_token", response.body.token);
+        //         this.principal.authenticate(response.body.username);
+        //         this.router.navigate([response.body.page]);
+        //     }
+        // });
     }
 }

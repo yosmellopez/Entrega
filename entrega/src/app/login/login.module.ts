@@ -7,8 +7,6 @@ import {InicioComponent} from './inicio/inicio.component';
 import {AngularMaterialModule} from "../material.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
-import {UsuarioService} from "../services/usuario.service";
-import {SharedModule} from "../shared.module";
 
 @NgModule({
     imports: [
@@ -19,7 +17,6 @@ import {SharedModule} from "../shared.module";
         ReactiveFormsModule,
         HttpClientModule,
         RouterModule,
-        SharedModule
     ],
     declarations: [RegistroComponent, InicioComponent],
 })
