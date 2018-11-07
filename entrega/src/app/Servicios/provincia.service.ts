@@ -19,7 +19,6 @@ export class ProvinciaService {
 
     listarProvincia(sort: string, order: string, page: number, limit: number): Observable<Respuesta<Provincia>> {
         let constUrl = `${this.provinciaUrl}?sort=${sort},${order}&page=${page + 1}&limit=${limit}`;
-        console.log(constUrl);
         return this.http.get<AppResponse<Provincia>>(constUrl, {
             observe: "response",
             headers: {"Authorization": this.token}
@@ -27,7 +26,6 @@ export class ProvinciaService {
     }
 
     insertarProvincia(provincia: Provincia): Observable<Respuesta<Provincia>> {
-        console.log(provincia);
         return this.http.post<AppResponse<Provincia>>(this.provinciaUrl + "/nueva", provincia, {
             observe: "response",
             headers: {"Authorization": this.token}
@@ -36,7 +34,6 @@ export class ProvinciaService {
 
     modificarProvincia(id: number, provincia: Provincia): Observable<Respuesta<Provincia>> {
         provincia.id = id;
-        console.log(provincia);
         return this.http.put<AppResponse<Provincia>>(SERVER_URL + "api/provincia/mod/" + id, provincia, {
             observe: "response",
             headers: {"Authorization": this.token}
@@ -44,7 +41,6 @@ export class ProvinciaService {
     }
 
     eliminarProvincia(id: number): Observable<Respuesta<Provincia>> {
-        console.log(id);
         return this.http.delete<AppResponse<Provincia>>(SERVER_URL + "api/provincia/" + id, {
             observe: "response",
             headers: {"Authorization": this.token}
