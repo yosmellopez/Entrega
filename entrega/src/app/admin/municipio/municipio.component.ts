@@ -12,8 +12,8 @@ import {MunicipioWindowComponent} from "./municipio-window/municipio-window.comp
 
 @Component({
     selector: 'app-Municipio',
-    templateUrl: './Municipio.component.html',
-    styleUrls: ['./Municipio.component.css'],
+    templateUrl: './municipio.component.html',
+    styleUrls: ['./municipio.component.css'],
     animations: [
         trigger('detailExpand', [
             state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),

@@ -6,7 +6,7 @@ import {AppComponent} from './app.component';
 import {HeaderComponent} from './components/header/header.component';
 
 import {ProvinciaComponent} from "./components/provincia/provincia.component";
-import {MunicipioComponent} from "./components/municipio/municipio.component";
+import {MunicipioComponent} from "./admin/municipio/municipio.component";
 import {ConsejoPopularComponent} from "./components/consejo-popular/consejo-popular.component";
 import {SolicitudComponent} from "./components/solicitud/solicitud.component";
 import {SolicitanteComponent} from "./components/solicitante/solicitante.component";
@@ -26,7 +26,7 @@ import {ProvinciaWindowComponent} from "./components/provincia/provincia-window/
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MensajeModule} from "./mensaje/mensaje.module";
 import {LoginComponent} from './components/login/login.component';
-import {MunicipioWindowComponent} from "./components/municipio/municipio-window/municipio-window.component";
+import {MunicipioWindowComponent} from "./admin/municipio/municipio-window/municipio-window.component";
 import {ProvinciaPipe} from './pipes/provincia.pipe';
 import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
 
