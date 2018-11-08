@@ -1,49 +1,48 @@
 <mat-toolbar color="primary" class="mat-elevation-z4 mat-toolbar">
-  <mat-toolbar-row>
-    <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
-      <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-    </button>
-    <P>Gestion de Entrega de Tierra </P>
+    <mat-toolbar-row>
+        <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
+            <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+        <P>Gestion de Entrega de Tierra </P>
 
-    <span class="spacer"></span>
-    <button  mat-icon-button (click)="searchOpen = !searchOpen" >
-      <i class="material-icons">search</i>
-    </button>
-    <cdk-search-bar [open]="searchOpen"></cdk-search-bar>
-
-    <cdk-user-menu></cdk-user-menu>
-  </mat-toolbar-row>
+        <span class="spacer"></span>
+        <button mat-icon-button (click)="searchOpen = !searchOpen">
+            <i class="material-icons">search</i>
+        </button>
+        <cdk-search-bar [open]="searchOpen"></cdk-search-bar>
+        <cdk-user-menu></cdk-user-menu>
+    </mat-toolbar-row>
 </mat-toolbar>
 
 <mat-drawer-container class="example-container" [hasBackdrop]="true">
-  <mat-drawer class="example-sidenav" #drawer mode="push" role="navigation">
-    <mat-nav-list role="navigation" >
-      <mat-list-item >
-        <a matLine routerLink="/solicitud">Solicitud</a>
-      </mat-list-item>
-      <mat-list-item>
-        <a matLine routerLink="/solicitante">Solicitante</a>
-      </mat-list-item>
-      <mat-list-item>
-        <a matLine routerLink="/parcela">Parcela</a>
-      </mat-list-item>
-      <mat-divider></mat-divider>
-      <p class="text-menu">Nomencladores</p>
-      <mat-list-item>
-        <a matLine routerLink="/provincia">Provincia</a>
-      </mat-list-item>
-      <mat-list-item>
-        <a matLine routerLink="/municipio">Municipio</a>
-      </mat-list-item>
-      <mat-list-item>
-        <a matLine routerLink="/consejoPopular">Consejo Popular</a>
-      </mat-list-item>
-      <mat-list-item>
-        <a matLine routerLink="/tipoDeSuperficie">Tipo de Superficie</a>
-      </mat-list-item>
-      <mat-list-item>
-        <a matLine routerLink="/tipoDeUso">Tipo de Uso</a>
-      </mat-list-item>
-    </mat-nav-list>
-  </mat-drawer>
+    <mat-drawer class="example-sidenav" #drawer mode="push" role="navigation">
+        <mat-nav-list role="navigation">
+            <mat-list-item>
+                <a matLine routerLink="/solicitud">Solicitud</a>
+            </mat-list-item>
+            <mat-list-item>
+                <a matLine routerLink="/solicitante">Solicitante</a>
+            </mat-list-item>
+            <mat-list-item>
+                <a matLine routerLink="/parcela">Parcela</a>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <p class="text-menu">Nomencladores</p>
+            <mat-list-item>
+                <a matLine routerLink="/provincia">Provincia</a>
+            </mat-list-item>
+            <mat-list-item>
+                <a matLine routerLink="/municipio">Municipio</a>
+            </mat-list-item>
+            <mat-list-item>
+                <a matLine routerLink="/consejoPopular">Consejo Popular</a>
+            </mat-list-item>
+            <mat-list-item>
+                <a matLine routerLink="/tipoDeSuperficie">Tipo de Superficie</a>
+            </mat-list-item>
+            <mat-list-item>
+                <a matLine routerLink="/tipoDeUso">Tipo de Uso</a>
+            </mat-list-item>
+        </mat-nav-list>
+    </mat-drawer>
 </mat-drawer-container>

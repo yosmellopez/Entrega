@@ -16,7 +16,7 @@ import {TipoDeSuperficieComponent} from "./tipo-de-superficie/tipo-de-superficie
 import {TipoDeUsoComponent} from "./tipo-de-uso/tipo-de-uso.component";
 import {ProvinciaWindowComponent} from "./provincia/provincia-window/provincia-window.component";
 import {MunicipioWindowComponent} from "./municipio/municipio-window/municipio-window.component";
-import {ProvinciaPipe} from "../pipes/provincia.pipe";
+import {PipesModule} from "../pipes/pipes.module";
 
 @NgModule({
     imports: [
@@ -26,11 +26,12 @@ import {ProvinciaPipe} from "../pipes/provincia.pipe";
         ReactiveFormsModule,
         FormsModule,
         MensajeModule,
-
+        PipesModule
     ],
     declarations: [
         ProvinciaComponent,
         MunicipioComponent,
+        MunicipioWindowComponent,
         ConsejoPopularComponent,
         SolicitudComponent,
         SolicitanteComponent,
@@ -39,8 +40,7 @@ import {ProvinciaPipe} from "../pipes/provincia.pipe";
         TipoDeSuperficieComponent,
         TipoDeUsoComponent,
         ProvinciaWindowComponent,
-        MunicipioWindowComponent,
-        ProvinciaPipe
+        MunicipioWindowComponent
     ],
     entryComponents: [ProvinciaWindowComponent, MunicipioWindowComponent]
 })

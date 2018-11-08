@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
         this.servicio.iniciarSesion({username: "yosmel", password: "123"}).subscribe(resp => {
             if (resp.body.success) {
                 localStorage.setItem("user_token", resp.headers.get("Authorization"));
-                this.router.navigate(["/provincia"]);
+                this.router.navigate(["/admin/provincia"]);
             } else {
                 this.mensaje = resp.body.msg;
             }
