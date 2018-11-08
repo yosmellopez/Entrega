@@ -1,6 +1,6 @@
 package cu.ult.entrega.repositorio;
 
-import com.reservaciones.clases.Usuario;
+import cu.ult.entrega.clases.Usuario;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

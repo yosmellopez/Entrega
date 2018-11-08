@@ -35,7 +35,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         Jws<Claims> jwsClaims = rawAccessToken.parseClaims(jwtSettings.getTokenSigningKey());
         String subject = jwsClaims.getBody().getSubject();
         System.out.println(subject);
-        Usuario user = usuarioRepository.findByUsername(subject).orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+        Usuario user = usuarioRepository.findOneByUsername(subject).orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
         JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(user, user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(jwtAuthenticationToken);
         return jwtAuthenticationToken;

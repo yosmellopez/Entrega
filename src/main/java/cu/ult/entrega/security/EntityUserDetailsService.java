@@ -24,7 +24,7 @@ public class EntityUserDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(final String login) {
-        Optional<Usuario> userFromDatabase = usuarioRepository.findByUsername(login.toLowerCase());
+        Optional<Usuario> userFromDatabase = usuarioRepository.findOneByUsername(login.toLowerCase());
         return userFromDatabase.orElseThrow(() -> new UsernameNotFoundException("Nombre usuario o contraseña incorrectos"));
     }
 }

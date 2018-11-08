@@ -4,6 +4,7 @@ import cu.ult.entrega.clases.Rol;
 import cu.ult.entrega.clases.Usuario;
 import cu.ult.entrega.repositorio.RolRepository;
 import cu.ult.entrega.repositorio.UsuarioRepository;
+import cu.ult.entrega.security.LoginStatus;
 import org.hibernate.exception.SQLGrammarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -15,15 +16,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import cu.ult.entrega.util.Auth;
 
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceException;
-import javax.servlet.http.Part;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,26 +85,11 @@ public class UsuarioController {
         return ResponseEntity.ok(AppResponse.success("Usuario insertado exitosamente.").elemento(usuario).build());
     }
 
-    @PostMapping(value = "/usuario/uploadImagen")
-    public ResponseEntity<AppResponse<Imagen>> subirImagenUsuario(@RequestPart("file") Part imagenFile, @AuthenticationPrincipal Usuario usuario) throws IOException {
-        String nombre = imagenFile.getSubmittedFileName();
-        Path archivoPath = Paths.get(WebUtil.FILE_UPLOAD_DIR).resolve("imagenes/" + nombre);
-        Files.copy(imagenFile.getInputStream(), archivoPath, StandardCopyOption.REPLACE_EXISTING);
-        imagenFile.delete();
-        String direccion = "imagenes/" + nombre;
-        Imagen imagen = new Imagen(nombre, direccion);
-        imagenRepository.saveAndFlush(imagen);
-        usuario.setImagen(imagen);
-        usuarioRepository.saveAndFlush(usuario);
-        String mensaje = "Imagen " + imagen.getTitulo() + " subida exitosamente";
-        return ResponseEntity.ok(AppResponse.success(imagen).msg(mensaje).build());
-    }
-
     @PostMapping(value = "/usuario/registro")
     public ResponseEntity<AppResponse<Usuario>> registro(@RequestBody Usuario usuario) {
         System.out.println(usuario);
         usuario.setRol(rolRepository.findById(2).orElseThrow(() -> new EntityNotFoundException()));
-        usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         usuarioRepository.saveAndFlush(usuario);
         return ResponseEntity.ok(AppResponse.success(usuario)
                 .msg(String.format("Usuario %1$s registrado exitosamente", usuario.getNombreCompleto())).build());
@@ -116,11 +97,11 @@ public class UsuarioController {
 
     @PutMapping(value = "/usuario/{idUsuario}")
     public ResponseEntity<AppResponse<Usuario>> actualizarUsuario(@PathVariable("idUsuario") Usuario usuarioBd, @RequestBody Usuario usuario) {
-        Optional.ofNullable(usuario.getContrasena()).ifPresent(password -> {
+        Optional.ofNullable(usuario.getPassword()).ifPresent(password -> {
             if (!password.isEmpty())
-                usuario.setContrasena(passwordEncoder.encode(password));
+                usuario.setPassword(passwordEncoder.encode(password));
         });
-        usuarioBd.clonarDatos(usuario);
+        //usuarioBd.clonarDatos(usuario);
         usuarioRepository.saveAndFlush(usuarioBd);
         return ResponseEntity.ok(AppResponse.success(usuarioBd).build());
     }

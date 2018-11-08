@@ -5,8 +5,8 @@ package cu.ult.entrega.config;
 //import com.reservaciones.security.jwt.JwtTokenAuthenticationProcessingFilter;
 //import com.reservaciones.security.jwt.SkipPathRequestMatcher;
 //import com.reservaciones.security.jwt.token.TokenExtractor;
-//import com.reservaciones.util.MapeadorObjetos;
-//import com.reservaciones.util.MyRequestMatcher;
+//import com.reservaciones.MapeadorObjetos;
+//import com.reservaciones.MyRequestMatcher;
 
 import cu.ult.entrega.security.AjaxLoginProcessingFilter;
 import cu.ult.entrega.security.AutenticacionAjaxExitosa;

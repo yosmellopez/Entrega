@@ -100,6 +100,10 @@ public class Usuario implements UserDetails, Serializable {
         this.email = email;
     }
 
+    public String getNombreCompleto (){
+        return this.name+' '+ this.lastname;
+    }
+
     @Override
     @JsonIgnore
     public boolean isAccountNonExpired() {

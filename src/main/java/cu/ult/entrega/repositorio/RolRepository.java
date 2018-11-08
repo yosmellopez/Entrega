@@ -32,4 +32,4 @@ public interface RolRepository extends JpaRepository<Rol, Integer> {
     List<Usuario> findByEliminado(Boolean eliminado);
 }
 
-}
+
