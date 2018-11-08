@@ -13,23 +13,6 @@ import java.util.Optional;
 
 public interface RolRepository extends JpaRepository<Rol, Integer> {
 
-    String USERS_BY_LOGIN_CACHE = "usersByLogin";
-
-    Optional<Usuario> findOneByActivationKey(String activationKey);
-
-    Optional<Usuario> findOneByResetKey(String resetKey);
-
-    Optional<Usuario> findOneByCorreo(String correo);
-
-    @EntityGraph(attributePaths = "comentarios")
-    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
-    Optional<Usuario> findOneByUsername(String username);
-
-    Page<Usuario> findAllByUsernameNot(Pageable pageable, String username);
-
-    Page<Usuario> findByEliminado(Boolean eliminado, Pageable pageable);
-
-    List<Usuario> findByEliminado(Boolean eliminado);
 }
 
 

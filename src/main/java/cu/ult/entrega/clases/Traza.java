@@ -38,7 +38,7 @@ public class Traza implements Serializable {
     private String ip;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", foreignKey = @ForeignKey(name = "fk_id_usuario"))
+    @JoinColumn(name = "id_usuario", foreignKey = @ForeignKey(name = "fk_id_usuario"))
     private Usuario usuario;
 
     public Traza() {
