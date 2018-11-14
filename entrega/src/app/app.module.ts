@@ -19,11 +19,13 @@ import {UsuarioComponent} from "./usuario/usuario.component";
 import {AdminComponent} from "./admin/admin.component";
 import {HeaderComponent} from "./layout/header/header.component";
 import {PipesModule} from "./pipes/pipes.module";
+import {MenuComponent} from "./components/menu/menu.component";
 
 @NgModule({
     declarations: [
         AppComponent,
         SearchBarComponent,
+        MenuComponent,
         UserMenuComponent,
         LoginComponent,
         UsuarioComponent,
