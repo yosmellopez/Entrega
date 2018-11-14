@@ -17,6 +17,7 @@ import {TipoDeUsoComponent} from "./tipo-de-uso/tipo-de-uso.component";
 import {ProvinciaWindowComponent} from "./provincia/provincia-window/provincia-window.component";
 import {MunicipioWindowComponent} from "./municipio/municipio-window/municipio-window.component";
 import {PipesModule} from "../pipes/pipes.module";
+import { TipoDeSuperficieWindowComponent } from './tipo-de-superficie/tipo-de-superficie-window/tipo-de-superficie-window.component';
 
 @NgModule({
     imports: [
@@ -40,7 +41,8 @@ import {PipesModule} from "../pipes/pipes.module";
         TipoDeSuperficieComponent,
         TipoDeUsoComponent,
         ProvinciaWindowComponent,
-        MunicipioWindowComponent
+        MunicipioWindowComponent,
+        TipoDeSuperficieWindowComponent
     ],
     entryComponents: [ProvinciaWindowComponent, MunicipioWindowComponent]
 })
