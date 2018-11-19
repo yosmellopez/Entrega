@@ -1,10 +1,10 @@
 import {Component, OnInit, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material";
 import {Municipio, Provincia} from "../../../modelo";
-import {MunicipioService} from "../../../Servicios/municipio.service";
+import {MunicipioService} from "../../../servicios/municipio.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MensajeError} from "../../../mensaje/window.mensaje";
-import {ProvinciaService} from "../../../Servicios/provincia.service";
+import {ProvinciaService} from "../../../servicios/provincia.service";
 import {takeUntil} from "rxjs/internal/operators";
 import {ReplaySubject} from "rxjs/index";
 

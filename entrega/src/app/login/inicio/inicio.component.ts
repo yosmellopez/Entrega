@@ -1,8 +1,8 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import {Principal} from "../../Servicios/principal.service";
-import {UsuarioService} from "../../Servicios/usuario.service";
+import {Principal} from "../../servicios/principal.service";
+import {UsuarioService} from "../../servicios/usuario.service";
 
 
 @Component({

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ProvinciaService} from "../../Servicios/provincia.service";
+import {ProvinciaService} from "../../servicios/provincia.service";
 import {Router} from "@angular/router";
 
 @Component({

@@ -1,7 +1,7 @@
 import {Component, OnInit, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material";
 import {Provincia} from "../../../modelo";
-import {ProvinciaService} from "../../../Servicios/provincia.service";
+import {ProvinciaService} from "../../../servicios/provincia.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MensajeError} from "../../../mensaje/window.mensaje";
 
@@ -21,8 +21,9 @@ export class ProvinciaWindowComponent implements OnInit {
 
     constructor(public dialogRef: MatDialogRef<ProvinciaWindowComponent>, @Inject(MAT_DIALOG_DATA) {id, codigo, nombre}: Provincia,
                 private service: ProvinciaService, private dialog: MatDialog) {
-        this.insertar = id === null;
+        this.insertar = id == null;
         this.idProvincia = id;
+        console.log(this.insertar);
         this.form = new FormGroup({
             codigo: new FormControl(codigo, [Validators.required, Validators.maxLength(2)]),
             nombre: new FormControl(nombre, [Validators.required]),
