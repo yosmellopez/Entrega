@@ -13,7 +13,6 @@ import {RouterModule} from "@angular/router";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MensajeModule} from "./mensaje/mensaje.module";
 import {LoginComponent} from './components/login/login.component';
-import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
 import {AppRoutingModule} from "./app-routing";
 import {UsuarioComponent} from "./usuario/usuario.component";
 import {AdminComponent} from "./admin/admin.component";
@@ -25,12 +24,13 @@ import {MenuComponent} from "./components/menu/menu.component";
     declarations: [
         AppComponent,
         SearchBarComponent,
-        MenuComponent,
+        UserMenuComponent,
         UserMenuComponent,
         LoginComponent,
         UsuarioComponent,
         AdminComponent,
-        HeaderComponent
+        HeaderComponent,
+        MenuComponent
     ],
     imports: [
         BrowserModule,
@@ -42,7 +42,6 @@ import {MenuComponent} from "./components/menu/menu.component";
         ReactiveFormsModule,
         FormsModule,
         MensajeModule,
-        NgxMatSelectSearchModule,
         PipesModule
     ],
     providers: [],
