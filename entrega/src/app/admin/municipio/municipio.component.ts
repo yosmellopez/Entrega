@@ -1,5 +1,5 @@
 import {Component, OnInit, Inject, ViewChild} from '@angular/core';
-import {MunicipioService} from "../../Servicios/municipio.service";
+import {MunicipioService} from "../../servicios/municipio.service";
 import {Municipio} from "../../modelo";
 
 import {MatDialog, MatPaginator, MatSort, MatTable, MatTableDataSource} from "@angular/material";

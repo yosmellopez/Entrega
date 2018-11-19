@@ -1,5 +1,5 @@
 import {Component, OnInit, Inject, ViewChild} from '@angular/core';
-import {ProvinciaService} from "../../Servicios/provincia.service";
+import {ProvinciaService} from "../../servicios/provincia.service";
 import {Provincia} from "../../modelo";
 
 import {MatDialog, MatPaginator, MatSort, MatTable, MatTableDataSource} from "@angular/material";
@@ -24,7 +24,6 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 
 })
 export class ProvinciaComponent implements OnInit {
-
     dataSource: MatTableDataSource<Provincia> = new MatTableDataSource<Provincia>();
     total: number = 0;
     pageSize: number = 10;
@@ -39,6 +38,7 @@ export class ProvinciaComponent implements OnInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     @ViewChild(MatTable) table: MatTable<Provincia>;
+
 
     constructor(private servicio: ProvinciaService, private dialog: MatDialog) {
     }
