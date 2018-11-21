@@ -1,7 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
-@import "assets/css/material-components-web.css";
-@import "assets/css/style.css";
+@import "assets/css/animate.min.css";
+@import "assets/css/sweet-alert.css";
+/*@import "assets/css/material-design-iconic-font.min.css";*/
+@import "assets/css/app.min.1.css";
+@import "assets/css/app.min.2.css";
 
 html, body {
     height: 100%;

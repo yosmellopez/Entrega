@@ -25,6 +25,12 @@ export class Usuario {
     name: string;
     lastname: string;
     username: string;
+    rol: Rol;
+}
+
+export class Rol {
+    id: number;
+    name: string;
 }
 
 export class ConsejoPopular {

@@ -1,0 +1,105 @@
+<div class="lc-block toggled" id="l-login">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" value="">
+            <i class="input-helper"></i>
+            Keep me signed in
+        </label>
+    </div>
+    <form class="login-form" [formGroup]="form" (submit)="iniciarSesion()" style="padding-top: 10%" [attr.disabled]="isLoading">
+        <div class="input-group m-b-20">
+            <span class="input-group-addon" style="vertical-align: middle">
+                <i class="material-icons prefix pt-5">person_outline</i>
+            </span>
+            <div class="fg-line">
+                <mat-form-field class="full-width" style="width: 95%">
+                    <input matInput placeholder="Nombre de Usuario" formControlName="username">
+                    <mat-error *ngIf="form.controls['username'].errors?.required">Debe insertar el nombre de usuario</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="input-group m-b-20">
+            <span class="input-group-addon" style="vertical-align: middle"><i class="material-icons prefix pt-5">lock_outline</i></span>
+            <div class="fg-line">
+                <mat-form-field class="full-width" style="width: 95%">
+                    <input matInput placeholder="Contraseña" formControlName="password" type="password" #password>
+                    <mat-error *ngIf="form.controls['password'].errors?.required">Debe proporcionar una contraseña</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="">
+                <i class="input-helper"></i>
+                Keep me signed in
+            </label>
+        </div>
+
+        <button class="btn btn-login btn-danger btn-float waves-effect waves-circle waves-float" style="padding-top: 10px">
+            <i class="material-icons">arrow_forward</i>
+        </button>
+
+        <ul class="login-navigation">
+            <li data-block="#l-register" class="bgm-red">Register</li>
+            <li data-block="#l-forget-password" class="bgm-orange">Forgot Password?</li>
+        </ul>
+    </form>
+</div>
+<!-- Register -->
+<div class="lc-block" id="l-register">
+    <div class="input-group m-b-20">
+
+    </div>
+
+    <div class="input-group m-b-20">
+        <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
+        <div class="fg-line">
+            <input type="text" class="form-control" placeholder="Email Address">
+        </div>
+    </div>
+
+    <div class="input-group m-b-20">
+        <span class="input-group-addon"><i class="zmdi zmdi-male"></i></span>
+        <div class="fg-line">
+            <input type="password" class="form-control" placeholder="Password">
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" value="">
+            <i class="input-helper"></i>
+            Accept the license agreement
+        </label>
+    </div>
+
+    <a href="http://byrushan.com/projects/ma/1-5-1/jquery/login.html" class="btn btn-login btn-danger btn-float waves-effect waves-circle waves-float"><i class="zmdi zmdi-arrow-forward"></i></a>
+
+    <ul class="login-navigation">
+        <li data-block="#l-login" class="bgm-green">Login</li>
+        <li data-block="#l-forget-password" class="bgm-orange">Forgot Password?</li>
+    </ul>
+</div>
+
+<!-- Forgot Password -->
+<div class="lc-block" id="l-forget-password">
+    <p class="text-left">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu risus. Curabitur commodo lorem fringilla enim feugiat commodo sed ac lacus.</p>
+
+    <div class="input-group m-b-20">
+        <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
+        <div class="fg-line">
+            <input type="text" class="form-control" placeholder="Email Address">
+        </div>
+    </div>
+
+    <a href="http://byrushan.com/projects/ma/1-5-1/jquery/login.html" class="btn btn-login btn-danger btn-float waves-effect waves-circle waves-float"><i class="zmdi zmdi-arrow-forward"></i></a>
+
+    <ul class="login-navigation">
+        <li data-block="#l-login" class="bgm-green">Login</li>
+        <li data-block="#l-register" class="bgm-red">Register</li>
+    </ul>
+</div>

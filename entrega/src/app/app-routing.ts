@@ -12,7 +12,7 @@ const routes: Routes = [
     {
         path: '',
         component: UsuarioComponent,
-        children: [{path: '', loadChildren: './usuario/usuario.module#UsuarioModule'}]
+        children: [{path: 'usuario', loadChildren: './usuario/usuario.module#UsuarioModule'}]
     }, {
         path: '',
         component: AdminComponent,
@@ -25,8 +25,7 @@ const routes: Routes = [
         CommonModule,
         BrowserModule,
         RouterModule.forRoot(routes)
-    ],
-    exports: []
+    ]
 })
 export class AppRoutingModule {
 }
