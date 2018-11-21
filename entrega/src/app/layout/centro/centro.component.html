@@ -1,0 +1,293 @@
+<section id="main">
+    <aside id="sidebar">
+        <div class="sidebar-inner c-overflow" tabindex="1" style="overflow: hidden; outline: none;">
+            <div class="profile-menu">
+                <a href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html">
+                    <div class="profile-pic">
+                        <img src="assets/images/1.jpg" alt="">
+                    </div>
+
+                    <div class="profile-info">
+                        Malinda Hollaway
+
+                        <i class="zmdi zmdi-arrow-drop-down"></i>
+                    </div>
+                </a>
+
+                <ul class="main-menu">
+                    <li>
+                        <a href="http://byrushan.com/projects/ma/1-5-1/jquery/profile-about.html"><i class="zmdi zmdi-account"></i> View Profile</a>
+                    </li>
+                    <li>
+                        <a href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html"><i class="zmdi zmdi-input-antenna"></i> Privacy Settings</a>
+                    </li>
+                    <li>
+                        <a href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html"><i class="zmdi zmdi-settings"></i> Settings</a>
+                    </li>
+                    <li>
+                        <a href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html"><i class="zmdi zmdi-time-restore"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+
+            <ul class="main-menu">
+                <li>
+                    <a href="http://byrushan.com/projects/ma/1-5-1/jquery/index.html">
+                        <i class="zmdi zmdi-home"></i>
+                        Home
+                    </a>
+                </li>
+                <li *ngFor="let menu of rutasUsuario" routerLinkActive="active" [class.sub-menu]="menu.hasChildren">
+                    <a href="#">
+                        <i class="zmdi zmdi-widgets"></i> {{menu.title}}
+                    </a>
+
+                    <ul *ngIf="menu.hasChildren">
+                        <li *ngFor="let menuItem of menu.routes">
+                            <a class="active" [routerLink]="menuItem.path">
+                                {{menuItem.title}}
+                            </a>
+                        </li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/widgets.html">Widgets</a></li>
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html"><i class="zmdi zmdi-view-list"></i> Tables</a>
+
+                    <ul>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/tables.html">Normal Tables</a></li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/data-tables.html">Data Tables</a></li>
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html"><i class="zmdi zmdi-collection-text"></i> Forms</a>
+
+                    <ul>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/form-elements.html">Basic Form Elements</a></li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/form-components.html">Form Components</a></li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/form-examples.html">Form Examples</a></li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/form-validations.html">Form Validation</a></li>
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html"><i class="zmdi zmdi-swap-alt"></i>User Interface</a>
+                    <ul>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/colors.html">Colors</a></li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/animations.html">Animations</a></li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/box-shadow.html">Box Shadow</a></li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/buttons.html">Buttons</a></li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/icons.html">Icons</a></li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/alerts.html">Alerts</a></li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/notification-dialog.html">Notifications &amp; Dialogs</a></li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/media.html">Media</a></li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/components.html">Components</a></li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/other-components.html">Others</a></li>
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html"><i class="zmdi zmdi-trending-up"></i>Charts</a>
+                    <ul>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/flot-charts.html">Flot Charts</a></li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/other-charts.html">Other Charts</a></li>
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html"><i class="zmdi zmdi-collection-item"></i> Sample Pages</a>
+                    <ul>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/profile-about.html">Profile</a></li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/list-view.html">List View</a></li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/messages.html">Messages</a></li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/login.html">Login and Sign Up</a></li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/lockscreen.html">Lockscreen</a></li>
+                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/404.html">Error 404</a></li>
+
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div id="ascrail2002" class="nicescroll-rails nicescroll-rails-vr" style="width: 5px; z-index: 5; cursor: default; position: absolute; top: 0px; left: 263px; height: 904px; touch-action: none; display: none; opacity: 0;">
+            <div class="nicescroll-cursors" style="position: relative; top: 0px; float: right; width: 5px; height: 0px; background-color: rgba(0, 0, 0, 0.5); border: 0px; background-clip: padding-box; border-radius: 0px; touch-action: none;"></div>
+        </div>
+        <div id="ascrail2002-hr" class="nicescroll-rails nicescroll-rails-hr" style="height: 5px; z-index: 5; top: 899px; left: 0px; position: absolute; cursor: default; display: none; opacity: 0;">
+            <div class="nicescroll-cursors" style="position: absolute; top: 0px; height: 5px; width: 0px; background-color: rgba(0, 0, 0, 0.5); border: 0px; background-clip: padding-box; border-radius: 0px; left: 0px;"></div>
+        </div>
+    </aside>
+
+    <aside id="chat">
+        <ul class="tab-nav tn-justified" role="tablist" tabindex="0" style="overflow: hidden; outline: none;">
+            <li role="presentation" class="active"><a href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html#friends" aria-controls="friends" role="tab" data-toggle="tab">Friends</a></li>
+            <li role="presentation"><a href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html#online" aria-controls="online" role="tab" data-toggle="tab">Online Now</a></li>
+        </ul>
+
+        <div class="chat-search">
+            <div class="fg-line">
+                <input type="text" class="form-control" placeholder="Search People">
+            </div>
+        </div>
+
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade in active" id="friends">
+                <div class="listview">
+                    <a class="lv-item" href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html">
+                        <div class="media">
+                            <div class="pull-left p-relative">
+                                <img class="lv-img-sm" src="assets/images/2.jpg" alt="">
+                                <i class="chat-status-busy"></i>
+                            </div>
+                            <div class="media-body">
+                                <div class="lv-title">Jonathan Morris</div>
+                                <small class="lv-small">Available</small>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="lv-item" href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html">
+                        <div class="media">
+                            <div class="pull-left">
+                                <img class="lv-img-sm" src="assets/images/1.jpg" alt="">
+                            </div>
+                            <div class="media-body">
+                                <div class="lv-title">David Belle</div>
+                                <small class="lv-small">Last seen 3 hours ago</small>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="lv-item" href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html">
+                        <div class="media">
+                            <div class="pull-left p-relative">
+                                <img class="lv-img-sm" src="assets/images/3.jpg" alt="">
+                                <i class="chat-status-online"></i>
+                            </div>
+                            <div class="media-body">
+                                <div class="lv-title">Fredric Mitchell Jr.</div>
+                                <small class="lv-small">Availble</small>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="lv-item" href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html">
+                        <div class="media">
+                            <div class="pull-left p-relative">
+                                <img class="lv-img-sm" src="assets/images/4.jpg" alt="">
+                                <i class="chat-status-online"></i>
+                            </div>
+                            <div class="media-body">
+                                <div class="lv-title">Glenn Jecobs</div>
+                                <small class="lv-small">Availble</small>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="lv-item" href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html">
+                        <div class="media">
+                            <div class="pull-left">
+                                <img class="lv-img-sm" src="assets/images/5.jpg" alt="">
+                            </div>
+                            <div class="media-body">
+                                <div class="lv-title">Bill Phillips</div>
+                                <small class="lv-small">Last seen 3 days ago</small>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="lv-item" href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html">
+                        <div class="media">
+                            <div class="pull-left">
+                                <img class="lv-img-sm" src="assets/images/6.jpg" alt="">
+                            </div>
+                            <div class="media-body">
+                                <div class="lv-title">Wendy Mitchell</div>
+                                <small class="lv-small">Last seen 2 minutes ago</small>
+                            </div>
+                        </div>
+                    </a>
+                    <a class="lv-item" href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html">
+                        <div class="media">
+                            <div class="pull-left p-relative">
+                                <img class="lv-img-sm" src="assets/images/7.jpg" alt="">
+                                <i class="chat-status-busy"></i>
+                            </div>
+                            <div class="media-body">
+                                <div class="lv-title">Teena Bell Ann</div>
+                                <small class="lv-small">Busy</small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="online">
+                <div class="listview">
+                    <a class="lv-item" href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html">
+                        <div class="media">
+                            <div class="pull-left p-relative">
+                                <img class="lv-img-sm" src="assets/images/2.jpg" alt="">
+                                <i class="chat-status-busy"></i>
+                            </div>
+                            <div class="media-body">
+                                <div class="lv-title">Jonathan Morris</div>
+                                <small class="lv-small">Available</small>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="lv-item" href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html">
+                        <div class="media">
+                            <div class="pull-left p-relative">
+                                <img class="lv-img-sm" src="assets/images/3.jpg" alt="">
+                                <i class="chat-status-online"></i>
+                            </div>
+                            <div class="media-body">
+                                <div class="lv-title">Fredric Mitchell Jr.</div>
+                                <small class="lv-small">Availble</small>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="lv-item" href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html">
+                        <div class="media">
+                            <div class="pull-left p-relative">
+                                <img class="lv-img-sm" src="assets/images/4.jpg" alt="">
+                                <i class="chat-status-online"></i>
+                            </div>
+                            <div class="media-body">
+                                <div class="lv-title">Glenn Jecobs</div>
+                                <small class="lv-small">Availble</small>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="lv-item" href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html">
+                        <div class="media">
+                            <div class="pull-left p-relative">
+                                <img class="lv-img-sm" src="assets/images/7.jpg" alt="">
+                                <i class="chat-status-busy"></i>
+                            </div>
+                            <div class="media-body">
+                                <div class="lv-title">Teena Bell Ann</div>
+                                <small class="lv-small">Busy</small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div id="ascrail2001" class="nicescroll-rails nicescroll-rails-vr" style="width: 1px; z-index: 10; cursor: default; position: absolute; top: 20px; left: 279px; height: 48px; touch-action: none; display: none;">
+            <div class="nicescroll-cursors" style="position: relative; top: 0px; float: right; width: 1px; height: 0px; background-color: rgba(0, 0, 0, 0); border: 0px; background-clip: padding-box; border-radius: 0px; touch-action: none;"></div>
+        </div>
+        <div id="ascrail2001-hr" class="nicescroll-rails nicescroll-rails-hr" style="height: 1px; z-index: 10; top: 67px; left: 0px; position: absolute; cursor: default; display: none;">
+            <div class="nicescroll-cursors" style="position: absolute; top: 0px; height: 1px; width: 0px; background-color: rgba(0, 0, 0, 0); border: 0px; background-clip: padding-box; border-radius: 0px;"></div>
+        </div>
+    </aside>
+
+
+    <section id="content">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

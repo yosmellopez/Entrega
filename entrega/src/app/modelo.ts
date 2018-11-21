@@ -137,3 +137,21 @@ export declare class Respuesta<T> extends HttpResponseBase {
     statusText: string;
     url: string;
 }
+
+export declare interface RouteInfo {
+    id: string;
+    path: string;
+    title: string;
+    icon: string;
+    class: string;
+    authority: string[];
+    routes: AppRoute[];
+    hasChildren: boolean;
+}
+
+export declare interface AppRoute {
+    path: string;
+    title: string;
+    icon: string;
+    class: string;
+}

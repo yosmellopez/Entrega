@@ -19,6 +19,7 @@ import {AdminComponent} from "./admin/admin.component";
 import {HeaderComponent} from "./layout/header/header.component";
 import {PipesModule} from "./pipes/pipes.module";
 import {MenuComponent} from "./components/menu/menu.component";
+import { CentroComponent } from './layout/centro/centro.component';
 
 @NgModule({
     declarations: [
@@ -30,7 +31,8 @@ import {MenuComponent} from "./components/menu/menu.component";
         UsuarioComponent,
         AdminComponent,
         HeaderComponent,
-        MenuComponent
+        MenuComponent,
+        CentroComponent,
     ],
     imports: [
         BrowserModule,

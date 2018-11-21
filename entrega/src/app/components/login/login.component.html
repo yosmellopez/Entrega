@@ -1,11 +1,4 @@
 <div class="lc-block toggled" id="l-login">
-    <div class="checkbox">
-        <label>
-            <input type="checkbox" value="">
-            <i class="input-helper"></i>
-            Keep me signed in
-        </label>
-    </div>
     <form class="login-form" [formGroup]="form" (submit)="iniciarSesion()" style="padding-top: 10%" [attr.disabled]="isLoading">
         <div class="input-group m-b-20">
             <span class="input-group-addon" style="vertical-align: middle">
