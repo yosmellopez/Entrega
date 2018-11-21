@@ -24,6 +24,7 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit() {
+        document.body.setAttribute("class", "login-content sw-toggled");
     }
 
     iniciarSesion() {
