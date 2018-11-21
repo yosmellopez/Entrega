@@ -39,16 +39,16 @@
                 </li>
                 <li *ngFor="let menu of rutasUsuario" routerLinkActive="active" [class.sub-menu]="menu.hasChildren">
                     <a href="#">
-                        <i class="zmdi zmdi-widgets"></i> {{menu.title}}
+                        <i class="{{menu.class}}"></i> {{menu.title}}
                     </a>
 
                     <ul *ngIf="menu.hasChildren">
                         <li *ngFor="let menuItem of menu.routes">
+                            <i class="{{menuItem.class}}"></i>
                             <a class="active" [routerLink]="menuItem.path">
                                 {{menuItem.title}}
                             </a>
                         </li>
-                        <li><a href="http://byrushan.com/projects/ma/1-5-1/jquery/widgets.html">Widgets</a></li>
                     </ul>
                 </li>
                 <li class="sub-menu">

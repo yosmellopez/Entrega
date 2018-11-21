@@ -20,26 +20,54 @@ const routes: Routes = [
         children: [{path: 'admin', loadChildren: './admin/admin.module#AdminModule'}]
     }
 ];
-
-
 export const APP_RUTAS: RouteInfo[] = [
     {
         id: "admin-actions",
-        title: "adminTitle",
+        title: "Administración",
         icon: "group",
-        class: "tag tag-rounded tag-info tag-sm",
+        class: "zmdi zmdi-accounts-alt",
         authority: ["Administrador"],
         hasChildren: true,
         path: "",
         routes: [{
-            path: '/admin/usuario-list',
+            path: '/admin/provincia',
+            title: 'Provincias',
+            icon: 'supervisor_account',
+            class: 'waves-effect waves-cyan',
+        }, {
+            path: '/admin/municipio',
+            title: 'Municipios',
+            icon: 'supervisor_account',
+            class: 'waves-effect waves-cyan',
+        }, {
+            path: '/admin/consejoPopular',
+            title: 'Conseejos Populares',
+            icon: 'supervisor_account',
+            class: 'waves-effect waves-cyan',
+        }, {
+            path: '/admin/tipoDeSuperficie',
+            title: 'Tipos de Superficies',
+            icon: 'supervisor_account',
+            class: 'waves-effect waves-cyan',
+        }, {
+            path: '/admin/tipoDeUso',
+            title: 'Tipo de Uso',
+            icon: 'supervisor_account',
+            class: 'waves-effect waves-cyan',
+        }, {
+            path: '/admin/solicitud',
             title: 'usuario.list',
             icon: 'supervisor_account',
             class: 'waves-effect waves-cyan',
         }, {
-            path: '/admin/company-list',
-            title: 'company.list',
-            icon: 'business',
+            path: '/admin/solicitante',
+            title: 'usuario.list',
+            icon: 'supervisor_account',
+            class: 'waves-effect waves-cyan',
+        }, {
+            path: '/admin/parcela',
+            title: 'usuario.list',
+            icon: 'supervisor_account',
             class: 'waves-effect waves-cyan',
         }]
     }, {
