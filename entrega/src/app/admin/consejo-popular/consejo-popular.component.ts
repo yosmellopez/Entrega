@@ -12,9 +12,9 @@ import {MunicipioWindowComponent} from "../municipio/municipio-window/municipio-
 import {ConsejoPopularWindowComponent} from "./consejo-popular-window/consejo-popular-window.component";
 
 @Component({
-  selector: 'app-consejo-popular',
-  templateUrl: './consejo-popular.component.html',
-  styleUrls: ['./consejo-popular.component.css'],
+    selector: 'app-consejo-popular',
+    templateUrl: './consejo-popular.component.html',
+    styleUrls: ['./consejo-popular.component.css'],
     animations: [
         trigger('detailExpand', [
             state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
@@ -28,7 +28,7 @@ export class ConsejoPopularComponent implements OnInit {
     dataSource: MatTableDataSource<ConsejoPopular> = new MatTableDataSource<ConsejoPopular>();
     total: number = 0;
     pageSize: number = 10;
-    displayedColumns = ['codigo', 'nombre', 'municipio','provincia', 'acciones'];
+    displayedColumns = ['index', 'codigo', 'nombre', 'municipio', 'provincia', 'acciones'];
     selection = new SelectionModel<ConsejoPopular>(true, []);
     url: string = '';
     nombre: string = '';

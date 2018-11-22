@@ -51,7 +51,7 @@ public class ProvinciaControler {
         return ResponseEntity.ok(success(provincias).total(provincias.size()).build());
     }
 
-    @PostMapping(value = "/provincia/nueva")
+    @PostMapping(value = "/provincia")
     public ResponseEntity<AppResponse<Provincia>> insertarProvincia(@Valid @RequestBody Provincia provincia) {
         provinciaRepositorio.saveAndFlush(provincia);
         return ResponseEntity.ok(success(provincia).build());

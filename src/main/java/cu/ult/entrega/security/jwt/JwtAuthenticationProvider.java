@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.EntityNotFoundException;
 
 @Component
-@SuppressWarnings("unchecked")
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     private final JwtSettings jwtSettings;
@@ -34,7 +33,6 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         RawAccessJwtToken rawAccessToken = (RawAccessJwtToken) authentication.getCredentials();
         Jws<Claims> jwsClaims = rawAccessToken.parseClaims(jwtSettings.getTokenSigningKey());
         String subject = jwsClaims.getBody().getSubject();
-        System.out.println(subject);
         Usuario user = usuarioRepository.findOneByUsername(subject).orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
         JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(user, user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(jwtAuthenticationToken);

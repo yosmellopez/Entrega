@@ -20,8 +20,15 @@
             </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
+            <mat-select matInput placeholder="Seleccione la Provincia" [compareWith]="compararProvincias" [formControl]="provinciaControl">
+                <mat-option *ngFor="let provincia of provincias" [value]="provincia">
+                    {{provincia|provincia}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="full-width">
             <mat-select matInput placeholder="Seleccione el municipio" formControlName="municipio" [compareWith]="compararMunicipios">
-                <mat-option *ngFor="let municipio of municipios" [value]="municipio">
+                <mat-option *ngFor="let municipio of municipiosFiltrados" [value]="municipio">
                     {{municipio|municipio}}
                 </mat-option>
             </mat-select>

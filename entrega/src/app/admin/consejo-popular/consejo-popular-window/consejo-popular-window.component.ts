@@ -6,24 +6,27 @@ import {ConsejoPopular, Municipio, Provincia} from "../../../modelo";
 import {MunicipioService} from "../../../servicios/municipio.service";
 import {ConsejoPopularService} from "../../../servicios/consejo-popular.service";
 import {MensajeError} from "../../../mensaje/window.mensaje";
+import {ProvinciaService} from "../../../Servicios/provincia.service";
 
 @Component({
-  selector: 'app-consejo-popular-window',
-  templateUrl: './consejo-popular-window.component.html',
-  styleUrls: ['./consejo-popular-window.component.css']
+    selector: 'app-consejo-popular-window',
+    templateUrl: './consejo-popular-window.component.html',
+    styleUrls: ['./consejo-popular-window.component.css']
 })
 export class ConsejoPopularWindowComponent implements OnInit {
 
     isLoadingResults = false;
     idConsejoPopular: number;
     form: FormGroup;
+    provinciaControl: FormControl = new FormControl();
     insertar = false;
     consejoPopular: ConsejoPopular;
     municipios: Municipio[] = [];
-    public municipiosFiltrados: ReplaySubject<Municipio[]> = new ReplaySubject<Municipio[]>(1);
+    provincias: Provincia[] = [];
+    public municipiosFiltrados: Municipio[] = [];
 
     constructor(public dialogRef: MatDialogRef<ConsejoPopularWindowComponent>, @Inject(MAT_DIALOG_DATA) {id, codigo, nombre, municipio}: ConsejoPopular,
-                private service: ConsejoPopularService, private dialog: MatDialog, private municipioService: MunicipioService) {
+                private service: ConsejoPopularService, private dialog: MatDialog, private municipioService: MunicipioService, private provinciaService: ProvinciaService) {
         this.insertar = id == null;
         this.idConsejoPopular = id;
         this.form = new FormGroup({
@@ -31,6 +34,11 @@ export class ConsejoPopularWindowComponent implements OnInit {
             nombre: new FormControl(nombre, [Validators.required]),
             municipio: new FormControl(municipio, [Validators.required]),
         });
+        if (!this.insertar) {
+            this.provinciaControl.setValue(municipio.provincia);
+            this.form.controls['municipio'].patchValue(municipio);
+        }
+        this.provinciaControl.valueChanges.subscribe(this.filtrarMunicipios.bind(this));
     }
 
     onNoClick(): void {
@@ -39,10 +47,19 @@ export class ConsejoPopularWindowComponent implements OnInit {
 
     ngOnInit() {
         this.municipioService.listarTodosMunicipio().subscribe(resp => {
-            console.log(resp);
             if (resp.body.success) {
                 this.municipios = resp.body.elementos;
-                this.municipiosFiltrados.next(this.municipios);
+                this.municipiosFiltrados = resp.body.elementos;
+                if (!this.insertar) {
+                    this.municipiosFiltrados = this.municipios.filter(municipio => {
+                        return municipio.provincia.id === this.provinciaControl.value.id;
+                    });
+                }
+            }
+        });
+        this.provinciaService.listarTodasProvincia().subscribe(resp => {
+            if (resp.body.success) {
+                this.provincias = resp.body.elementos;
             }
         });
     }
@@ -53,7 +70,6 @@ export class ConsejoPopularWindowComponent implements OnInit {
             if (this.insertar) {
                 this.service.insertarConsejoPopular(this.form.value).subscribe(resp => {
                     let appResp = resp.body;
-                    console.log(resp);
                     if (appResp.success) {
                         this.dialogRef.close(resp.body);
                     } else {
@@ -79,4 +95,16 @@ export class ConsejoPopularWindowComponent implements OnInit {
         return inicio && fin && inicio.id === fin.id;
     }
 
+    compararProvincias(inicio: Provincia, fin: Provincia) {
+        if (inicio && fin && inicio.id && fin.id)
+            return inicio.id === fin.id;
+        return false;
+    }
+
+    filtrarMunicipios(provincia: Provincia) {
+        this.municipiosFiltrados = this.municipios.filter(municipio => {
+            return municipio.provincia.id === provincia.id;
+        });
+        this.form.controls['municipio'].reset();
+    }
 }

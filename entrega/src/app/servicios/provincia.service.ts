@@ -34,7 +34,7 @@ export class ProvinciaService {
     }
 
     insertarProvincia(provincia: Provincia): Observable<Respuesta<Provincia>> {
-        return this.http.post<AppResponse<Provincia>>(this.provinciaUrl + "/nueva", provincia, {
+        return this.http.post<AppResponse<Provincia>>(this.provinciaUrl, provincia, {
             observe: "response",
             headers: {"Authorization": this.token}
         });
@@ -42,14 +42,14 @@ export class ProvinciaService {
 
     modificarProvincia(id: number, provincia: Provincia): Observable<Respuesta<Provincia>> {
         provincia.id = id;
-        return this.http.put<AppResponse<Provincia>>(SERVER_URL + "api/provincia/mod/" + id, provincia, {
+        return this.http.put<AppResponse<Provincia>>(`${this.provinciaUrl}/${id}`, provincia, {
             observe: "response",
             headers: {"Authorization": this.token}
         });
     }
 
     eliminarProvincia(id: number): Observable<Respuesta<Provincia>> {
-        return this.http.delete<AppResponse<Provincia>>(SERVER_URL + "api/provincia/" + id, {
+        return this.http.delete<AppResponse<Provincia>>(`${this.provinciaUrl}/${id}`, {
             observe: "response",
             headers: {"Authorization": this.token}
         });

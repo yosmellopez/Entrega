@@ -27,7 +27,7 @@ export class ProvinciaComponent implements OnInit {
     dataSource: MatTableDataSource<Provincia> = new MatTableDataSource<Provincia>();
     total: number = 0;
     pageSize: number = 10;
-    displayedColumns = ['codigo', 'nombre', 'acciones'];
+    displayedColumns = ['index', 'codigo', 'nombre', 'acciones'];
     selection = new SelectionModel<Provincia>(true, []);
     url: string = '';
     nombre: string = '';
