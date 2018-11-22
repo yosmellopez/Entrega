@@ -6,6 +6,7 @@
 package cu.ult.entrega.control;
 import cu.ult.entrega.clases.Provincia;
 import cu.ult.entrega.clases.TipoDeUso;
+import cu.ult.entrega.excepcion.MunicipioException;
 import cu.ult.entrega.excepcion.ProvinciaException;
 import cu.ult.entrega.repositorio.TipoDeUsoRepositorio;
 import java.util.List;
@@ -18,6 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolation;
@@ -64,6 +67,13 @@ public class TipoDeUsoControler {
         return ResponseEntity.ok(AppResponse.success("Tipo de Uso eliminado exitosamente.").build());
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<AppResponse> tratarValidacion(MethodArgumentNotValidException ex, Locale locale) {
+        List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
+        String mensaje = fieldErrors.parallelStream().map(error -> error.getDefaultMessage()).collect(Collectors.joining(", "));
+        return ResponseEntity.ok(failure(mensaje).build());
+    }
+
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<AppResponse> tratarValidacion(ConstraintViolationException ex, Locale locale) {
         Set<ConstraintViolation<?>> violations = ex.getConstraintViolations();
@@ -73,10 +83,8 @@ public class TipoDeUsoControler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<AppResponse> mostrarError(Exception e) {
-        ProvinciaException generalException = new ProvinciaException(e);
+        MunicipioException generalException = new MunicipioException(e);
         return ResponseEntity.ok(failure(generalException.tratarExcepcion()).build());
     }
-
-
 }
 

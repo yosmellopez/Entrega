@@ -19,6 +19,7 @@ import {MunicipioWindowComponent} from "./municipio/municipio-window/municipio-w
 import {PipesModule} from "../pipes/pipes.module";
 import { TipoDeSuperficieWindowComponent } from './tipo-de-superficie/tipo-de-superficie-window/tipo-de-superficie-window.component';
 import { TipoDeUsoWindowComponent } from './tipo-de-uso/tipo-de-uso-window/tipo-de-uso-window.component';
+import { ConsejoPopularWindowComponent } from './consejo-popular/consejo-popular-window/consejo-popular-window.component';
 
 @NgModule({
     imports: [
@@ -44,9 +45,10 @@ import { TipoDeUsoWindowComponent } from './tipo-de-uso/tipo-de-uso-window/tipo-
         ProvinciaWindowComponent,
         MunicipioWindowComponent,
         TipoDeSuperficieWindowComponent,
-        TipoDeUsoWindowComponent
+        TipoDeUsoWindowComponent,
+        ConsejoPopularWindowComponent
     ],
-    entryComponents: [ProvinciaWindowComponent, MunicipioWindowComponent, TipoDeSuperficieWindowComponent, TipoDeUsoWindowComponent]
+    entryComponents: [ProvinciaWindowComponent, MunicipioWindowComponent, TipoDeSuperficieWindowComponent, TipoDeUsoWindowComponent, ConsejoPopularWindowComponent]
 })
 export class AdminModule {
 }

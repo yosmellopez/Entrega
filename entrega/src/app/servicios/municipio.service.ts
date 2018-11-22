@@ -25,6 +25,14 @@ export class MunicipioService {
         });
     }
 
+    listarTodosMunicipio(): Observable<Respuesta<Municipio>> {
+        let constUrl = `${this.municipioUrl}/todos`;
+        return this.http.get<AppResponse<Municipio>>(constUrl, {
+            observe: "response",
+            headers: {"Authorization": this.token}
+        });
+    }
+
     insertarMunicipio(municipio: Municipio): Observable<Respuesta<Municipio>> {
         return this.http.post<AppResponse<Municipio>>(this.municipioUrl, municipio, {
             observe: "response",

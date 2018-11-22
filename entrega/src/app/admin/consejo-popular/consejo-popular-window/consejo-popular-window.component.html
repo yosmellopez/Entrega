@@ -1,0 +1,42 @@
+<form class="form" [formGroup]="form" (submit)="insertarConsejoPopular()">
+    <h1 mat-dialog-title style="margin: 0 0">{{insertar?'Nuevo Consejo Popular':'Modificar Consejo Popular'}}
+        <button type="button" mat-icon-button class="close-button" (click)="onNoClick()">
+            <mat-icon style="font-size: 25px">close</mat-icon>
+        </button>
+        <hr>
+    </h1>
+    <div mat-dialog-content style="min-height: 7em;">
+        <mat-form-field class="full-width" hintLabel="Maximo 2 caracteres">
+            <input matInput #input maxlength="2" placeholder="Codigo del consejo popular" formControlName="codigo">
+            <mat-error *ngIf="form.controls['codigo'].errors?.required">
+                Debe insertar el codigo del consejo popular
+            </mat-error>
+            <mat-hint align="end">{{input.value?.length || 0}}/2</mat-hint>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+            <input matInput placeholder="Nombre del consejo popular" formControlName="nombre">
+            <mat-error *ngIf="form.controls['nombre'].errors?.required">
+                Debe insertar el nombre del consejo popular
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+            <mat-select matInput placeholder="Seleccione el municipio" formControlName="municipio" [compareWith]="compararMunicipios">
+                <mat-option *ngFor="let municipio of municipios" [value]="municipio">
+                    {{municipio|municipio}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.controls['municipio'].errors?.required">Debe seleccionar el municipio.</mat-error>
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="boton-theme">
+        <span class="spacer"></span>
+        <button type="submit" mat-raised-button cdkFocusInitial color="primary">
+            <mat-icon>check_circle</mat-icon>
+            {{insertar?'Guardar':'Modificar'}}
+        </button>
+        <button type="button" mat-raised-button (click)="onNoClick()" color="warn">
+            <mat-icon>cancel</mat-icon>
+            Cancelar
+        </button>
+    </div>
+</form>

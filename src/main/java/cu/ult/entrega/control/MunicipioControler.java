@@ -38,6 +38,12 @@ public class MunicipioControler {
         return ResponseEntity.ok(success(Municipios).total(page.getTotalElements()).build());
     }
 
+    @RequestMapping(value = "/municipio/todos")
+    public ResponseEntity<AppResponse<Municipio>> listarTodosMunicipios() {
+        List<Municipio> municipios = municipioRepositorio.findAll();
+        return ResponseEntity.ok(success(municipios).total(municipios.size()).build());
+    }
+
     @PostMapping(value = "/municipio")
     public ResponseEntity<AppResponse<Municipio>> insertarMunicipio(@Valid @RequestBody Municipio Municipio) {
         municipioRepositorio.saveAndFlush(Municipio);
