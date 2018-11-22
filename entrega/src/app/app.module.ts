@@ -13,24 +13,26 @@ import {RouterModule} from "@angular/router";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MensajeModule} from "./mensaje/mensaje.module";
 import {LoginComponent} from './components/login/login.component';
-import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
 import {AppRoutingModule} from "./app-routing";
 import {UsuarioComponent} from "./usuario/usuario.component";
 import {AdminComponent} from "./admin/admin.component";
 import {HeaderComponent} from "./layout/header/header.component";
 import {PipesModule} from "./pipes/pipes.module";
 import {MenuComponent} from "./components/menu/menu.component";
+import { CentroComponent } from './layout/centro/centro.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         SearchBarComponent,
-        MenuComponent,
+        UserMenuComponent,
         UserMenuComponent,
         LoginComponent,
         UsuarioComponent,
         AdminComponent,
-        HeaderComponent
+        HeaderComponent,
+        MenuComponent,
+        CentroComponent,
     ],
     imports: [
         BrowserModule,
@@ -42,7 +44,6 @@ import {MenuComponent} from "./components/menu/menu.component";
         ReactiveFormsModule,
         FormsModule,
         MensajeModule,
-        NgxMatSelectSearchModule,
         PipesModule
     ],
     providers: [],

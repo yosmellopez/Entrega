@@ -25,6 +25,12 @@ export class Usuario {
     name: string;
     lastname: string;
     username: string;
+    rol: Rol;
+}
+
+export class Rol {
+    id: number;
+    name: string;
 }
 
 export class ConsejoPopular {
@@ -130,4 +136,22 @@ export declare class Respuesta<T> extends HttpResponseBase {
     status: number;
     statusText: string;
     url: string;
+}
+
+export declare interface RouteInfo {
+    id: string;
+    path: string;
+    title: string;
+    icon: string;
+    class: string;
+    authority: string[];
+    routes: AppRoute[];
+    hasChildren: boolean;
+}
+
+export declare interface AppRoute {
+    path: string;
+    title: string;
+    icon: string;
+    class: string;
 }

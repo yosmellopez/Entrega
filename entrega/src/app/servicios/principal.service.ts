@@ -1,16 +1,13 @@
 import {Injectable} from '@angular/core';
-import {Observable, Subject} from "rxjs/index";
 import {AccountService} from "./account.service";
-
-@Injectable({
-    providedIn: 'root'
-})
+import {Observable, Subject} from "rxjs/index";
+import {Usuario} from "../modelo";
 
 @Injectable({providedIn: 'root'})
 export class Principal {
     private userIdentity: any;
     private authenticated = false;
-    private authenticationState = new Subject<any>();
+    public authenticationState = new Subject<any>();
 
     constructor(private account: AccountService) {
     }
@@ -22,31 +19,37 @@ export class Principal {
     }
 
     hasAnyAuthority(authorities: string[]): Promise<boolean> {
-        return Promise.resolve(this.hasAnyAuthorityDirect(authorities));
+        return this.hasAnyAuthorityDirect(authorities);
     }
 
-    hasAnyAuthorityDirect(authorities: string[]): boolean {
-        if (!this.authenticated || !this.userIdentity || !this.userIdentity.authorities) {
-            return false;
-        }
-
-        for (let i = 0; i < authorities.length; i++) {
-            if (this.userIdentity.authorities.includes(authorities[i])) {
-                return true;
+    hasAnyAuthorityDirect(authorities: string[]): Promise<boolean> {
+        return this.identity().then(
+            (usuario: Usuario) => {
+                if (!usuario) {
+                    return Promise.resolve(false);
+                }
+                for (let i = 0; i < authorities.length; i++) {
+                    if (usuario.rol.name == authorities[i]) {
+                        return Promise.resolve(true);
+                    }
+                }
+                return Promise.resolve(false);
+            },
+            () => {
+                return Promise.resolve(false);
             }
-        }
+        );
 
-        return false;
+
     }
 
     hasAuthority(authority: string): Promise<boolean> {
-        if (!this.authenticated) {
-            return Promise.resolve(false);
-        }
-
         return this.identity().then(
-            id => {
-                return Promise.resolve(id.authorities && id.authorities.includes(authority));
+            (usuario: Usuario) => {
+                if (usuario) {
+                    return Promise.resolve(usuario.rol && usuario.rol.name === authority);
+                } else
+                    return Promise.resolve(false);
             },
             () => {
                 return Promise.resolve(false);
@@ -58,28 +61,34 @@ export class Principal {
         if (force === true) {
             this.userIdentity = undefined;
         }
-
         // check and see if we have retrieved the userIdentity data from the server.
         // if we have, reuse it by immediately resolving
         if (this.userIdentity) {
+            this.authenticationState.next(this.userIdentity);
             return Promise.resolve(this.userIdentity);
         }
-
         // retrieve the userIdentity data from the server, update the identity object, and then resolve.
         return this.account
             .get()
             .toPromise()
             .then(response => {
-                const account = response.body;
-                if (account) {
-                    this.userIdentity = account;
-                    this.authenticated = true;
+                if (response.body.success) {
+                    const account = response.body.elemento;
+                    if (account) {
+                        this.userIdentity = account;
+                        this.authenticated = true;
+                    } else {
+                        this.userIdentity = null;
+                        this.authenticated = false;
+                    }
+                    this.authenticationState.next(this.userIdentity);
+                    return this.userIdentity;
                 } else {
                     this.userIdentity = null;
                     this.authenticated = false;
+                    this.authenticationState.next(this.userIdentity);
+                    return null;
                 }
-                this.authenticationState.next(this.userIdentity);
-                return this.userIdentity;
             })
             .catch(err => {
                 this.userIdentity = null;
@@ -103,5 +112,11 @@ export class Principal {
 
     getImageUrl(): string {
         return this.isIdentityResolved() ? this.userIdentity.imageUrl : null;
+    }
+
+    logout() {
+        this.userIdentity = null;
+        this.authenticated = false;
+        this.authenticationState.next(false);
     }
 }
