@@ -79,11 +79,11 @@ public class Persona implements Serializable {
     private String situacionLaboral;
     
     @JsonIgnore
-    @OneToMany (mappedBy = "persona")
+    @OneToMany (mappedBy = "asociado")
     private List<Persona> persona;
     
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_poseedor_asociado"))
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_persona_asociado"))
     private Persona asociado;
     
     @JsonIgnore

@@ -41,7 +41,7 @@ export const APP_RUTAS: RouteInfo[] = [
             class: 'waves-effect waves-cyan',
         }, {
             path: '/admin/consejoPopular',
-            title: 'Conseejos Populares',
+            title: 'Consejos Populares',
             icon: 'supervisor_account',
             class: 'waves-effect waves-cyan',
         }, {
@@ -56,7 +56,7 @@ export const APP_RUTAS: RouteInfo[] = [
             class: 'waves-effect waves-cyan',
         }, {
             path: '/admin/solicitud',
-            title: 'usuario.list',
+            title: 'Solicitud',
             icon: 'supervisor_account',
             class: 'waves-effect waves-cyan',
         }, {

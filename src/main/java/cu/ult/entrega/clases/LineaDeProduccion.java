@@ -31,7 +31,7 @@ public class LineaDeProduccion implements Serializable {
     private Long id;
     
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_solicitud_lineaDeProduccion"))
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_lineaDeProduccion_solicitud"))
     private Solicitud solicitud;
     
     @Column (name = "lineaDeProduccion")

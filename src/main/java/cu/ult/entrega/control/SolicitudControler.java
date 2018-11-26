@@ -6,10 +6,13 @@
 package cu.ult.entrega.control;
 
 import cu.ult.entrega.clases.Parcela;
+import cu.ult.entrega.clases.Provincia;
 import cu.ult.entrega.clases.Solicitud;
 import cu.ult.entrega.repositorio.ParcelaRepositorio;
 import cu.ult.entrega.repositorio.SolicitudRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
@@ -21,10 +24,13 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Set;
 
+import static cu.ult.entrega.control.AppResponse.success;
+
 /**
  * @author Pablo Caram Local
  */
 @RestController
+@RequestMapping("/api")
 public class SolicitudControler {
 
     @Autowired
@@ -33,10 +39,11 @@ public class SolicitudControler {
     @Autowired
     ParcelaRepositorio parcelaRepositorio;
 
-    @GetMapping(value = "/solicitud")
-    public ResponseEntity<AppResponse<Solicitud>> listarsolicitudes() {
-        List<Solicitud> solicituds = solicitudRepositorio.findAll();
-        return ResponseEntity.ok(AppResponse.success(solicituds).total(solicituds.size()).build());
+    @RequestMapping(value = "/solicitud")
+    public ResponseEntity<AppResponse<Solicitud>> listarSolicitud(Pageable p) {
+        Page<Solicitud> page = solicitudRepositorio.findAll(p);
+        List<Solicitud> solicituds = page.getContent();
+        return ResponseEntity.ok(success(solicituds).total(page.getTotalElements()).build());
     }
 
     @PostMapping(value = "/solicitud")

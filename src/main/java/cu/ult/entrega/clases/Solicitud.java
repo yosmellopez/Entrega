@@ -68,9 +68,10 @@ public class Solicitud implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "parcela_id",foreignKey = @ForeignKey(name = "fk_parcela_solicitud")) 
     )
     Set<Parcela> parcelas = new HashSet<>();
-    
+
+    @JsonIgnore
     @OneToMany(mappedBy = "solicitud")
-    private List<LineaDeProduccion> lineaProduccion;
+    private List<LineaDeProduccion> listLineaProduccion;
     
     @Column (name = "areaSolicitada")
     private Double areaSolicitada;
@@ -143,11 +144,11 @@ public class Solicitud implements Serializable {
     }
 
     public List<LineaDeProduccion> getLineaProduccion() {
-        return lineaProduccion;
+        return listLineaProduccion;
     }
 
-    public void setLineaProduccion(List<LineaDeProduccion> lineaProduccion) {
-        this.lineaProduccion = lineaProduccion;
+    public void setLineaProduccion(List<LineaDeProduccion> listLineaProduccion) {
+        this.listLineaProduccion = listLineaProduccion;
     }
 
     public Double getAreaSolicitada() {
