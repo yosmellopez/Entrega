@@ -4,8 +4,9 @@ import {SelectionModel} from "@angular/cdk/collections";
 import {catchError, map, startWith, switchMap} from "rxjs/internal/operators";
 import {merge} from "rxjs/index";
 import {MatDialog, MatPaginator, MatSort, MatTable, MatTableDataSource} from "@angular/material";
-import {Solicitud} from "../../modelo";
+import {Parcela, Solicitud} from "../../modelo";
 import {SolicitudService} from "../../servicios/solicitud.service";
+
 
 @Component({
   selector: 'app-solicitud',
@@ -20,21 +21,27 @@ import {SolicitudService} from "../../servicios/solicitud.service";
     ],
 })
 
+
+
 export class SolicitudComponent implements OnInit {
     dataSource: MatTableDataSource<Solicitud> = new MatTableDataSource<Solicitud>();
+    parcelas: MatTableDataSource<Parcela> = new MatTableDataSource<Parcela>()
     total: number = 0;
     pageSize: number = 10;
-    displayedColumns = ['index', 'numExpediente', 'fechaSolicitud','areaSolicitada','estado', 'acciones'];
-    selection = new SelectionModel<Solicitud>(true, []);
+    displayedColumns = ['select','index', 'numExpediente', 'fechaSolicitud','areaSolicitada','estado', 'acciones'];
+    displayedColumnsParcela = ['parcela'];
+    selection = new SelectionModel<Solicitud>(false, []);
     url: string = '';
     nombre: string = '';
     resultsLength = 0;
     isLoadingResults = true;
     isRateLimitReached = false;
     expandedElement: Solicitud;
+
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     @ViewChild(MatTable) table: MatTable<Solicitud>;
+    @ViewChild(MatTable) tableP: MatTable<Parcela>;
 
     constructor(private servicio: SolicitudService, private dialog: MatDialog) {
     }
@@ -145,5 +152,23 @@ export class SolicitudComponent implements OnInit {
             return `${startIndex + 1} - ${endIndex} de ${length}`;
         }
     }
+
+    /** Whether the number of selected elements matches the total number of rows. */
+    isAllSelected(event: Event, element:Solicitud) {
+        event.stopPropagation();
+        this.parcelas = new MatTableDataSource(element.parcelas);
+        this.tableP.dataSource = this.parcelas;
+        this.tableP.renderRows();
+
+
+        //this.dataSource[1] = new MatTableDataSource(element.parcelas);
+       // const numRows = this.dataSource.data.length;
+        console.log(this.parcelas);
+        console.log( this.tableP);
+        return event;
+    }
+
+    /** Selects all rows if they are not all selected; otherwise clear selection. */
+
 
 }

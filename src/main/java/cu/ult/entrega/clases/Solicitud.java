@@ -7,6 +7,8 @@ package cu.ult.entrega.clases;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -69,9 +71,9 @@ public class Solicitud implements Serializable {
     )
     Set<Parcela> parcelas = new HashSet<>();
 
-    @JsonIgnore
     @OneToMany(mappedBy = "solicitud")
-    private List<LineaDeProduccion> listLineaProduccion;
+    @JsonManagedReference
+    private List<LineaDeProduccion> LineaProduccions;
     
     @Column (name = "areaSolicitada")
     private Double areaSolicitada;
@@ -143,12 +145,12 @@ public class Solicitud implements Serializable {
         this.numExpediente = numExpediente;
     }
 
-    public List<LineaDeProduccion> getLineaProduccion() {
-        return listLineaProduccion;
+    public List<LineaDeProduccion> getLineaProduccions() {
+        return LineaProduccions;
     }
 
-    public void setLineaProduccion(List<LineaDeProduccion> listLineaProduccion) {
-        this.listLineaProduccion = listLineaProduccion;
+    public void setLineaProduccions(List<LineaDeProduccion> lineaProduccions) {
+        LineaProduccions = lineaProduccions;
     }
 
     public Double getAreaSolicitada() {
@@ -181,6 +183,10 @@ public class Solicitud implements Serializable {
 
     public void setParcelas(Set<Parcela> parcelas) {
         this.parcelas = parcelas;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     @Override

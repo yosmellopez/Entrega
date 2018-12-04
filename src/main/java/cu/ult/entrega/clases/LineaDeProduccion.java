@@ -5,6 +5,8 @@
  */
 package cu.ult.entrega.clases;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -32,6 +34,7 @@ public class LineaDeProduccion implements Serializable {
     
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_lineaDeProduccion_solicitud"))
+    @JsonBackReference
     private Solicitud solicitud;
     
     @Column (name = "lineaDeProduccion")
