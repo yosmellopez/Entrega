@@ -4,8 +4,12 @@ import {SelectionModel} from "@angular/cdk/collections";
 import {catchError, map, startWith, switchMap} from "rxjs/internal/operators";
 import {merge} from "rxjs/index";
 import {MatDialog, MatPaginator, MatSort, MatTable, MatTableDataSource} from "@angular/material";
-import {Parcela, Solicitud} from "../../modelo";
+import {Municipio, Parcela, Solicitud} from "../../modelo";
 import {SolicitudService} from "../../servicios/solicitud.service";
+import {Information} from "../../mensaje/window.mensaje";
+import {MunicipioWindowComponent} from "../municipio/municipio-window/municipio-window.component";
+import {DetallesSolicitudComponent} from "./detalles-solicitud/detalles-solicitud.component";
+import {BlockScrollStrategy} from "@angular/cdk/overlay";
 
 
 @Component({
@@ -25,11 +29,10 @@ import {SolicitudService} from "../../servicios/solicitud.service";
 
 export class SolicitudComponent implements OnInit {
     dataSource: MatTableDataSource<Solicitud> = new MatTableDataSource<Solicitud>();
-    parcelas: MatTableDataSource<Parcela> = new MatTableDataSource<Parcela>()
+    parcelas:Parcela[] = [];
     total: number = 0;
     pageSize: number = 10;
     displayedColumns = ['select','index', 'numExpediente', 'fechaSolicitud','areaSolicitada','estado', 'acciones'];
-    displayedColumnsParcela = ['parcela'];
     selection = new SelectionModel<Solicitud>(false, []);
     url: string = '';
     nombre: string = '';
@@ -41,7 +44,6 @@ export class SolicitudComponent implements OnInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     @ViewChild(MatTable) table: MatTable<Solicitud>;
-    @ViewChild(MatTable) tableP: MatTable<Parcela>;
 
     constructor(private servicio: SolicitudService, private dialog: MatDialog) {
     }
@@ -79,6 +81,23 @@ export class SolicitudComponent implements OnInit {
 
             });
     }
+
+    abrirVentanaDetalles(event: Event, solicitud: Solicitud):void {
+        event.stopPropagation();
+
+        let dialogRef = this.dialog.open(DetallesSolicitudComponent, {
+            width: '1400px',disableClose: true, data: solicitud,
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result != false) {
+                this.paginator.page.emit();
+            }
+        });
+    }
+
+
+
 
     /*abrirVentana() {
         let dialogRef = this.dialog.open(TipoDeSuperficieWindowComponent, {
@@ -152,23 +171,4 @@ export class SolicitudComponent implements OnInit {
             return `${startIndex + 1} - ${endIndex} de ${length}`;
         }
     }
-
-    /** Whether the number of selected elements matches the total number of rows. */
-    isAllSelected(event: Event, element:Solicitud) {
-        event.stopPropagation();
-        this.parcelas = new MatTableDataSource(element.parcelas);
-        this.tableP.dataSource = this.parcelas;
-        this.tableP.renderRows();
-
-
-        //this.dataSource[1] = new MatTableDataSource(element.parcelas);
-       // const numRows = this.dataSource.data.length;
-        console.log(this.parcelas);
-        console.log( this.tableP);
-        return event;
-    }
-
-    /** Selects all rows if they are not all selected; otherwise clear selection. */
-
-
 }

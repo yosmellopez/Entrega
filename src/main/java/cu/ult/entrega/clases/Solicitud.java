@@ -73,7 +73,7 @@ public class Solicitud implements Serializable {
 
     @OneToMany(mappedBy = "solicitud")
     @JsonManagedReference
-    private List<LineaDeProduccion> LineaProduccions;
+    private List<LineaDeProduccion> lineasDeProduccion;
     
     @Column (name = "areaSolicitada")
     private Double areaSolicitada;
@@ -145,12 +145,12 @@ public class Solicitud implements Serializable {
         this.numExpediente = numExpediente;
     }
 
-    public List<LineaDeProduccion> getLineaProduccions() {
-        return LineaProduccions;
+    public List<LineaDeProduccion> getLineasDeProduccion() {
+        return lineasDeProduccion;
     }
 
-    public void setLineaProduccions(List<LineaDeProduccion> lineaProduccions) {
-        LineaProduccions = lineaProduccions;
+    public void setLineasDeProduccion(List<LineaDeProduccion> lineasDeProduccion) {
+        this.lineasDeProduccion = lineasDeProduccion;
     }
 
     public Double getAreaSolicitada() {

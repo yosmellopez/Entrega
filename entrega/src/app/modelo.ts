@@ -65,7 +65,7 @@ export class Solicitud {
     numExpediente: number;
     persona: Persona;
     parcelas: Parcela[];
-    lineaProduccion: LineaDeProduccion[];
+    lineasDeProduccion: LineaDeProduccion[];
     areaSolicitada: number;
     tramite: Tramite;
     estado: string;
