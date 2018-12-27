@@ -52,7 +52,6 @@ public class Solicitud implements Serializable {
     private String tipoSolicitud;
         
     @Column (name = "fechaSolicitud")
-    @JsonFormat(pattern = "dd/MM/yyyy") 
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaSolicitud;
         

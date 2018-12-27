@@ -56,10 +56,15 @@
                         <mat-form-field>
                             <input matInput placeholder="Dirección Particular" formControlName="dirParticular">
                         </mat-form-field>
-                        <mat-form-field>
-                            <input matInput [matDatepicker]="picker" placeholder="Fecha de Nacimiento" formControlName="fechaDeNacimiento">
-                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker startView="year" [startAt]="startDate"></mat-datepicker>
+                        <!--<mat-form-field>-->
+                            <!--<input matInput [matDatepicker]="picker" placeholder="Fecha de Nacimiento" formControlName="fechaDeNacimiento">-->
+                            <!--<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>-->
+                            <!--<mat-datepicker #picker startView="year" [startAt]="startDate"></mat-datepicker>-->
+                        <!--</mat-form-field>-->
+                        <mat-form-field class="middle-width">
+                            <input matInput [matDatepicker]="nacimentoDatePicker" formControlName="fechaDeNacimiento" placeholder="Fecha de Nacimiento">
+                            <mat-datepicker-toggle matSuffix [for]="nacimentoDatePicker"></mat-datepicker-toggle>
+                            <mat-datepicker #nacimentoDatePicker></mat-datepicker>
                         </mat-form-field>
                         <mat-form-field>
                             <input matInput type="number" maxlength="8" placeholder="Teléfono Movil" formControlName="movil">

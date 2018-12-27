@@ -1,4 +1,5 @@
 import {HttpHeaders, HttpResponseBase} from "@angular/common/http";
+import {NativeDateAdapter} from "@angular/material";
 
 export class Provincia {
     id: number = null;
@@ -154,4 +155,20 @@ export declare interface AppRoute {
     title: string;
     icon: string;
     class: string;
+}
+
+export class DateFormat extends NativeDateAdapter {
+    useUtcForDisplay = true;
+
+    parse(value: any): Date | null {
+        if ((typeof value === 'string') && (value.indexOf('/') > -1)) {
+            const str = value.split('/');
+            const year = Number(str[2]);
+            const month = Number(str[1]) - 1;
+            const date = Number(str[0]);
+            return new Date(year, month, date);
+        }
+        const timestamp = typeof value === 'number' ? value : Date.parse(value);
+        return isNaN(timestamp) ? null : new Date(timestamp);
+    }
 }

@@ -19,7 +19,9 @@ import {AdminComponent} from "./admin/admin.component";
 import {HeaderComponent} from "./layout/header/header.component";
 import {PipesModule} from "./pipes/pipes.module";
 import {MenuComponent} from "./components/menu/menu.component";
-import { CentroComponent } from './layout/centro/centro.component';
+import {CentroComponent} from './layout/centro/centro.component';
+import {DateFormat} from "./modelo";
+import {DateAdapter} from "@angular/material";
 
 @NgModule({
     declarations: [
@@ -46,9 +48,12 @@ import { CentroComponent } from './layout/centro/centro.component';
         MensajeModule,
         PipesModule
     ],
-    providers: [],
+    providers: [{provide: DateAdapter, useClass: DateFormat}],
     bootstrap: [AppComponent],
     entryComponents: []
 })
 export class AppModule {
+    constructor(private dateAdapter: DateAdapter<Date>) {
+        dateAdapter.setLocale('en-in'); // DD/MM/YYYY
+    }
 }

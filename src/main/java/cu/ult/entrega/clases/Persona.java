@@ -7,6 +7,7 @@ package cu.ult.entrega.clases;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -26,15 +27,16 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.UniqueConstraint;
+
 /**
- *
  * @author Pablo Caram Local
  */
 @Entity
-@Table (name = "persona", uniqueConstraints = @UniqueConstraint(name = "persona_unica", columnNames = {"ci"}))
+@Table(name = "persona", uniqueConstraints = @UniqueConstraint(name = "persona_unica", columnNames = {"ci"}))
 public class Persona implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,51 +47,50 @@ public class Persona implements Serializable {
 
     @Column(name = "tipoPersona")
     private String tipoPersona;
-    
+
     @Column(name = "ci")
     private String ci;
-    
+
     @Column(name = "nombre")
     private String nombre;
-        
+
     @Column(name = "primerApellido")
     private String primerApellido;
-    
+
     @Column(name = "segundoApellido")
     private String segundoApellido;
-    
-    @Column(name = "sexo") 
+
+    @Column(name = "sexo")
     private char sexo;
-    
-    @Column (name = "dirParticular")
+
+    @Column(name = "dirParticular")
     private String dirParticular;
-    
-    @Column (name = "fechaNacimiento")
-    @JsonFormat(pattern = "dd/MM/yyyy") 
+
+    @Column(name = "fechaNacimiento")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaNacimiento;
-    
-    @Column (name = "movil")
+
+    @Column(name = "movil")
     private String movil;
-    
-    @Column (name = "telFijo")
+
+    @Column(name = "telFijo")
     private String telFijo;
-    
-    @Column (name = "situacionLaboral")
+
+    @Column(name = "situacionLaboral")
     private String situacionLaboral;
-    
+
     @JsonIgnore
-    @OneToMany (mappedBy = "asociado")
+    @OneToMany(mappedBy = "asociado")
     private List<Persona> persona;
-    
+
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_persona_asociado"))
     private Persona asociado;
-    
+
     @JsonIgnore
     @OneToMany(mappedBy = "persona")
     private List<Solicitud> solicitud;
-    
+
     @JsonIgnore
     @OneToMany(mappedBy = "persona")
     private List<Parcela> parcelas;
@@ -226,6 +227,14 @@ public class Persona implements Serializable {
         this.parcelas = parcelas;
     }
 
+    public String getSituacionLaboral() {
+        return situacionLaboral;
+    }
+
+    public void setSituacionLaboral(String situacionLaboral) {
+        this.situacionLaboral = situacionLaboral;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;
@@ -253,10 +262,8 @@ public class Persona implements Serializable {
 
     @Override
     public String toString() {
-        return "Persona{" + "id=" + id + ", tipoPersona=" + tipoPersona + ", ci=" + ci + ", nombre=" + nombre + ", primerApellido=" + primerApellido + ", segundoApellido=" + segundoApellido + ", sexo=" + sexo + ", dirParticular=" + dirParticular + ", fechaNacimiento=" + fechaNacimiento + ", movil=" + movil + ", telFijo=" + telFijo + ", persona=" + persona + ", asociado=" + asociado + ", solicitudes=" + solicitud+ '}';
+        return "Persona{" + "id=" + id + ", tipoPersona=" + tipoPersona + ", ci=" + ci + ", nombre=" + nombre + ", primerApellido=" + primerApellido + ", segundoApellido=" + segundoApellido + ", sexo=" + sexo + ", dirParticular=" + dirParticular + ", fechaNacimiento=" + fechaNacimiento + ", movil=" + movil + ", telFijo=" + telFijo + ", persona=" + persona + ", asociado=" + asociado + ", solicitudes=" + solicitud + '}';
     }
-    
-    
-    
+
 
 }
