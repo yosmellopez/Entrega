@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {AppResponse, Provincia, Respuesta, Solicitud} from "../modelo";
+import {AppResponse, ConsejoPopular, Provincia, Respuesta, Solicitud} from "../modelo";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs/index";
 import {SERVER_URL} from "../contantes";
@@ -24,6 +24,13 @@ export class SolicitudService {
         });
     }
 
+    listarSolicitudNoDefinido(): Observable<Respuesta<Solicitud>> {
+        let constUrl = `${this.solicitudUrl}/noDefinido`;
+        return this.http.get<AppResponse<Solicitud>>(constUrl, {
+            observe: "response",
+            headers: {"Authorization": this.token}
+        });
+    }
 
     insertarSolicitud(solicitud: Solicitud): Observable<Respuesta<Solicitud>> {
         return this.http.post<AppResponse<Solicitud>>(this.solicitudUrl, solicitud, {

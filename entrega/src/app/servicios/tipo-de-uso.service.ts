@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {AppResponse, Respuesta, TipoDeUso} from "../modelo";
+import {AppResponse, ConsejoPopular, Respuesta, TipoDeUso} from "../modelo";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs/index";
 import {SERVER_URL} from "../contantes";
@@ -27,6 +27,14 @@ export class TipoDeUsoService {
 
     listarTodasTipoDeUso(): Observable<Respuesta<TipoDeUso>> {
         let constUrl = `${this.tipoDeUsoUrl}/todas`;
+        return this.http.get<AppResponse<TipoDeUso>>(constUrl, {
+            observe: "response",
+            headers: {"Authorization": this.token}
+        });
+    }
+
+    listarTipoDeUsoNoDefinido(nombre:string): Observable<Respuesta<TipoDeUso>> {
+        let constUrl = `${this.tipoDeUsoUrl+'/porNombre/'}${nombre}`;
         return this.http.get<AppResponse<TipoDeUso>>(constUrl, {
             observe: "response",
             headers: {"Authorization": this.token}

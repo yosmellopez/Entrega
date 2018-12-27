@@ -47,6 +47,12 @@ public class ConsjoPopularControler {
         return ResponseEntity.ok(success(consejoPopulars).total(consejoPopulars.size()).build());
     }
 
+    @RequestMapping(value = "/consejoPopular/porNombre/{nombre}")
+    public ResponseEntity<AppResponse<ConsejoPopular>> ObtenerConsejoPopularPorNombre(@PathVariable("nombre") String nombre) {
+        ConsejoPopular consejoPopular = consejoPopularRepositorio.findByNombre(nombre);
+        return ResponseEntity.ok(success(consejoPopular).total(1).build());
+    }
+
     @PostMapping(value = "/consejoPopular/nuevo")
     public ResponseEntity<AppResponse<ConsejoPopular>> insertarConsejoPopular(@Valid @RequestBody ConsejoPopular consejoPopular) {
         consejoPopularRepositorio.saveAndFlush(consejoPopular);

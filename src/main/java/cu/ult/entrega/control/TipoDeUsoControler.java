@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package cu.ult.entrega.control;
+import cu.ult.entrega.clases.ConsejoPopular;
 import cu.ult.entrega.clases.Provincia;
 import cu.ult.entrega.clases.TipoDeUso;
 import cu.ult.entrega.excepcion.MunicipioException;
@@ -42,6 +43,14 @@ public class TipoDeUsoControler {
         Page<TipoDeUso> page = tipoDeUsoRepositorio.findAll(p);
         List<TipoDeUso> tipoDeUsos = page.getContent();
         return ResponseEntity.ok(success(tipoDeUsos).total(page.getTotalElements()).build());
+    }
+
+    @RequestMapping(value = "/tipoDeUso/porNombre/{nombre}")
+    public ResponseEntity<AppResponse<TipoDeUso>> obtenerTipoDeUsoPorNombre(@PathVariable("nombre") String nombre) {
+        System.out.println(nombre);
+        TipoDeUso tipoDeUso = tipoDeUsoRepositorio.findByNombre(nombre);
+        System.out.println(tipoDeUso);
+        return ResponseEntity.ok(success(tipoDeUso).total(1).build());
     }
 
     @PostMapping(value = "/tipoDeUso/nuevo")

@@ -10,6 +10,7 @@ import {Information} from "../../mensaje/window.mensaje";
 import {MunicipioWindowComponent} from "../municipio/municipio-window/municipio-window.component";
 import {DetallesSolicitudComponent} from "./detalles-solicitud/detalles-solicitud.component";
 import {BlockScrollStrategy} from "@angular/cdk/overlay";
+import {SolicitudWindowComponent} from "./solicitud-window/solicitud-window.component";
 
 
 @Component({
@@ -40,7 +41,6 @@ export class SolicitudComponent implements OnInit {
     isLoadingResults = true;
     isRateLimitReached = false;
     expandedElement: Solicitud;
-
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     @ViewChild(MatTable) table: MatTable<Solicitud>;
@@ -96,12 +96,9 @@ export class SolicitudComponent implements OnInit {
         });
     }
 
-
-
-
-    /*abrirVentana() {
-        let dialogRef = this.dialog.open(TipoDeSuperficieWindowComponent, {
-            width: '400px', disableClose: true, data: new TipoDeSuperficie(),
+    abrirVentana() {
+        let dialogRef = this.dialog.open(SolicitudWindowComponent, {
+            width: '900px', disableClose: true, data: new Solicitud(),
         });
 
         dialogRef.afterClosed().subscribe(result => {
@@ -109,14 +106,14 @@ export class SolicitudComponent implements OnInit {
                 console.log(result);
                 this.dialog.open(Information, {
                     width: '400px',
-                    data: {mensaje: 'Se ha insertardo el tipo de superficie:' + result.elemento.nombre}
+                    data: {mensaje: 'Se ha insertardo la solicitud:' + result.elemento.nombre}
                 });
                 this.paginator.page.emit();
             }
         });
     }
 
-    editarTipoDeSuperficie(event: Event, tipoDeSuperficie: TipoDeSuperficie): void {
+    /*editarTipoDeSuperficie(event: Event, tipoDeSuperficie: TipoDeSuperficie): void {
         event.stopPropagation();
         let editDialogRef = this.dialog.open(TipoDeSuperficieWindowComponent, {
             width: '400px', data: tipoDeSuperficie, disableClose: true

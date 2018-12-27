@@ -32,6 +32,14 @@ export class ConsejoPopularService {
         });
     }
 
+    listarConsejoPopularNoDefinido(nombre:string): Observable<Respuesta<ConsejoPopular>> {
+        let constUrl = `${this.consejoPopularUrl+'/porNombre/'}${nombre}`;
+        return this.http.get<AppResponse<ConsejoPopular>>(constUrl, {
+            observe: "response",
+            headers: {"Authorization": this.token}
+        });
+    }
+
     insertarConsejoPopular(consejoPopular: ConsejoPopular): Observable<Respuesta<ConsejoPopular>> {
         return this.http.post<AppResponse<ConsejoPopular>>(this.consejoPopularUrl + "/nuevo", consejoPopular, {
             observe: "response",

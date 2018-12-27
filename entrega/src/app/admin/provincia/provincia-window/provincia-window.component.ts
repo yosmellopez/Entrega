@@ -27,9 +27,7 @@ export class ProvinciaWindowComponent implements OnInit {
         this.form = new FormGroup({
             codigo: new FormControl(codigo, [Validators.required, Validators.maxLength(2)]),
             nombre: new FormControl(nombre, [Validators.required]),
-
         });
-
     }
 
     onNoClick(): void {
