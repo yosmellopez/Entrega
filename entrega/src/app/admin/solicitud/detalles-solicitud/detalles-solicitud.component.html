@@ -1,7 +1,6 @@
 <div class="card">
     <div class="card-header ch-alt m-b-20 bgm-green">
         <h2>Informacion de la Solicitud {{numeroExpediente}}
-            <small>Muestra el detalle de la solicitude seleccionada</small>
         </h2>
         <button type="button" mat-icon-button class="close-button" (click)="onNoClick()">
             <mat-icon style="font-size: 25px">close</mat-icon>
@@ -11,9 +10,7 @@
         <mat-card class="example-card">
             <mat-card-title>
                 <div class="card-header ch-alt m-b-20 bgm-blue" style="padding: 10px 10px;">
-                    <h2>Datos del solicitante.
-                        <small>Muestra los datos del solicitante</small>
-                    </h2>
+                    <h2>Datos del solicitante </h2>
                 </div>
             </mat-card-title>
             <mat-card-content>
@@ -24,40 +21,40 @@
                     </ng-container>
 
                     <ng-container matColumnDef="nombre">
-                        <th mat-header-cell *matHeaderCellDef> Nombre </th>
-                        <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Nombre</th>
+                        <td mat-cell *matCellDef="let element"> {{element.nombre}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="primerApellido">
-                        <th mat-header-cell *matHeaderCellDef> Primer Apellido </th>
-                        <td mat-cell *matCellDef="let element"> {{element.primerApellido}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Primer Apellido</th>
+                        <td mat-cell *matCellDef="let element"> {{element.primerApellido}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="segundoApellido">
-                        <th mat-header-cell *matHeaderCellDef> Segundo Apellido </th>
-                        <td mat-cell *matCellDef="let element"> {{element.segundoApellido}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Segundo Apellido</th>
+                        <td mat-cell *matCellDef="let element"> {{element.segundoApellido}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="sexo">
                         <th mat-header-cell *matHeaderCellDef>Sexo</th>
-                        <td mat-cell *matCellDef="let element"> {{element.sexo}} </td>
+                        <td mat-cell *matCellDef="let element"> {{element.sexo}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="dirParticular">
-                        <th mat-header-cell *matHeaderCellDef> Dirección Particular </th>
-                        <td mat-cell *matCellDef="let element"> {{element.dirParticular}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Dirección Particular</th>
+                        <td mat-cell *matCellDef="let element"> {{element.dirParticular}}</td>
                     </ng-container>
 
                     <!-- Name Column -->
                     <ng-container matColumnDef="movil">
-                        <th mat-header-cell *matHeaderCellDef> Movil </th>
-                        <td mat-cell *matCellDef="let element"> {{element.movil}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Movil</th>
+                        <td mat-cell *matCellDef="let element"> {{element.movil}}</td>
                     </ng-container>
 
                     <!-- Weight Column -->
                     <ng-container matColumnDef="telFijo">
-                        <th mat-header-cell *matHeaderCellDef> Telefono Fijo </th>
-                        <td mat-cell *matCellDef="let element"> {{element.telFijo}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Telefono Fijo</th>
+                        <td mat-cell *matCellDef="let element"> {{element.telFijo}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="acciones" stickyEnd>
@@ -80,9 +77,7 @@
         <mat-card class="example-card">
             <mat-card-title>
                 <div class="card-header ch-alt m-b-20 bgm-blue" style="padding: 10px 10px;">
-                    <h2>Lista de parcelas solicitadas.
-                        <small>Muestra la lista de las parcelas solicitadas</small>
-                    </h2>
+                    <h2>Lista de parcelas solicitadas. </h2>
                 </div>
             </mat-card-title>
             <mat-card-content>
@@ -93,46 +88,46 @@
                     </ng-container>
 
                     <ng-container matColumnDef="zonaCatastral">
-                        <th mat-header-cell *matHeaderCellDef> ZC </th>
-                        <td mat-cell *matCellDef="let element"> {{element.zonaCatastral}} </td>
+                        <th mat-header-cell *matHeaderCellDef> ZC</th>
+                        <td mat-cell *matCellDef="let element"> {{element.zonaCatastral}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="parcela">
-                        <th mat-header-cell *matHeaderCellDef> Parcela </th>
-                        <td mat-cell *matCellDef="let element"> {{element.parcela}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Parcela</th>
+                        <td mat-cell *matCellDef="let element"> {{element.parcela}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="divicion">
-                        <th mat-header-cell *matHeaderCellDef> Divicion </th>
-                        <td mat-cell *matCellDef="let element"> {{element.divicion}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Divicion</th>
+                        <td mat-cell *matCellDef="let element"> {{element.divicion}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="area">
-                        <th mat-header-cell *matHeaderCellDef> Área(Ha) </th>
-                        <td mat-cell *matCellDef="let element"> {{element.area}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Área(Ha)</th>
+                        <td mat-cell *matCellDef="let element"> {{element.area}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="limiteN">
-                        <th mat-header-cell *matHeaderCellDef> Limite N </th>
-                        <td mat-cell *matCellDef="let element"> {{element.limiteN}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Limite N</th>
+                        <td mat-cell *matCellDef="let element"> {{element.limiteN}}</td>
                     </ng-container>
 
                     <!-- Name Column -->
                     <ng-container matColumnDef="limiteS">
-                        <th mat-header-cell *matHeaderCellDef> Limite S </th>
-                        <td mat-cell *matCellDef="let element"> {{element.limiteS}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Limite S</th>
+                        <td mat-cell *matCellDef="let element"> {{element.limiteS}}</td>
                     </ng-container>
 
                     <!-- Weight Column -->
                     <ng-container matColumnDef="limiteE">
-                        <th mat-header-cell *matHeaderCellDef> Limite E </th>
-                        <td mat-cell *matCellDef="let element"> {{element.limiteE}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Limite E</th>
+                        <td mat-cell *matCellDef="let element"> {{element.limiteE}}</td>
                     </ng-container>
 
                     <!-- Symbol Column -->
                     <ng-container matColumnDef="limiteW">
-                        <th mat-header-cell *matHeaderCellDef> Limite W </th>
-                        <td mat-cell *matCellDef="let element"> {{element.limiteW}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Limite W</th>
+                        <td mat-cell *matCellDef="let element"> {{element.limiteW}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="acciones" stickyEnd>
@@ -155,9 +150,7 @@
         <mat-card class="example-card">
             <mat-card-title>
                 <div class="card-header ch-alt m-b-20 bgm-blue" style="padding: 10px 10px;">
-                    <h2>Lista de las lineas de producción.
-                        <small>Muestra la lista de las lineas de producción</small>
-                    </h2>
+                    <h2>Lista de las lineas de producción. </h2>
                 </div>
             </mat-card-title>
             <mat-card-content>
@@ -168,18 +161,18 @@
                     </ng-container>
 
                     <ng-container matColumnDef="lineaDeProduccion">
-                        <th mat-header-cell *matHeaderCellDef> Linea de Producción </th>
-                        <td mat-cell *matCellDef="let element"> {{element.lineaDeProduccion}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Linea de Producción</th>
+                        <td mat-cell *matCellDef="let element"> {{element.lineaDeProduccion}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="areaDedicada">
                         <th mat-header-cell *matHeaderCellDef>Área Dedicada</th>
-                        <td mat-cell *matCellDef="let element"> {{element.areaDedicada}} </td>
+                        <td mat-cell *matCellDef="let element"> {{element.areaDedicada}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="estudioSuelo">
-                        <th mat-header-cell *matHeaderCellDef> Estudio De Suelo </th>
-                        <td mat-cell *matCellDef="let element"> {{element.estudioSuelo}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Estudio De Suelo</th>
+                        <td mat-cell *matCellDef="let element"> {{element.estudioSuelo}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="acciones" stickyEnd>
