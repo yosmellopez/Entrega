@@ -33,6 +33,7 @@ export class SolicitudService {
     }
 
     insertarSolicitud(solicitud: Solicitud): Observable<Respuesta<Solicitud>> {
+        console.log(solicitud);
         return this.http.post<AppResponse<Solicitud>>(this.solicitudUrl, solicitud, {
             observe: "response",
             headers: {"Authorization": this.token}

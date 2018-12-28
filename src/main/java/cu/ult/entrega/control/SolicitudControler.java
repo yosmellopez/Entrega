@@ -48,6 +48,7 @@ public class SolicitudControler {
 
     @PostMapping(value = "/solicitud")
     public ResponseEntity<AppResponse<Solicitud>> insertarSolicitud(@RequestBody Solicitud solicitud) {
+        System.out.println(solicitud.getParcelas());
         solicitudRepositorio.saveAndFlush(solicitud);
         return ResponseEntity.ok(AppResponse.success(solicitud).build());
     }

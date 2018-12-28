@@ -62,7 +62,7 @@ public class Solicitud implements Serializable {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_solicitud_persona"))
     private Persona persona;
     
-    @ManyToMany
+    @ManyToMany (cascade = CascadeType.PERSIST)
     @JoinTable(
         name = "solicitud_parcela",
         joinColumns = @JoinColumn(name = "solicitud_id", foreignKey = @ForeignKey(name = "fk_solicitud_parcela")),
