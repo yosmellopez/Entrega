@@ -8,10 +8,7 @@ package cu.ult.entrega.clases;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -77,20 +74,16 @@ public class Parcela implements Serializable {
 
     @JsonIgnore
     @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "Parcelas_Regulaciones",
+    @JoinTable(name = "Parcelas_Regulaciones",
             joinColumns = {@JoinColumn(name = "parcela_id")},
-            inverseJoinColumns = {@JoinColumn(name = "regulacion_id")}
-    )
+            inverseJoinColumns = {@JoinColumn(name = "regulacion_id")})
     Set<Regulaciones> regulaciones = new HashSet<>();
 
     @JsonIgnore
     @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "Parcelas_Bienhechurias",
+    @JoinTable(name = "Parcelas_Bienhechurias",
             joinColumns = {@JoinColumn(name = "parcela_id")},
-            inverseJoinColumns = {@JoinColumn(name = "bienhechuria_id")}
-    )
+            inverseJoinColumns = {@JoinColumn(name = "bienhechuria_id")})
     Set<Bienhechurías> bienhechurias = new HashSet<>();
 
     @JsonIgnore
@@ -217,21 +210,30 @@ public class Parcela implements Serializable {
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Parcela)) {
+    public boolean equals(Object o) {
+        Parcela parcela = (Parcela) o;
+        if (id == null && parcela.id == null)
             return false;
-        }
-        Parcela other = (Parcela) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        return Objects.equals(id, parcela.id);
     }
 
     @Override
     public String toString() {
-        return "entrega.clases.Parcela[ id=" + id + " ]";
+        return "Parcela{" +
+                "id=" + id +
+                ", consejoPopular=" + consejoPopular +
+                ", persona=" + persona +
+                ", zonaCatastral=" + zonaCatastral +
+                ", parcela=" + parcela +
+                ", divicion=" + divicion +
+                ", tipoDeUso=" + tipoDeUso +
+                ", area=" + area +
+                ", limiteN='" + limiteN + '\'' +
+                ", limiteS='" + limiteS + '\'' +
+                ", limiteE='" + limiteE + '\'' +
+                ", limiteW='" + limiteW + '\'' +
+                '}';
     }
-
 }

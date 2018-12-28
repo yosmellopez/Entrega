@@ -49,6 +49,7 @@ public class SolicitudControler {
 
     @PostMapping(value = "/solicitud")
     public ResponseEntity<AppResponse<Solicitud>> insertarSolicitud(@RequestBody Solicitud solicitud) {
+        System.out.println(solicitud.getParcelas());
         Set<Parcela> parcelas = solicitud.getParcelas();
         Set<Parcela> parcelasGuardadas = new HashSet<>();
         for (Parcela parcela : parcelas) {

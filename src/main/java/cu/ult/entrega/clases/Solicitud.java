@@ -5,8 +5,6 @@
  */
 package cu.ult.entrega.clases;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.io.Serializable;
@@ -30,10 +28,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.persistence.UniqueConstraint;
 
 /**
- *
  * @author Pablo Caram Local
  */
 @Entity
@@ -41,52 +37,51 @@ import javax.persistence.UniqueConstraint;
 public class Solicitud implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column (name = "tipoDecreto")
+
+    @Column(name = "tipoDecreto")
     private String tipoDecreto;
-    
-    @Column (name = "tipoSolicitud")
+
+    @Column(name = "tipoSolicitud")
     private String tipoSolicitud;
-        
-    @Column (name = "fechaSolicitud")
+
+    @Column(name = "fechaSolicitud")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaSolicitud;
-        
-    @Column (name = "numExpediente")
+
+    @Column(name = "numExpediente")
     private Integer numExpediente;
-    
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_solicitud_persona"))
     private Persona persona;
-    
-    @ManyToMany (cascade = CascadeType.PERSIST)
-    @JoinTable(
-        name = "solicitud_parcela",
-        joinColumns = @JoinColumn(name = "solicitud_id", foreignKey = @ForeignKey(name = "fk_solicitud_parcela")),
-        inverseJoinColumns = @JoinColumn(name = "parcela_id",foreignKey = @ForeignKey(name = "fk_parcela_solicitud")) 
-    )
+
+    @ManyToMany
+    @JoinTable(name = "solicitud_parcela",
+            joinColumns = @JoinColumn(name = "solicitud_id", foreignKey = @ForeignKey(name = "fk_solicitud_parcela")),
+            inverseJoinColumns = @JoinColumn(name = "parcela_id", foreignKey = @ForeignKey(name = "fk_parcela_solicitud")))
     Set<Parcela> parcelas = new HashSet<>();
 
     @OneToMany(mappedBy = "solicitud")
     @JsonManagedReference
     private List<LineaDeProduccion> lineasDeProduccion;
-    
-    @Column (name = "areaSolicitada")
+
+    @Column(name = "areaSolicitada")
     private Double areaSolicitada;
-    
+
     @OneToOne(mappedBy = "solicitud", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Tramite tramite;
-       
-    @Column (name = "estado")
+
+    @Column(name = "estado")
     private String estado;
-    
-    @Column (name = "fechaAproDes")
+
+    @Column(name = "fechaAproDes")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaAproDes;
-    
+
 
     public Long getId() {
         return id;
@@ -194,7 +189,7 @@ public class Solicitud implements Serializable {
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
- 
+
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
