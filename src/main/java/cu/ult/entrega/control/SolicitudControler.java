@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -48,7 +49,12 @@ public class SolicitudControler {
 
     @PostMapping(value = "/solicitud")
     public ResponseEntity<AppResponse<Solicitud>> insertarSolicitud(@RequestBody Solicitud solicitud) {
-        System.out.println(solicitud.getParcelas());
+        Set<Parcela> parcelas = solicitud.getParcelas();
+        Set<Parcela> parcelasGuardadas = new HashSet<>();
+        for (Parcela parcela : parcelas) {
+            parcelasGuardadas.add(parcelaRepositorio.saveAndFlush(parcela));
+        }
+        solicitud.setParcelas(parcelasGuardadas);
         solicitudRepositorio.saveAndFlush(solicitud);
         return ResponseEntity.ok(AppResponse.success(solicitud).build());
     }
