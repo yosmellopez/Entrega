@@ -31,7 +31,7 @@
                 <ng-template matStepLabel>Datos del solicitante</ng-template>
 
                 <div formGroupName="persona">
-                    <mat-radio-group class="example-radio-group" formControlName="tipoPersona" [value]="selected">
+                    <mat-radio-group class="example-radio-group" formControlName="tipoPersona" [value]="formSolici.get('persona').get('tipoPersona')">
                         <mat-radio-button value="Natural" (click)="selectTipoPersona('Natural')">Natural</mat-radio-button>
                         <mat-radio-button value="Juridica"(click)="selectTipoPersona('Juridica')">Juridica</mat-radio-button>
                     </mat-radio-group>
@@ -47,7 +47,6 @@
                     <mat-form-field>
                         <input matInput placeholder="Segundo Apellido" formControlName="segundoApellido">
                     </mat-form-field>
-                    <p>tipo de persona{{selected}}</p>
                     <div *ngIf="formSolici.get('persona').get('tipoPersona').value == 'Natural'">
                         <mat-radio-group class="example-radio-group" formControlName="sexo">
                             <mat-radio-button value="M">Masculino</mat-radio-button>
@@ -56,15 +55,10 @@
                         <mat-form-field>
                             <input matInput placeholder="Dirección Particular" formControlName="dirParticular">
                         </mat-form-field>
-                        <!--<mat-form-field>-->
-                            <!--<input matInput [matDatepicker]="picker" placeholder="Fecha de Nacimiento" formControlName="fechaDeNacimiento">-->
-                            <!--<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>-->
-                            <!--<mat-datepicker #picker startView="year" [startAt]="startDate"></mat-datepicker>-->
-                        <!--</mat-form-field>-->
                         <mat-form-field class="middle-width">
-                            <input matInput [matDatepicker]="nacimentoDatePicker" formControlName="fechaDeNacimiento" placeholder="Fecha de Nacimiento">
+                            <input matInput [matDatepicker]="nacimentoDatePicker" formControlName="fechaNacimiento" placeholder="Fecha de Nacimiento">
                             <mat-datepicker-toggle matSuffix [for]="nacimentoDatePicker"></mat-datepicker-toggle>
-                            <mat-datepicker #nacimentoDatePicker></mat-datepicker>
+                            <mat-datepicker #nacimentoDatePicker [startAt]="startDate"></mat-datepicker>
                         </mat-form-field>
                         <mat-form-field>
                             <input matInput type="number" maxlength="8" placeholder="Teléfono Movil" formControlName="movil">
@@ -91,6 +85,19 @@
                         <mat-form-field>
                             <input matInput type="number" maxlength="8" placeholder="Teléfono De la Entidad" formControlName="telFijo">
                         </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field class="full-width">
+                            <mat-select matInput placeholder="Seleccione La Entidad A Vincular" formControlName="asociado" [compareWith]="compararPersonas">
+                                <mat-option *ngFor="let persona of personas" [value]="persona">
+                                    {{persona|persona}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="formSolici.get('persona').get('asociado').errors?.required">Debe vincular a una Entidad.</mat-error>
+                        </mat-form-field>
+                        <button *ngIf="formSolici.get('persona').get('tipoPersona').value =='Natural'" mat-mini-fab color="primary" (click)="abrirVentana()" matTooltip="Nueva Persona Juridica">
+                            <mat-icon style="font-size: 25px">add</mat-icon>
+                        </button>
                     </div>
                 </div>
                     <div>

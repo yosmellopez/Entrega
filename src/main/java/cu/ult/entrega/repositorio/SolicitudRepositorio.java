@@ -21,4 +21,6 @@ public interface SolicitudRepositorio extends JpaRepository<Solicitud, Long>{
     public Solicitud findByNumExpediente(String numExpediente); 
     
     public List<Solicitud> findByEstado(String estado);
+
+    public Solicitud findTopByOrderByNumExpedienteDesc();
 }

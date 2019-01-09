@@ -56,6 +56,13 @@ export class Persona {
     telFijo: string;
     situacionLaboral: string;
     asociado: Persona;
+
+    constructor(value?: any) {
+        if (value) {
+            this.tipoPersona = value? value : "";
+            //this.nombre = value.nombre ? value.nombre : "";
+        }
+    }
 }
 
 export class Solicitud {

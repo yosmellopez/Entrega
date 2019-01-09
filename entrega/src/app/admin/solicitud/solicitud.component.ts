@@ -106,7 +106,7 @@ export class SolicitudComponent implements OnInit {
                 console.log(result);
                 this.dialog.open(Information, {
                     width: '400px',
-                    data: {mensaje: 'Se ha insertardo la solicitud:' + result.elemento.nombre}
+                    data: {mensaje: 'Se ha insertardo la solicitud:' + result.elemento.numExpediente}
                 });
                 this.paginator.page.emit();
             }

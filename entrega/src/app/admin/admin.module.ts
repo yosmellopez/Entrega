@@ -22,6 +22,7 @@ import { TipoDeUsoWindowComponent } from './tipo-de-uso/tipo-de-uso-window/tipo-
 import { ConsejoPopularWindowComponent } from './consejo-popular/consejo-popular-window/consejo-popular-window.component';
 import { DetallesSolicitudComponent } from './solicitud/detalles-solicitud/detalles-solicitud.component';
 import { SolicitudWindowComponent } from './solicitud/solicitud-window/solicitud-window.component';
+import { PersonaWindowsComponent } from './solicitante/persona-windows/persona-windows.component';
 
 @NgModule({
     imports: [
@@ -50,9 +51,10 @@ import { SolicitudWindowComponent } from './solicitud/solicitud-window/solicitud
         TipoDeUsoWindowComponent,
         ConsejoPopularWindowComponent,
         DetallesSolicitudComponent,
-        SolicitudWindowComponent
+        SolicitudWindowComponent,
+        PersonaWindowsComponent
     ],
-    entryComponents: [ProvinciaWindowComponent, MunicipioWindowComponent, TipoDeSuperficieWindowComponent, TipoDeUsoWindowComponent, ConsejoPopularWindowComponent, DetallesSolicitudComponent,SolicitudWindowComponent]
+    entryComponents: [ProvinciaWindowComponent, MunicipioWindowComponent, TipoDeSuperficieWindowComponent, TipoDeUsoWindowComponent, ConsejoPopularWindowComponent, DetallesSolicitudComponent,SolicitudWindowComponent, PersonaWindowsComponent]
 })
 export class AdminModule {
 }

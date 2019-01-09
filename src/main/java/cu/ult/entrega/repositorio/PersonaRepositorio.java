@@ -8,12 +8,14 @@ package cu.ult.entrega.repositorio;
 import cu.ult.entrega.clases.Persona;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 /**
  *
  * @author Pablo Caram Local
  */
 public interface PersonaRepositorio extends JpaRepository<Persona, Long>{
-    //public List<Persona> findByCi(String ci);
+    public List<Persona> findByTipoPersona(String tipoPersona);
     
     public Persona findByCi(String ci);
 }
