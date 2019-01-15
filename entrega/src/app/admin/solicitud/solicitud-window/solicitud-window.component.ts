@@ -9,6 +9,7 @@ import {SolicitudService} from "../../../servicios/solicitud.service";
 import {PersonaService} from "../../../servicios/persona.service";
 import {ReplaySubject} from "rxjs/index";
 import {PersonaWindowsComponent} from "../../solicitante/persona-windows/persona-windows.component";
+import {validate} from "codelyzer/walkerFactory/walkerFn";
 
 export const MY_FORMATS = {
     parse: {
@@ -44,6 +45,7 @@ export class SolicitudWindowComponent implements OnInit {
     tipoDeUso: TipoDeUso;
     startDate = new Date(1988, 0, 1);
     personas:Persona[];
+    maxValorAreaDedicada:number;
     public PersonasFiltradas: ReplaySubject<Persona[]> = new ReplaySubject<Persona[]>(1);
 
     constructor(public dialogRef: MatDialogRef<SolicitudWindowComponent>,
@@ -150,9 +152,16 @@ export class SolicitudWindowComponent implements OnInit {
     }
 
     addLineasDeProduccion() {
+        if (this.formSolici.get('lineasDeProduccion').get('areaDedicada').value){
+            this.maxValorAreaDedicada = this.formSolici.get('areaSolicitada').value - this.formSolici.get('lineasDeProduccion').get('areaDedicada').value;
+        }else {
+            this.maxValorAreaDedicada = this.formSolici.get('areaSolicitada').value;
+        }
+
+        console.log(this.maxValorAreaDedicada);
         const lineaDeProduccion = this.formBuilder.group({
             lineaDeProduccion: [],
-            areaDedicada: new FormControl (areaDedicada,[vali]),
+            areaDedicada: new FormControl ([],[Validators.required(),Validators.maxLength(this.maxValorAreaDedicada)]),
         })
 
         this.lineasDeProduccionForm.push(lineaDeProduccion);
