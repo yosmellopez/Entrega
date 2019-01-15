@@ -5,9 +5,10 @@
  */
 package cu.ult.entrega.control;
 
+import cu.ult.entrega.clases.LineaDeProduccion;
 import cu.ult.entrega.clases.Parcela;
-import cu.ult.entrega.clases.Provincia;
 import cu.ult.entrega.clases.Solicitud;
+import cu.ult.entrega.repositorio.LineaDeProduccionRepositorio;
 import cu.ult.entrega.repositorio.ParcelaRepositorio;
 import cu.ult.entrega.repositorio.SolicitudRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,24 +41,14 @@ public class SolicitudControler {
     @Autowired
     ParcelaRepositorio parcelaRepositorio;
 
+    @Autowired
+    LineaDeProduccionRepositorio lineaDeProduccionRepositorio;
+
     @RequestMapping(value = "/solicitud")
     public ResponseEntity<AppResponse<Solicitud>> listarSolicitud(Pageable p) {
         Page<Solicitud> page = solicitudRepositorio.findAll(p);
         List<Solicitud> solicituds = page.getContent();
         return ResponseEntity.ok(success(solicituds).total(page.getTotalElements()).build());
-    }
-
-    @PostMapping(value = "/solicitud")
-    public ResponseEntity<AppResponse<Solicitud>> insertarSolicitud(@RequestBody Solicitud solicitud) {
-        System.out.println(solicitud.getParcelas());
-        Set<Parcela> parcelas = solicitud.getParcelas();
-        Set<Parcela> parcelasGuardadas = new HashSet<>();
-        for (Parcela parcela : parcelas) {
-            parcelasGuardadas.add(parcelaRepositorio.saveAndFlush(parcela));
-        }
-        solicitud.setParcelas(parcelasGuardadas);
-        solicitudRepositorio.saveAndFlush(solicitud);
-        return ResponseEntity.ok(AppResponse.success(solicitud).build());
     }
 
     @RequestMapping(value = "/solicitud/estado/{estado}")
@@ -90,6 +81,30 @@ public class SolicitudControler {
 
         map.put("response", HttpStatus.OK);
         return new ModelAndView(new MappingJackson2JsonView(), map);
+    }
+
+    @RequestMapping(value = "/solicitud/ultima")
+    public ResponseEntity<AppResponse<Solicitud>> obtenerLaUltimaSolicitud (){
+       Solicitud solicitud = solicitudRepositorio.findTopByOrderByNumExpedienteDesc();
+       return ResponseEntity.ok(success(solicitud).build());
+    }
+
+    @PostMapping(value = "/solicitud")
+    public ResponseEntity<AppResponse<Solicitud>> insertarSolicitud(@RequestBody Solicitud solicitud) {
+        Set<Parcela> parcelas = solicitud.getParcelas();
+        Set<Parcela> parcelasGuardadas = new HashSet<>();
+        List<LineaDeProduccion> lineasDeProduccion = solicitud.getLineasDeProduccion();
+        for (Parcela parcela : parcelas) {
+            parcelasGuardadas.add(parcelaRepositorio.saveAndFlush(parcela));
+        }
+        solicitud.setParcelas(parcelasGuardadas);
+        solicitudRepositorio.saveAndFlush(solicitud);
+        for (LineaDeProduccion lineaDeProduccion : lineasDeProduccion){
+            lineaDeProduccion.setSolicitud(solicitud);
+            lineaDeProduccionRepositorio.saveAndFlush(lineaDeProduccion);
+        }
+
+        return ResponseEntity.ok(AppResponse.success(solicitud).build());
     }
 
     @RequestMapping(value = "/solicitud/{id}", method = RequestMethod.PUT)

@@ -24,6 +24,15 @@ export class SolicitudService {
         });
     }
 
+    obtenerUltimSolicitud():Observable<Respuesta<Solicitud>>{
+        let constUrl = `${this.solicitudUrl}/ultima`;
+        return this.http.get<AppResponse<Solicitud>>(constUrl, {
+            observe: "response",
+            headers: {"Authorization": this.token}
+        });
+
+    }
+
     listarSolicitudNoDefinido(): Observable<Respuesta<Solicitud>> {
         let constUrl = `${this.solicitudUrl}/noDefinido`;
         return this.http.get<AppResponse<Solicitud>>(constUrl, {
