@@ -1,11 +1,11 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {CommonModule} from "@angular/common";
-import {BrowserModule} from "@angular/platform-browser";
-import {UsuarioComponent} from "./usuario/usuario.component";
-import {AdminComponent} from "./admin/admin.component";
-import {LoginComponent} from "./components/login/login.component";
-import {RouteInfo} from "./modelo";
+import {CommonModule} from '@angular/common';
+import {BrowserModule} from '@angular/platform-browser';
+import {UsuarioComponent} from './usuario/usuario.component';
+import {AdminComponent} from './admin/admin.component';
+import {LoginComponent} from './components/login/login.component';
+import {RouteInfo} from './modelo';
 
 const routes: Routes = [
     {path: '', redirectTo: '/login', pathMatch: 'full'},
@@ -20,15 +20,16 @@ const routes: Routes = [
         children: [{path: 'admin', loadChildren: './admin/admin.module#AdminModule'}]
     }
 ];
+
 export const APP_RUTAS: RouteInfo[] = [
     {
-        id: "admin-actions",
-        title: "Administración",
-        icon: "group",
-        class: "zmdi zmdi-accounts-alt",
-        authority: ["Administrador"],
+        id: 'admin-actions',
+        title: 'Administración',
+        icon: 'group',
+        class: 'zmdi zmdi-accounts-alt',
+        authority: ['Administrador'],
         hasChildren: true,
-        path: "",
+        path: '',
         routes: [{
             path: '/admin/provincia',
             title: 'Provincias',
@@ -71,13 +72,13 @@ export const APP_RUTAS: RouteInfo[] = [
             class: 'waves-effect waves-cyan',
         }]
     }, {
-        id: "user-actions",
-        title: "gpsTravel",
-        icon: "gps_fixed",
-        class: "tag tag-rounded tag-success tag-sm",
+        id: 'user-actions',
+        title: 'gpsTravel',
+        icon: 'gps_fixed',
+        class: 'tag tag-rounded tag-success tag-sm',
         hasChildren: true,
-        path: "",
-        authority: ["Usuario", "Administrador"],
+        path: '',
+        authority: ['Usuario', 'Administrador'],
         routes: [{
             path: '/user/bus-list',
             title: 'bus.list',
@@ -100,21 +101,21 @@ export const APP_RUTAS: RouteInfo[] = [
             class: 'waves-effect waves-cyan',
         }]
     }, {
-        id: "user-profile",
+        id: 'user-profile',
         path: '/user/profile',
         title: 'userprofile',
         icon: 'person',
         class: 'tag tag-rounded tag-danger tag-sm',
-        authority: ["Administrador", "Usuario"],
+        authority: ['Administrador', 'Usuario'],
         hasChildren: false,
         routes: [],
     }, {
-        id: "notifications",
+        id: 'notifications',
         path: '/user/notification',
         title: 'notifications',
         icon: 'notifications',
         class: 'tag tag-rounded tag-danger tag-sm',
-        authority: ["Administrador", "Usuario"],
+        authority: ['Administrador', 'Usuario'],
         hasChildren: false,
         routes: [],
     }

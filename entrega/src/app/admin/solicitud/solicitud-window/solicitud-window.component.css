@@ -10,3 +10,8 @@
 .example-selected-value {
     margin: 15px 0;
 }
+
+.example-container {
+    height: 350px;
+    overflow: auto;
+}

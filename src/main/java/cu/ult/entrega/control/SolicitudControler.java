@@ -51,20 +51,10 @@ public class SolicitudControler {
         return ResponseEntity.ok(success(solicituds).total(page.getTotalElements()).build());
     }
 
-    @RequestMapping(value = "/solicitud/estado/{estado}")
-    public ModelAndView listarSolicitudesEstado(@PathVariable("estado") String estado, ModelMap map) {
-
-        List<Solicitud> solicitudes = solicitudRepositorio.findByEstado(estado);
-        map.put("solicitudes", solicitudes);
-        map.put("cant", solicitudes.size());
-
-        if (solicitudes.isEmpty()) {
-            map.put("response", HttpStatus.NO_CONTENT);
-            return new ModelAndView(new MappingJackson2JsonView(), map);
-        }
-
-        map.put("response", HttpStatus.OK);
-        return new ModelAndView(new MappingJackson2JsonView(), map);
+    @GetMapping(value = "/solicitud/estado")
+    public ResponseEntity<AppResponse<Solicitud>> listarSolicitudesEstado(Pageable pageable, @RequestParam("estado") String estado) {
+        Page<Solicitud> page = solicitudRepositorio.findByEstado(estado, pageable);
+        return ResponseEntity.ok(success(page.getContent()).total(page.getTotalElements()).build());
     }
 
     @RequestMapping(value = "/solicitud/una/{numExp}")
@@ -84,9 +74,9 @@ public class SolicitudControler {
     }
 
     @RequestMapping(value = "/solicitud/ultima")
-    public ResponseEntity<AppResponse<Solicitud>> obtenerLaUltimaSolicitud (){
-       Solicitud solicitud = solicitudRepositorio.findTopByOrderByNumExpedienteDesc();
-       return ResponseEntity.ok(success(solicitud).build());
+    public ResponseEntity<AppResponse<Solicitud>> obtenerLaUltimaSolicitud() {
+        Solicitud solicitud = solicitudRepositorio.findTopByOrderByNumExpedienteDesc();
+        return ResponseEntity.ok(success(solicitud).build());
     }
 
     @PostMapping(value = "/solicitud")
@@ -99,7 +89,7 @@ public class SolicitudControler {
         }
         solicitud.setParcelas(parcelasGuardadas);
         solicitudRepositorio.saveAndFlush(solicitud);
-        for (LineaDeProduccion lineaDeProduccion : lineasDeProduccion){
+        for (LineaDeProduccion lineaDeProduccion : lineasDeProduccion) {
             lineaDeProduccion.setSolicitud(solicitud);
             lineaDeProduccionRepositorio.saveAndFlush(lineaDeProduccion);
         }

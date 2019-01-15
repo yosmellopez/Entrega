@@ -30,7 +30,7 @@ export class DetallesSolicitudComponent implements OnInit {
   }
 
   ngOnInit() {
-      console.log(this.parcelas);
+      console.log(this.formParcela);
       console.log(this.solicitante);
       console.log(this.lineasDeProduccion);
 
