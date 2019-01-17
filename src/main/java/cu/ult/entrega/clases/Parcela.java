@@ -90,6 +90,14 @@ public class Parcela implements Serializable {
     @ManyToMany(mappedBy = "parcelas")
     private List<Solicitud> solicitudes;
 
+    public TipoDeUso getTipoDeUso() {
+        return tipoDeUso;
+    }
+
+    public void setTipoDeUso(TipoDeUso tipoDeUso) {
+        this.tipoDeUso = tipoDeUso;
+    }
+
     public Long getId() {
         return id;
     }

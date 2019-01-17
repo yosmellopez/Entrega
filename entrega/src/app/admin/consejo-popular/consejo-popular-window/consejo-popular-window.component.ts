@@ -6,7 +6,7 @@ import {ConsejoPopular, Municipio, Provincia} from "../../../modelo";
 import {MunicipioService} from "../../../servicios/municipio.service";
 import {ConsejoPopularService} from "../../../servicios/consejo-popular.service";
 import {MensajeError} from "../../../mensaje/window.mensaje";
-import {ProvinciaService} from "../../../Servicios/provincia.service";
+import {ProvinciaService} from "../../../servicios/provincia.service";
 
 @Component({
     selector: 'app-consejo-popular-window',

@@ -1,4 +1,4 @@
-<form [formGroup]="formSolici"(submit)="insertarSolicitud()">
+<form [formGroup]="formSolicitud" (submit)="insertarSolicitud()">
     <h1 mat-dialog-title style="margin: 0 0">{{insertar?'Nueva Solicitud':'Modificar Solicitud'}}
         <button type="button" mat-icon-button class="close-button" (click)="onNoClick()">
             <mat-icon style="font-size: 25px">close</mat-icon>
@@ -6,34 +6,33 @@
         <hr>
     </h1>
     <div mat-dialog-content style="min-height: 7em;">
-        <mat-horizontal-stepper [linear]="isLinear" #stepper>
-            <mat-step [stepControl]="formSolici">
-                <ng-template matStepLabel>Datos de la solicitud</ng-template>
-                <form [formGroup]="formSolici">
+        <mat-horizontal-stepper [linear]="false" #stepper>
+            <mat-step [stepControl]="formSolicitud">
+                <form [formGroup]="formSolicitud">
+                    <ng-template matStepLabel>Datos de la solicitud</ng-template>
                     <mat-radio-group class="example-radio-group" formControlName="tipoSolicitud">
                         <mat-radio-button value="Nueva">Nueva</mat-radio-button>
                         <mat-radio-button value="Ampliacion">Ampliacion</mat-radio-button>
                     </mat-radio-group>
                     <mat-form-field>
                         <input type="number" matInput #input placeholder="Numero de Solicitud" formControlName="numExpediente">
-                        <mat-error *ngIf="formSolici.controls['numExpediente'].errors?.required">Debe insertar el numero de la solicitud</mat-error>
+                        <mat-error *ngIf="formSolicitud.controls['numExpediente'].errors?.required">Debe insertar el numero de la solicitud</mat-error>
                     </mat-form-field>
                     <mat-form-field>
                         <input type="number" matInput #input placeholder="Área Solicitada(Ha)" formControlName="areaSolicitada">
-                        <mat-error *ngIf="formSolici.controls['areaSolicitada'].errors?.required">Debe insertar el área solicitada</mat-error>
+                        <mat-error *ngIf="formSolicitud.controls['areaSolicitada'].errors?.required">Debe insertar el área solicitada</mat-error>
                     </mat-form-field>
                     <div>
                         <button mat-button matStepperNext>Next</button>
                     </div>
                 </form>
             </mat-step>
-            <mat-step [stepControl]="persona">
+            <mat-step [stepControl]="formPersona">
                 <ng-template matStepLabel>Datos del solicitante</ng-template>
-
-                <div formGroupName="persona">
-                    <mat-radio-group class="example-radio-group" formControlName="tipoPersona" [value]="formSolici.get('persona').get('tipoPersona')">
-                        <mat-radio-button value="Natural" (click)="selectTipoPersona('Natural')">Natural</mat-radio-button>
-                        <mat-radio-button value="Juridica"(click)="selectTipoPersona('Juridica')">Juridica</mat-radio-button>
+                <form [formGroup]="formPersona">
+                    <mat-radio-group class="example-radio-group" formControlName="tipoPersona" [value]="formPersona.controls['tipoPersona'].value">
+                        <mat-radio-button value="Natural">Natural</mat-radio-button>
+                        <mat-radio-button value="Juridica">Juridica</mat-radio-button>
                     </mat-radio-group>
                     <mat-form-field>
                         <input matInput maxlength="11" placeholder="CI" formControlName="ci">
@@ -47,7 +46,7 @@
                     <mat-form-field>
                         <input matInput placeholder="Segundo Apellido" formControlName="segundoApellido">
                     </mat-form-field>
-                    <div *ngIf="formSolici.get('persona').get('tipoPersona').value == 'Natural'">
+                    <div *ngIf="formPersona.value.tipoPersona == 'Natural'">
                         <mat-radio-group class="example-radio-group" formControlName="sexo">
                             <mat-radio-button value="M">Masculino</mat-radio-button>
                             <mat-radio-button value="F">Femenino</mat-radio-button>
@@ -67,7 +66,7 @@
                             <input matInput type="number" maxlength="8" placeholder="Teléfono Fijo" formControlName="telFijo">
                         </mat-form-field>
                         <mat-form-field>
-                            <mat-select matInput placeholder="Situacion Laboral" formControlName="situacionLaboral" >
+                            <mat-select matInput placeholder="Situacion Laboral" formControlName="situacionLaboral">
                                 <mat-option value="Trabajador estatal">Trabajador estatal</mat-option>
                                 <mat-option value="Trabajador no estatal">Trabajador no estatal</mat-option>
                                 <mat-option value="Trabajador por CP">Trabajdor por cuenta propia</mat-option>
@@ -78,7 +77,7 @@
                             </mat-select>
                         </mat-form-field>
                     </div>
-                    <div *ngIf="formSolici.get('persona').get('tipoPersona').value == 'Juridica'">
+                    <div *ngIf="formPersona.value.tipoPersona == 'Juridica'">
                         <mat-form-field>
                             <input matInput placeholder="Dirección Particular" formControlName="dirParticular">
                         </mat-form-field>
@@ -93,70 +92,138 @@
                                     {{persona|persona}}
                                 </mat-option>
                             </mat-select>
-                            <mat-error *ngIf="formSolici.get('persona').get('asociado').errors?.required">Debe vincular a una Entidad.</mat-error>
+                            <mat-error *ngIf="formPersona.controls['asociado'].errors?.required">Debe vincular a una Entidad.</mat-error>
                         </mat-form-field>
-                        <button *ngIf="formSolici.get('persona').get('tipoPersona').value =='Natural'" mat-mini-fab color="primary" (click)="abrirVentana()" matTooltip="Nueva Persona Juridica">
+                        <button *ngIf="formPersona.controls['tipoPersona'].value =='Natural'" mat-mini-fab color="primary" (click)="abrirVentana()" matTooltip="Nueva Persona Juridica">
                             <mat-icon style="font-size: 25px">add</mat-icon>
                         </button>
                     </div>
-                </div>
-                    <div>
-                        <button mat-button matStepperPrevious>Back</button>
-                        <button mat-button matStepperNext>Next</button>
-                    </div>
-            </mat-step>
-            <mat-step [stepControl]="parcelas">
-                <ng-template matStepLabel>Parcelas</ng-template>
-                <div formArrayName="parcelas">
-                    <div *ngFor="let parcela of parcelasForm.controls; let i=index"
-                         [formGroupName]="i">
-                        <mat-form-field>
-                            <input matInput placeholder="Limite Norte" formControlName="limiteN" required>
-                        </mat-form-field>
-                        <mat-form-field>
-                            <input matInput placeholder="Limite Sur" formControlName="limiteS" required>
-                        </mat-form-field>
-                        <mat-form-field>
-                            <input matInput placeholder="Limite Este" formControlName="limiteE" required>
-                        </mat-form-field>
-                        <mat-form-field>
-                            <input matInput placeholder="Limite Oeste" formControlName="limiteW" required>
-                        </mat-form-field>
-                        <button mat-mini-fab color="warn" (click)="deleteParcela(i)" [matTooltip]="'Eliminar parcela - '+ (i+1)">
-                            <mat-icon style="font-size: 25px">remove</mat-icon>
-                        </button>
-                    </div>
-                    <button mat-mini-fab color="warn" (click)="addParcela(i)" [matTooltip]="'Nueva parcela'">
-                        <mat-icon style="font-size: 25px">add</mat-icon>
-                    </button>
-                    <div>
-                        <button mat-button matStepperPrevious>Back</button>
-                        <button mat-button matStepperNext>Next</button>
-                    </div>
-                </div>
-            </mat-step>
-            <mat-step>
-                <ng-template matStepLabel>Linea de Produccion</ng-template>
-                <div formArrayName="lineasDeProduccion">
-                    <div *ngFor="let lineaDeProduccion of lineasDeProduccionForm.controls; let i=index"
-                         [formGroupName]="i">
-                        <mat-form-field>
-                            <input matInput placeholder="Linea de Produccion" formControlName="lineaDeProduccion" required>
-                        </mat-form-field>
-                        <mat-form-field>
-                            <input type="number" matInput placeholder="Área Dedicada" formControlName="areaDedicada" required>
-                        </mat-form-field>
-                        <button mat-mini-fab color="warn" (click)="deleteLineasDeProduccion(i)" [matTooltip]="'Eliminar linea de produccion - '+ (i+1)">
-                            <mat-icon style="font-size: 25px">remove</mat-icon>
-                        </button>
-                    </div>
-                    <button mat-mini-fab color="warn" (click)="addLineasDeProduccion(i)" [matTooltip]="'Nueva linea de produccion'">
-                        <mat-icon style="font-size: 25px">add</mat-icon>
-                    </button>
-                </div>
+                </form>
                 <div>
                     <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperNext>Next</button>
                 </div>
+            </mat-step>
+            <mat-step [stepControl]="formParcela">
+                <ng-template matStepLabel>Parcelas</ng-template>
+                <form [formGroup]="formParcela" (submit)="addParcela()">
+                    <input type="hidden" formControlName="contador">
+                    <mat-form-field>
+                        <input type="number" matInput placeholder="Numero de Solicitud" formControlName="limiteN">
+                        <mat-error *ngIf="formParcela.controls['limiteN'].errors?.required">Debe insertar el numero de la solicitud</mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input type="number" matInput placeholder="Área Solicitada(Ha)" formControlName="limiteS">
+                        <mat-error *ngIf="formParcela.controls['limiteS'].errors?.required">Debe insertar el área solicitada</mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input type="number" matInput placeholder="Área Solicitada(Ha)" formControlName="limiteE">
+                        <mat-error *ngIf="formParcela.controls['limiteE'].errors?.required">Debe insertar el área solicitada</mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input type="number" matInput placeholder="Área Solicitada(Ha)" formControlName="limiteW">
+                        <mat-error *ngIf="formParcela.controls['limiteW'].errors?.required">Debe insertar el área solicitada</mat-error>
+                    </mat-form-field>
+                    <button mat-mini-fab color="primary" style="margin-right: 10px;" matTooltip="Añadir Parcela">
+                        <mat-icon>add</mat-icon>
+                    </button>
+
+                    <div class="example-container mat-elevation-z8" style="top: 10px;position:relative;">
+                        <table mat-table [dataSource]="dataSourceParcela">
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="limiteN">
+                                <th mat-header-cell *matHeaderCellDef> Nombre</th>
+                                <td mat-cell *matCellDef="let element"> {{element.limiteN}}</td>
+                                <!--<td mat-footer-cell *matFooterCellDef><strong> Total</strong></td>-->
+                            </ng-container>
+
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="limiteS">
+                                <th mat-header-cell *matHeaderCellDef> Apellidos</th>
+                                <td mat-cell *matCellDef="let element"> {{element.limiteS}}</td>
+                                <!--<td mat-footer-cell *matFooterCellDef><strong>{{getTotal()}}</strong></td>-->
+                            </ng-container>
+
+                            <!-- Weight Column -->
+                            <ng-container matColumnDef="limiteE">
+                                <th mat-header-cell *matHeaderCellDef> DNI</th>
+                                <td mat-cell *matCellDef="let element"> {{element.limiteE}}</td>
+                                <!--<td mat-footer-cell *matFooterCellDef></td>-->
+                            </ng-container>
+
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="limiteW">
+                                <th mat-header-cell *matHeaderCellDef> Lugar</th>
+                                <td mat-cell *matCellDef="let element"> {{element.limiteW}}</td>
+                                <!--<td mat-footer-cell *matFooterCellDef></td>-->
+                            </ng-container>
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="acciones" stickyEnd>
+                                <th mat-header-cell *matHeaderCellDef> Acciones</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <button mat-mini-fab type="button" color="accent" (click)="editParcela($event,element)" matTooltip="Editar Pasajero">
+                                        <mat-icon>mode_edit</mat-icon>
+                                    </button>
+                                </td>
+                                <!--<td mat-footer-cell *matFooterCellDef></td>-->
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsParcela; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsParcela;"></tr>
+                            <!--<tr mat-footer-row *matFooterRowDef="displayedColumnsParcela; sticky: true"></tr>-->
+                        </table>
+                    </div>
+                </form>
+            </mat-step>
+            <mat-step [stepControl]="formLineaProduccion">
+                <ng-template matStepLabel>Linea de Produccion</ng-template>
+                <form [formGroup]="formLineaProduccion" (submit)="addLineasProduccion()">
+                    <input type="hidden" formControlName="contador">
+                    <mat-form-field>
+                        <input type="number" matInput placeholder="Numero de Solicitud" formControlName="lineaDeProduccion">
+                        <mat-error *ngIf="formLineaProduccion.controls['lineaDeProduccion'].errors?.required">Debe insertar el numero de la solicitud</mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input type="number" matInput placeholder="Área Solicitada(Ha)" formControlName="areaDedicada">
+                        <mat-error *ngIf="formLineaProduccion.controls['areaDedicada'].errors?.required">Debe insertar el área solicitada</mat-error>
+                    </mat-form-field>
+                    <button mat-mini-fab color="primary" style="margin-right: 10px;" matTooltip="Añadir Parcela">
+                        <mat-icon>add</mat-icon>
+                    </button>
+
+                    <div class="example-container mat-elevation-z8" style="top: 10px;position:relative;">
+                        <table mat-table [dataSource]="dataSourceLinea">
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="lineaDeProduccion">
+                                <th mat-header-cell *matHeaderCellDef> Nombre</th>
+                                <td mat-cell *matCellDef="let element"> {{element.lineaDeProduccion}}</td>
+                                <!--<td mat-footer-cell *matFooterCellDef><strong> Total</strong></td>-->
+                            </ng-container>
+
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="areaDedicada">
+                                <th mat-header-cell *matHeaderCellDef> Apellidos</th>
+                                <td mat-cell *matCellDef="let element"> {{element.areaDedicada}}</td>
+                                <!--<td mat-footer-cell *matFooterCellDef><strong>{{getTotal()}}</strong></td>-->
+                            </ng-container>
+
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="acciones" stickyEnd>
+                                <th mat-header-cell *matHeaderCellDef> Acciones</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <button mat-mini-fab type="button" color="accent" (click)="editParcela($event,element)" matTooltip="Editar Pasajero">
+                                        <mat-icon>mode_edit</mat-icon>
+                                    </button>
+                                </td>
+                                <!--<td mat-footer-cell *matFooterCellDef></td>-->
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsLinea; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsLinea;"></tr>
+                            <!--<tr mat-footer-row *matFooterRowDef="displayedColumnsParcela; sticky: true"></tr>-->
+                        </table>
+                    </div>
+                </form>
             </mat-step>
         </mat-horizontal-stepper>
     </div>

@@ -1,15 +1,15 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DATE_FORMATS, MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material";
-import {ConsejoPopular, LineaDeProduccion, Parcela, Persona, Provincia, Solicitud, TipoDeUso} from "../../../modelo";
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Information, MensajeError} from "../../../mensaje/window.mensaje";
-import {ConsejoPopularService} from "../../../servicios/consejo-popular.service";
-import {TipoDeUsoService} from "../../../servicios/tipo-de-uso.service";
-import {SolicitudService} from "../../../servicios/solicitud.service";
-import {PersonaService} from "../../../servicios/persona.service";
-import {ReplaySubject} from "rxjs/index";
-import {PersonaWindowsComponent} from "../../solicitante/persona-windows/persona-windows.component";
-import {validate} from "codelyzer/walkerFactory/walkerFn";
+import {MAT_DATE_FORMATS, MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatTableDataSource} from '@angular/material';
+import {ConsejoPopular, LineaDeProduccion, Parcela, Persona, Solicitud, TipoDeUso} from '../../../modelo';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Information, MensajeError} from '../../../mensaje/window.mensaje';
+import {ConsejoPopularService} from '../../../servicios/consejo-popular.service';
+import {TipoDeUsoService} from '../../../servicios/tipo-de-uso.service';
+import {SolicitudService} from '../../../servicios/solicitud.service';
+import {PersonaService} from '../../../servicios/persona.service';
+import {ReplaySubject} from 'rxjs/index';
+import {PersonaWindowsComponent} from '../../solicitante/persona-windows/persona-windows.component';
+import {SelectionModel} from '@angular/cdk/collections';
 
 export const MY_FORMATS = {
     parse: {
@@ -31,61 +31,81 @@ export const MY_FORMATS = {
 })
 export class SolicitudWindowComponent implements OnInit {
 
-    isLinear = false;
     isLoadingResults = false;
     idSolicitud: number;
-    formSolici: FormGroup;
-    //persona:FormGroup;
-    parcelas: FormGroup;
-    lineasDeProduccion: FormGroup;
+    formSolicitud: FormGroup;
+    formParcela: FormGroup;
+    formPersona: FormGroup;
+    formLineaProduccion: FormGroup;
+    parcelas: Parcela[] = [];
+    lineasProduccion: LineaDeProduccion[] = [];
     insertar = false;
     solicitud: Solicitud;
     ultimoNumeroSolicitud: number;
+    contadorParcela: number = 0;
+    contadorLinea: number = 0;
     consejoPopular: ConsejoPopular;
     tipoDeUso: TipoDeUso;
     startDate = new Date(1988, 0, 1);
-    personas:Persona[];
-    maxValorAreaDedicada:number;
-    public PersonasFiltradas: ReplaySubject<Persona[]> = new ReplaySubject<Persona[]>(1);
+    personas: Persona[];
+    displayedColumnsParcela: string[] = ['limiteN', 'limiteS', 'limiteE', 'limiteW', 'acciones'];
+    displayedColumnsLinea: string[] = ['lineaDeProduccion', 'areaDedicada', 'acciones'];
+    dataSourceParcela = new MatTableDataSource<Parcela>();
+    dataSourceLinea = new MatTableDataSource<LineaDeProduccion>();
+    public personasFiltradas: ReplaySubject<Persona[]> = new ReplaySubject<Persona[]>(1);
 
     constructor(public dialogRef: MatDialogRef<SolicitudWindowComponent>,
                 @Inject(MAT_DIALOG_DATA){id, tipoDecreto = '300', tipoSolicitud = 'Nueva', fechaSolicitud = new Date(), numExpediente, persona, parcelas, lineasDeProduccion, areaSolicitada, estado = 'Por Tramitar'}: Solicitud,
                 @Inject(MAT_DIALOG_DATA){tipoPersona = 'Natural', ci, nombre, primerApellido, segundoApellido, sexo = 'M', dirParticular, fechaNacimiento, movil, telFijo, situacionLaboral, asociado}: Persona,
                 @Inject(MAT_DIALOG_DATA){consejoPopular, tipoDeUso, limiteS, limiteN, limiteE, limiteW}: Parcela,
-                @Inject(MAT_DIALOG_DATA){lineaDeProduccion, areaDedicada, estudioSuelo}: LineaDeProduccion, private formBuilder: FormBuilder, private service: SolicitudService, private consejoPopularService: ConsejoPopularService, private tipodeUsoService: TipoDeUsoService,private personaService:PersonaService, private dialog: MatDialog) {
+                @Inject(MAT_DIALOG_DATA){lineaDeProduccion, areaDedicada, estudioSuelo}: LineaDeProduccion, private service: SolicitudService, private consejoPopularService: ConsejoPopularService, private tipodeUsoService: TipoDeUsoService, private personaService: PersonaService, private dialog: MatDialog) {
         this.insertar = id == null;
         this.consejoPopular = consejoPopular;
         this.tipoDeUso = tipoDeUso;
         this.idSolicitud = id;
-        this.formSolici = formBuilder.group({
+        this.formSolicitud = new FormGroup({
             tipoDecreto: new FormControl(tipoDecreto),
             tipoSolicitud: new FormControl(tipoSolicitud, [Validators.required]),
             fechaSolicitud: new FormControl(fechaSolicitud),
             numExpediente: new FormControl(numExpediente, [Validators.required]),
             areaSolicitada: new FormControl(areaSolicitada, [Validators.required]),
-            persona: formBuilder.group({
-                tipoPersona: new FormControl(tipoPersona, [Validators.required]),
-                ci: new FormControl(ci, [Validators.required, Validators.maxLength(11)]),
-                nombre: new FormControl(nombre, [Validators.required]),
-                primerApellido: new FormControl(primerApellido, [Validators.required]),
-                segundoApellido: new FormControl(segundoApellido, [Validators.required]),
-                sexo: new FormControl(sexo, [Validators.required]),
-                dirParticular: new FormControl(dirParticular, [Validators.required]),
-                fechaNacimiento: new FormControl(fechaNacimiento, [Validators.required]),
-                movil: new FormControl(movil, [Validators.required, Validators.maxLength(8)]),
-                telFijo: new FormControl(telFijo, [Validators.required, Validators.maxLength(8)]),
-                situacionLaboral: new FormControl(situacionLaboral, [Validators.required]),
-                asociado: new FormControl(asociado, [Validators.required])
-            }),
-            parcelas: this.formBuilder.array([]),
-            lineasDeProduccion: this.formBuilder.array([]),
-            estado: new FormControl(estado,[Validators.required]),
+            estado: new FormControl(estado, [Validators.required]),
+        });
+
+        this.formPersona = new FormGroup({
+            tipoPersona: new FormControl(tipoPersona, [Validators.required]),
+            ci: new FormControl(ci, [Validators.required, Validators.maxLength(11)]),
+            nombre: new FormControl(nombre, [Validators.required]),
+            primerApellido: new FormControl(primerApellido, [Validators.required]),
+            segundoApellido: new FormControl(segundoApellido, [Validators.required]),
+            sexo: new FormControl(sexo, [Validators.required]),
+            dirParticular: new FormControl(dirParticular, [Validators.required]),
+            fechaNacimiento: new FormControl(fechaNacimiento, [Validators.required]),
+            movil: new FormControl(movil, [Validators.required, Validators.maxLength(8)]),
+            telFijo: new FormControl(telFijo, [Validators.required, Validators.maxLength(8)]),
+            situacionLaboral: new FormControl(situacionLaboral, [Validators.required]),
+            asociado: new FormControl(asociado, [Validators.required])
+        });
+
+        this.formParcela = new FormGroup({
+            contador: new FormControl(this.contadorParcela, []),
+            limiteN: new FormControl('', [Validators.required]),
+            limiteS: new FormControl('', [Validators.required]),
+            limiteE: new FormControl('', [Validators.required]),
+            limiteW: new FormControl('', [Validators.required])
+        });
+        this.formPersona.controls['tipoPersona'].valueChanges.subscribe(value => {
+            console.log(value)
+        });
+        this.formLineaProduccion = new FormGroup({
+            contador: new FormControl(this.contadorLinea, []),
+            lineaDeProduccion: new FormControl('', [Validators.required]),
+            areaDedicada: new FormControl('', [Validators.required]),
         });
     }
 
     ngOnInit() {
-        if (this.insertar){
-
+        if (this.insertar) {
             this.consejoPopularService.listarConsejoPopularNoDefinido('No Definido').subscribe(resp => {
                 if (resp.body.success) {
                     this.consejoPopular = resp.body.elemento;
@@ -100,9 +120,9 @@ export class SolicitudWindowComponent implements OnInit {
 
             this.listarTipoPersonaJuridica();
 
-            this.service.obtenerUltimSolicitud().subscribe(resp =>{
-                if (resp.body.success){
-                    this.formSolici.get('numExpediente').setValue((resp.body.elemento.numExpediente)+1);
+            this.service.obtenerUltimSolicitud().subscribe(resp => {
+                if (resp.body.success) {
+                    this.formSolicitud.get('numExpediente').setValue((resp.body.elemento.numExpediente) + 1);
                 }
             });
 
@@ -128,19 +148,14 @@ export class SolicitudWindowComponent implements OnInit {
     }
 
     get parcelasForm() {
-        return this.formSolici.get('parcelas') as FormArray;
+        return this.formSolicitud.get('parcelas') as FormArray;
     }
 
     addParcela() {
-        const parcela = this.formBuilder.group({
-            consejoPopular: [this.consejoPopular],
-            tipoDeUso: [this.tipoDeUso],
-            limiteN: [],
-            limiteS: [],
-            limiteE: [],
-            limiteW: [],
-        })
-        this.parcelasForm.push(parcela);
+        if (this.formParcela.valid) {
+            this.parcelas.push(this.formParcela.value);
+            this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
+        }
     }
 
     deleteParcela(i) {
@@ -148,80 +163,55 @@ export class SolicitudWindowComponent implements OnInit {
     }
 
     get lineasDeProduccionForm() {
-        return this.formSolici.get('lineasDeProduccion') as FormArray;
+        return this.formSolicitud.get('lineasDeProduccion') as FormArray;
     }
 
-    addLineasDeProduccion() {
-        if (this.formSolici.get('lineasDeProduccion').get('areaDedicada').value){
-            this.maxValorAreaDedicada = this.formSolici.get('areaSolicitada').value - this.formSolici.get('lineasDeProduccion').get('areaDedicada').value;
-        }else {
-            this.maxValorAreaDedicada = this.formSolici.get('areaSolicitada').value;
+    addLineasProduccion() {
+        if (this.formLineaProduccion.valid) {
+            this.lineasProduccion.push(this.formLineaProduccion.value);
+            this.dataSourceLinea = new MatTableDataSource<LineaDeProduccion>(this.lineasProduccion);
         }
-
-        console.log(this.maxValorAreaDedicada);
-        const lineaDeProduccion = this.formBuilder.group({
-            lineaDeProduccion: [],
-            areaDedicada: new FormControl ([],[Validators.required(),Validators.maxLength(this.maxValorAreaDedicada)]),
-        })
-
-        this.lineasDeProduccionForm.push(lineaDeProduccion);
     }
 
     deleteLineasDeProduccion(i) {
         this.lineasDeProduccionForm.removeAt(i)
     }
 
-    selectTipoPersona(tipoPersona: string): void {
-        console.log('Entro');
-        if (tipoPersona == 'Juridica') {
-            console.log('Entro');
-            this.formSolici.get('persona').get('sexo').setValue(null);
-            this.formSolici.get('persona').get('dirParticular').setValue(null);
-            this.formSolici.get('persona').get('fechaNacimiento').setValue(null);
-            this.formSolici.get('persona').get('movil').setValue(null);
-            this.formSolici.get('persona').get('telFijo').setValue(null);
-            this.formSolici.get('persona').get('situacionLaboral').setValue(null);
-            this.formSolici.get('persona').get('tipoPersona').setValue(tipoPersona);
-        } else {
-            this.formSolici.get('persona').get('sexo').setValue('M');
-            this.formSolici.get('persona').get('dirParticular').setValue(null);
-            this.formSolici.get('persona').get('telFijo').setValue(null);
-            this.formSolici.get('persona').get('tipoPersona').setValue(tipoPersona);
-        }
-    }
-
-    listarTipoPersonaJuridica(){
-        this.personaService.listarPorTipoPersona('Juridica').subscribe(resp =>{
-            if (resp.body.success){
+    listarTipoPersonaJuridica() {
+        this.personaService.listarPorTipoPersona('Juridica').subscribe(resp => {
+            if (resp.body.success) {
                 this.personas = resp.body.elementos;
-                this.PersonasFiltradas.next(this.personas);
+                this.personasFiltradas.next(this.personas);
             }
         });
     }
 
     insertarSolicitud(): void {
-        console.log(this.formSolici.value)
-        console.log(this.formSolici.valid)
-        if (this.formSolici.valid) {
+        if (this.formSolicitud.valid) {
+            const solicitud = this.formSolicitud.value;
+            solicitud.persona = {...this.formPersona.value};
+            solicitud.parcelas = [...this.parcelas];
+            solicitud.lineasDeProduccion = [...this.lineasProduccion];
+            this.solicitud = solicitud;
             this.isLoadingResults = true;
             if (this.insertar) {
-                this.service.insertarSolicitud(this.formSolici.value).subscribe(resp => {
+                this.service.insertarSolicitud(this.solicitud).subscribe(resp => {
                     let appResp = resp.body;
                     console.log(resp);
                     if (appResp.success) {
                         this.dialogRef.close(resp.body);
                     } else {
-                        this.dialog.open(MensajeError, {width: "400px", data: {mensaje: appResp.msg}});
+                        this.dialog.open(MensajeError, {width: '400px', data: {mensaje: appResp.msg}});
                     }
                     this.isLoadingResults = false;
                 });
             } else {
-                this.service.modificarSolicitud(this.idSolicitud, this.formSolici.value).subscribe(resp => {
+                this.service.modificarSolicitud(this.idSolicitud, this.solicitud).subscribe(resp => {
                     let appResp = resp.body;
                     if (appResp.success) {
                         this.dialogRef.close(resp.body);
                     } else {
-                        this.dialog.open(MensajeError, {width: "400px", data: {mensaje: appResp.msg}});
+                        this.dialog.open(MensajeError, {width: '400px', data: {mensaje: appResp.msg}});
                     }
                     this.isLoadingResults = false;
                 });
