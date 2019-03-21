@@ -33,6 +33,15 @@ export class MunicipioService {
         });
     }
 
+    obtenerMunicipioPorCodigo(codigo:string): Observable<Respuesta<Municipio>> {
+        let constUrl = `${this.municipioUrl}/${codigo}`;
+        return this.http.get<AppResponse<Municipio>>(constUrl, {
+            observe:"response",
+            headers:{"Authorization":this.token}
+
+        })
+    }
+
     insertarMunicipio(municipio: Municipio): Observable<Respuesta<Municipio>> {
         return this.http.post<AppResponse<Municipio>>(this.municipioUrl, municipio, {
             observe: "response",

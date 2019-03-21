@@ -42,10 +42,14 @@ public class Municipio implements Serializable {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_municipio_provincia"))
     private Provincia provincia;
-    
+
     @JsonIgnore
     @OneToMany(mappedBy = "municipio")
     private List<ConsejoPopular> consejosPopulares;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "municipio")
+    private List<Solicitud> solicitudes;
 
     public Long getId() {
         return id;

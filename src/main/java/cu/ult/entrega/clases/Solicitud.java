@@ -5,6 +5,7 @@
  */
 package cu.ult.entrega.clases;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.io.Serializable;
@@ -81,6 +82,11 @@ public class Solicitud implements Serializable {
     @Column(name = "fechaAproDes")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaAproDes;
+
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(foreignKey = @ForeignKey (name = "fk_solicitud_municipio"))
+    private Municipio municipio;
 
 
     public Long getId() {

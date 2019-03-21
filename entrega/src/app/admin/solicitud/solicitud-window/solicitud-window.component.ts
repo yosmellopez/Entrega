@@ -1,6 +1,14 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DATE_FORMATS, MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatTableDataSource} from '@angular/material';
-import {ConsejoPopular, LineaDeProduccion, Parcela, Persona, Solicitud, TipoDeUso} from '../../../modelo';
+import {
+    FloatLabelType,
+    MAT_DATE_FORMATS,
+    MAT_DIALOG_DATA,
+    MatDialog,
+    MatDialogRef,
+    MatHorizontalStepper, MatStepper, matStepperAnimations,
+    MatTableDataSource
+} from '@angular/material';
+import {ConsejoPopular, LineaDeProduccion, Municipio, Parcela, Persona, Solicitud, TipoDeUso} from '../../../modelo';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Information, MensajeError} from '../../../mensaje/window.mensaje';
 import {ConsejoPopularService} from '../../../servicios/consejo-popular.service';
@@ -10,6 +18,8 @@ import {PersonaService} from '../../../servicios/persona.service';
 import {ReplaySubject} from 'rxjs/index';
 import {PersonaWindowsComponent} from '../../solicitante/persona-windows/persona-windows.component';
 import {SelectionModel} from '@angular/cdk/collections';
+import {StepperSelectionEvent} from "@angular/cdk/stepper";
+import {MunicipioService} from "../../../servicios/municipio.service";
 
 export const MY_FORMATS = {
     parse: {
@@ -41,13 +51,19 @@ export class SolicitudWindowComponent implements OnInit {
     lineasProduccion: LineaDeProduccion[] = [];
     insertar = false;
     solicitud: Solicitud;
-    ultimoNumeroSolicitud: number;
     contadorParcela: number = 0;
     contadorLinea: number = 0;
     consejoPopular: ConsejoPopular;
     tipoDeUso: TipoDeUso;
     startDate = new Date(1988, 0, 1);
     personas: Persona[];
+    indexStepper: number =0;
+    municipio:Municipio;
+    persona:Persona;
+    maxlengthAD:number=0;
+    totalAreaDedicada: number =0;
+    acumuladoAreaDedicada:number= 0;
+    valorTemporalAreaDedicada:number;
     displayedColumnsParcela: string[] = ['limiteN', 'limiteS', 'limiteE', 'limiteW', 'acciones'];
     displayedColumnsLinea: string[] = ['lineaDeProduccion', 'areaDedicada', 'acciones'];
     dataSourceParcela = new MatTableDataSource<Parcela>();
@@ -55,15 +71,18 @@ export class SolicitudWindowComponent implements OnInit {
     public personasFiltradas: ReplaySubject<Persona[]> = new ReplaySubject<Persona[]>(1);
 
     constructor(public dialogRef: MatDialogRef<SolicitudWindowComponent>,
-                @Inject(MAT_DIALOG_DATA){id, tipoDecreto = '300', tipoSolicitud = 'Nueva', fechaSolicitud = new Date(), numExpediente, persona, parcelas, lineasDeProduccion, areaSolicitada, estado = 'Por Tramitar'}: Solicitud,
+                @Inject(MAT_DIALOG_DATA){id, municipio, tipoDecreto = '300', tipoSolicitud = 'Nueva', fechaSolicitud = new Date(), numExpediente, persona, parcelas, lineasDeProduccion, areaSolicitada, estado = 'Por Tramitar'}: Solicitud,
                 @Inject(MAT_DIALOG_DATA){tipoPersona = 'Natural', ci, nombre, primerApellido, segundoApellido, sexo = 'M', dirParticular, fechaNacimiento, movil, telFijo, situacionLaboral, asociado}: Persona,
                 @Inject(MAT_DIALOG_DATA){consejoPopular, tipoDeUso, limiteS, limiteN, limiteE, limiteW}: Parcela,
-                @Inject(MAT_DIALOG_DATA){lineaDeProduccion, areaDedicada, estudioSuelo}: LineaDeProduccion, private service: SolicitudService, private consejoPopularService: ConsejoPopularService, private tipodeUsoService: TipoDeUsoService, private personaService: PersonaService, private dialog: MatDialog) {
+                @Inject(MAT_DIALOG_DATA){lineaDeProduccion, areaDedicada, estudioSuelo}: LineaDeProduccion, private service: SolicitudService, private consejoPopularService: ConsejoPopularService, private tipodeUsoService: TipoDeUsoService, private personaService: PersonaService,private municipioService:MunicipioService, private dialog: MatDialog) {
         this.insertar = id == null;
+        this.municipio = municipio;
         this.consejoPopular = consejoPopular;
         this.tipoDeUso = tipoDeUso;
         this.idSolicitud = id;
+        this.persona=persona;
         this.formSolicitud = new FormGroup({
+            municipio: new FormControl(municipio),
             tipoDecreto: new FormControl(tipoDecreto),
             tipoSolicitud: new FormControl(tipoSolicitud, [Validators.required]),
             fechaSolicitud: new FormControl(fechaSolicitud),
@@ -89,18 +108,26 @@ export class SolicitudWindowComponent implements OnInit {
 
         this.formParcela = new FormGroup({
             contador: new FormControl(this.contadorParcela, []),
+            consejoPopular: new FormControl('', [Validators.required]),
+            tipoDeUso: new FormControl('', [Validators.required]),
+            direccion: new FormControl('', [Validators.required]),
+            zonaCatastral: new FormControl('', [Validators.required]),
+            parcela: new FormControl('', [Validators.required]),
+            divicion: new FormControl('', [Validators.required]),
             limiteN: new FormControl('', [Validators.required]),
             limiteS: new FormControl('', [Validators.required]),
             limiteE: new FormControl('', [Validators.required]),
             limiteW: new FormControl('', [Validators.required])
         });
-        this.formPersona.controls['tipoPersona'].valueChanges.subscribe(value => {
-            console.log(value)
-        });
+
         this.formLineaProduccion = new FormGroup({
             contador: new FormControl(this.contadorLinea, []),
             lineaDeProduccion: new FormControl('', [Validators.required]),
             areaDedicada: new FormControl('', [Validators.required]),
+        });
+
+        this.formSolicitud.valueChanges.subscribe(value => {
+            if (this.totalAreaDedicada) this.maxlengthAD =(this.totalAreaDedicada.toString()).length;
         });
     }
 
@@ -108,14 +135,20 @@ export class SolicitudWindowComponent implements OnInit {
         if (this.insertar) {
             this.consejoPopularService.listarConsejoPopularNoDefinido('No Definido').subscribe(resp => {
                 if (resp.body.success) {
-                    this.consejoPopular = resp.body.elemento;
+                    this.formParcela.get('consejoPopular').setValue(resp.body.elemento);
                 }
             });
 
             this.tipodeUsoService.listarTipoDeUsoNoDefinido('No Definido').subscribe(resp => {
                 if (resp.body.success) {
-                    this.tipoDeUso = resp.body.elemento;
+                    this.formParcela.get('tipoDeUso').setValue(resp.body.elemento);
                 }
+            });
+
+            this.municipioService.obtenerMunicipioPorCodigo('02').subscribe(resp=>{
+               if (resp.body.success){
+                   this.formSolicitud.get('municipio').setValue(resp.body.elemento);
+               }
             });
 
             this.listarTipoPersonaJuridica();
@@ -125,8 +158,8 @@ export class SolicitudWindowComponent implements OnInit {
                     this.formSolicitud.get('numExpediente').setValue((resp.body.elemento.numExpediente) + 1);
                 }
             });
-
         }
+        console.log(this.formSolicitud.value);
     }
 
     abrirVentana() {
@@ -168,6 +201,10 @@ export class SolicitudWindowComponent implements OnInit {
 
     addLineasProduccion() {
         if (this.formLineaProduccion.valid) {
+            this.acumuladoAreaDedicada= this.acumuladoAreaDedicada + this.formLineaProduccion.get('areaDedicada').value;
+            this.totalAreaDedicada = this.formSolicitud.get('areaSolicitada').value - this.acumuladoAreaDedicada;
+            console.log(this.formSolicitud.get('areaSolicitada').value);
+            //console.log(this.limiAreaDedicada);
             this.lineasProduccion.push(this.formLineaProduccion.value);
             this.dataSourceLinea = new MatTableDataSource<LineaDeProduccion>(this.lineasProduccion);
         }
@@ -185,6 +222,20 @@ export class SolicitudWindowComponent implements OnInit {
             }
         });
     }
+
+    public selectionChange($event?: StepperSelectionEvent): void {
+        this.indexStepper = $event.selectedIndex;
+    }
+
+    controlStepper (stepper:MatStepper, next:boolean):void{
+        if (next){
+            stepper.next();
+        }else {
+            stepper.previous();
+        }
+    }
+
+
 
     insertarSolicitud(): void {
         if (this.formSolicitud.valid) {

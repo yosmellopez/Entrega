@@ -6,8 +6,9 @@
         <hr>
     </h1>
     <div mat-dialog-content style="min-height: 7em;">
-        <mat-horizontal-stepper [linear]="false" #stepper>
-            <mat-step [stepControl]="formSolicitud">
+        <mat-horizontal-stepper [linear]="false" #stepper [selectedIndex]="indexStepper"
+                                (selectionChange)="selectionChange($event)">
+            <mat-step [stepControl]="formSolicitud" >
                 <form [formGroup]="formSolicitud">
                     <ng-template matStepLabel>Datos de la solicitud</ng-template>
                     <mat-radio-group class="example-radio-group" formControlName="tipoSolicitud">
@@ -22,60 +23,93 @@
                         <input type="number" matInput #input placeholder="Área Solicitada(Ha)" formControlName="areaSolicitada">
                         <mat-error *ngIf="formSolicitud.controls['areaSolicitada'].errors?.required">Debe insertar el área solicitada</mat-error>
                     </mat-form-field>
-                    <div>
-                        <button mat-button matStepperNext>Next</button>
-                    </div>
                 </form>
             </mat-step>
             <mat-step [stepControl]="formPersona">
                 <ng-template matStepLabel>Datos del solicitante</ng-template>
                 <form [formGroup]="formPersona">
-                    <mat-radio-group class="example-radio-group" formControlName="tipoPersona" [value]="formPersona.controls['tipoPersona'].value">
-                        <mat-radio-button value="Natural">Natural</mat-radio-button>
-                        <mat-radio-button value="Juridica">Juridica</mat-radio-button>
-                    </mat-radio-group>
-                    <mat-form-field>
-                        <input matInput maxlength="11" placeholder="CI" formControlName="ci">
-                    </mat-form-field>
-                    <mat-form-field>
-                        <input matInput placeholder="Nombre" formControlName="nombre">
-                    </mat-form-field>
-                    <mat-form-field>
-                        <input matInput placeholder="Primer Apellido" formControlName="primerApellido">
-                    </mat-form-field>
-                    <mat-form-field>
-                        <input matInput placeholder="Segundo Apellido" formControlName="segundoApellido">
-                    </mat-form-field>
+                    <table class="example-full-width" cellspacing="0">
+                        <tr>
+                            <td>
+                                <mat-radio-group class="example-radio-group" formControlName="tipoPersona" [value]="formPersona.controls['tipoPersona'].value">
+                                    <mat-radio-button value="Natural">Natural</mat-radio-button>
+                                    <mat-radio-button value="Juridica">Juridica</mat-radio-button>
+                                </mat-radio-group>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field>
+                                    <input matInput maxlength="11" placeholder="CI" formControlName="ci">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field>
+                                    <input matInput placeholder="Nombre" formControlName="nombre">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field>
+                                    <input matInput placeholder="Primer Apellido" formControlName="primerApellido">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field>
+                                    <input matInput placeholder="Segundo Apellido" formControlName="segundoApellido">
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>
                     <div *ngIf="formPersona.value.tipoPersona == 'Natural'">
-                        <mat-radio-group class="example-radio-group" formControlName="sexo">
-                            <mat-radio-button value="M">Masculino</mat-radio-button>
-                            <mat-radio-button value="F">Femenino</mat-radio-button>
-                        </mat-radio-group>
-                        <mat-form-field>
-                            <input matInput placeholder="Dirección Particular" formControlName="dirParticular">
-                        </mat-form-field>
-                        <mat-form-field class="middle-width">
-                            <input matInput [matDatepicker]="nacimentoDatePicker" formControlName="fechaNacimiento" placeholder="Fecha de Nacimiento">
-                            <mat-datepicker-toggle matSuffix [for]="nacimentoDatePicker"></mat-datepicker-toggle>
-                            <mat-datepicker #nacimentoDatePicker [startAt]="startDate"></mat-datepicker>
-                        </mat-form-field>
-                        <mat-form-field>
-                            <input matInput type="number" maxlength="8" placeholder="Teléfono Movil" formControlName="movil">
-                        </mat-form-field>
-                        <mat-form-field>
-                            <input matInput type="number" maxlength="8" placeholder="Teléfono Fijo" formControlName="telFijo">
-                        </mat-form-field>
-                        <mat-form-field>
-                            <mat-select matInput placeholder="Situacion Laboral" formControlName="situacionLaboral">
-                                <mat-option value="Trabajador estatal">Trabajador estatal</mat-option>
-                                <mat-option value="Trabajador no estatal">Trabajador no estatal</mat-option>
-                                <mat-option value="Trabajador por CP">Trabajdor por cuenta propia</mat-option>
-                                <mat-option value="Sin vinculo labora">Sin vinculo labora</mat-option>
-                                <mat-option value="Juvilados">Juvilados</mat-option>
-                                <mat-option value="Estudiantes">Estudiantes</mat-option>
-                                <mat-option value="Desmovilizados SMG">Desmovilizados SMG</mat-option>
-                            </mat-select>
-                        </mat-form-field>
+                        <table class="full-width" cellspacing="0">
+                            <tr>
+                                <td>
+                                    <mat-radio-group class="example-radio-group" formControlName="sexo">
+                                        <mat-radio-button value="M">Masculino</mat-radio-button>
+                                        <mat-radio-button value="F">Femenino</mat-radio-button>
+                                    </mat-radio-group>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <mat-form-field class="full-width">
+                                        <input matInput placeholder="Dirección Particular" formControlName="dirParticular">
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="full-width">
+                                        <input matInput [matDatepicker]="nacimentoDatePicker" formControlName="fechaNacimiento" placeholder="Fecha de Nacimiento">
+                                        <mat-datepicker-toggle matSuffix [for]="nacimentoDatePicker"></mat-datepicker-toggle>
+                                        <mat-datepicker #nacimentoDatePicker [startAt]="startDate"></mat-datepicker>
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <mat-form-field class="full-width">
+                                        <input matInput type="number" maxlength="8" placeholder="Teléfono Movil" formControlName="movil">
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="full-width">
+                                        <input matInput type="number" maxlength="8" placeholder="Teléfono Fijo" formControlName="telFijo">
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="full-width">
+                                        <mat-select matInput placeholder="Situacion Laboral" formControlName="situacionLaboral">
+                                            <mat-option value="Trabajador estatal">Trabajador estatal</mat-option>
+                                            <mat-option value="Trabajador no estatal">Trabajador no estatal</mat-option>
+                                            <mat-option value="Trabajador por CP">Trabajdor por cuenta propia</mat-option>
+                                            <mat-option value="Sin vinculo labora">Sin vinculo labora</mat-option>
+                                            <mat-option value="Juvilados">Juvilados</mat-option>
+                                            <mat-option value="Estudiantes">Estudiantes</mat-option>
+                                            <mat-option value="Desmovilizados SMG">Desmovilizados SMG</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                     <div *ngIf="formPersona.value.tipoPersona == 'Juridica'">
                         <mat-form-field>
@@ -104,7 +138,7 @@
                     <button mat-button matStepperNext>Next</button>
                 </div>
             </mat-step>
-            <mat-step [stepControl]="formParcela">
+            <mat-step [stepControl]="formParcela" >
                 <ng-template matStepLabel>Parcelas</ng-template>
                 <form [formGroup]="formParcela" (submit)="addParcela()">
                     <input type="hidden" formControlName="contador">
@@ -179,18 +213,24 @@
                 <ng-template matStepLabel>Linea de Produccion</ng-template>
                 <form [formGroup]="formLineaProduccion" (submit)="addLineasProduccion()">
                     <input type="hidden" formControlName="contador">
-                    <mat-form-field>
-                        <input type="number" matInput placeholder="Numero de Solicitud" formControlName="lineaDeProduccion">
-                        <mat-error *ngIf="formLineaProduccion.controls['lineaDeProduccion'].errors?.required">Debe insertar el numero de la solicitud</mat-error>
+                    <mat-form-field class="full-width">
+                        <mat-select matInput placeholder="Linea de producción" formControlName="lineaDeProduccion">
+                            <mat-option value="Cultivos Varios">Cultivos Varios</mat-option>
+                            <mat-option value="Ganado Mayor">Ganado Mayor</mat-option>
+                            <mat-option value="Ganado Menor">Ganado  Menor</mat-option>
+                            <mat-option value="Caña">Caña</mat-option>
+                            <mat-option value="Frutales">Frutales</mat-option>
+                            <mat-option value="Arroz">Arroz</mat-option>
+                            <mat-option value="Forestal">Forestal</mat-option>
+                        </mat-select>
                     </mat-form-field>
                     <mat-form-field>
-                        <input type="number" matInput placeholder="Área Solicitada(Ha)" formControlName="areaDedicada">
+                        <input matInput [maxlength]="maxlengthAD" #areaDedi placeholder="Área dedicada(Ha)" formControlName="areaDedicada" value="0.0">
                         <mat-error *ngIf="formLineaProduccion.controls['areaDedicada'].errors?.required">Debe insertar el área solicitada</mat-error>
                     </mat-form-field>
                     <button mat-mini-fab color="primary" style="margin-right: 10px;" matTooltip="Añadir Parcela">
                         <mat-icon>add</mat-icon>
                     </button>
-
                     <div class="example-container mat-elevation-z8" style="top: 10px;position:relative;">
                         <table mat-table [dataSource]="dataSourceLinea">
                             <!-- Position Column -->
@@ -229,7 +269,14 @@
     </div>
     <div mat-dialog-actions class="boton-theme">
         <span class="spacer"></span>
-        <button type="submit" mat-raised-button cdkFocusInitial color="primary">
+        <button type="button" mat-raised-button *ngIf="indexStepper!=0" (click)="controlStepper(stepper, false)">
+            Back
+        </button>
+        <button type="button" mat-raised-button *ngIf="indexStepper!=3" (click)="controlStepper(stepper, true)">
+            Next
+        </button>
+
+        <button *ngIf="indexStepper==3" type="submit" mat-raised-button cdkFocusInitial color="primary">
             <mat-icon>check_circle</mat-icon>
             {{insertar?'Guardar':'Modificar'}}
         </button>

@@ -16,16 +16,6 @@
                     <!--- Note that these columns can be defined in any order.
                           The actual rendered columns are set as a property on the row definition" -->
                     <!-- Position Column -->
-                    <ng-container matColumnDef="select">
-                        <th mat-header-cell *matHeaderCellDef></th>
-                        <td mat-cell *matCellDef="let element">
-                            <mat-radio-button (click)="abrirVentanaDetalles($event, element)"
-                                              (change)="$event ? selection.toggle(element) : null"
-                                              [checked]="selection.isSelected(element)">
-                            </mat-radio-button>
-                        </td>
-                    </ng-container>
-
                     <ng-container matColumnDef="index">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> No.</th>
                         <td mat-cell *matCellDef="let element;let i = index"> {{i+1}}</td>
@@ -54,11 +44,14 @@
                     <ng-container matColumnDef="acciones" stickyEnd>
                         <th mat-header-cell *matHeaderCellDef style="text-align: center;">Acciones</th>
                         <td mat-cell *matCellDef="let element" align="center">
-                            <button mat-mini-fab color="accent" (click)="editarTipoDeSuperficie($event,element)" [matTooltip]="'Editar Tipo De Superficie - ' + element.nombre">
+                            <button mat-mini-fab color="accent" (click)="editarTipoDeSuperficie($event,element)" [matTooltip]="'Editar Solicitud - ' + element.numExpediente">
                                 <mat-icon>mode_edit</mat-icon>
                             </button>
-                            <button mat-mini-fab color="warn" (click)="eliminarTipoDeSuperficie($event,element)" [matTooltip]="'Eliminar Tipo De Superficie - ' + element.nombre">
+                            <button mat-mini-fab color="warn" (click)="eliminarTipoDeSuperficie($event,element)" [matTooltip]="'Eliminar Solicitud - ' + element.numExpediente">
                                 <mat-icon>delete</mat-icon>
+                            </button>
+                            <button mat-mini-fab color="accent" (click)="abrirVentanaDetalles($event,element)" [matTooltip]="'Detalle de la Solicitud - ' + element.numExpediente">
+                                <mat-icon>info</mat-icon>
                             </button>
                         </td>
                     </ng-container>

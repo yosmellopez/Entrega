@@ -7,8 +7,13 @@ import {Persona} from "../modelo";
 export class PersonaPipe implements PipeTransform {
 
     transform(value: Persona, args?: any): any {
-        if (value)
-            return value.nombre;
+        if (value){
+            if (value.primerApellido!='-' && value.segundoApellido!='-'){
+                return value.nombre+' '+value.primerApellido+' '+value.segundoApellido;
+            } else {
+                return value.nombre;
+            }
+        }
         return "";
     }
 }

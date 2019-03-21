@@ -4,6 +4,9 @@ import {Router} from "@angular/router";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AccountService} from "../../Servicios/account.service";
 import {Principal} from "../../Servicios/principal.service";
+import {MunicipioService} from "../../servicios/municipio.service";
+import {Municipio, Provincia, TipoDeSuperficie} from "../../modelo";
+import {ReplaySubject} from "rxjs/index";
 
 @Component({
     selector: 'app-login',

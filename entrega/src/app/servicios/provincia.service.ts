@@ -54,8 +54,4 @@ export class ProvinciaService {
             headers: {"Authorization": this.token}
         });
     }
-
-    iniciarSesion(values: any): Observable<Respuesta<Usuario>> {
-        return this.http.post<AppResponse<Usuario>>(SERVER_URL + 'api/auth/login', values, {observe: 'response'});
-    }
 }

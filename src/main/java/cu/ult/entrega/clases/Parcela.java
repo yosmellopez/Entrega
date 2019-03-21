@@ -40,6 +40,9 @@ public class Parcela implements Serializable {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_parcela_consejoPopular"))
     private ConsejoPopular consejoPopular;
 
+    @Column(name = "direccion")
+    private String direccion;
+
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_parcela_poseedor"))
     private Persona persona;

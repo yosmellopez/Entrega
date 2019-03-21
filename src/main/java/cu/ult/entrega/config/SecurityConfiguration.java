@@ -1,13 +1,5 @@
 package cu.ult.entrega.config;
 
-//import com.reservaciones.security.*;
-//import com.reservaciones.security.jwt.JwtAuthenticationProvider;
-//import com.reservaciones.security.jwt.JwtTokenAuthenticationProcessingFilter;
-//import com.reservaciones.security.jwt.SkipPathRequestMatcher;
-//import com.reservaciones.security.jwt.token.TokenExtractor;
-//import com.reservaciones.MapeadorObjetos;
-//import com.reservaciones.MyRequestMatcher;
-
 import cu.ult.entrega.security.AjaxLoginProcessingFilter;
 import cu.ult.entrega.security.AutenticacionAjaxExitosa;
 import cu.ult.entrega.security.AutenticacionAjaxFallida;
@@ -29,13 +21,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-//import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -93,19 +83,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(AUTHENTICATION_URL).permitAll()
                 .antMatchers(LOGOUT_URL).permitAll()
-                .antMatchers("/api/auth/autenticated").permitAll()
+                .antMatchers("/api/auth/autenticated", "/auth/account").permitAll()
                 .antMatchers("/index.html").fullyAuthenticated()
                 .and()
                 .addFilterBefore(new CustomCorsFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(buildAjaxLoginProcessingFilter(AUTHENTICATION_URL), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(buildJwtTokenAuthenticationProcessingFilter(permitAllEndpointList, API_ROOT_URL), UsernamePasswordAuthenticationFilter.class)
                 .logout().invalidateHttpSession(true).logoutRequestMatcher(new OrRequestMatcher(new AntPathRequestMatcher("/salir.html"), new AntPathRequestMatcher(LOGOUT_URL)));
-//                .defaultLogoutSuccessHandlerFor(new AjaxLogoutSuccessHandler(mapeadorObjetos), new MyRequestMatcher(LOGOUT_URL, Arrays.asList(LOGOUT_URL)))
-//                .defaultLogoutSuccessHandlerFor(manejadorLogout(), new AntPathRequestMatcher("/salir.html", "GET")).logoutSuccessUrl("/login.html").and()
-//                .exceptionHandling()
-//                .accessDeniedPage("/denegado.html").and()
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//              .defaultLogoutSuccessHandlerFor(new AjaxLogoutSuccessHandler(mapeadorObjetos), new MyRequestMatcher(LOGOUT_URL, Arrays.asList(LOGOUT_URL)))
+//              .defaultLogoutSuccessHandlerFor(manejadorLogout(), new AntPathRequestMatcher("/salir.html", "GET")).logoutSuccessUrl("/login.html").and()
+//              .exceptionHandling()
+//              .accessDeniedPage("/denegado.html").and()
+//              .sessionManagement()
+//              .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     private AjaxLoginProcessingFilter buildAjaxLoginProcessingFilter(String defaultProcessUrl) throws Exception {
@@ -124,17 +114,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public AuthenticationProvider daoAuthenticationProvider() throws Exception {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(new PasswordEncoder() {
-            @Override
-            public String encode(CharSequence charSequence) {
-                return charSequence.toString();
-            }
-
-            @Override
-            public boolean matches(CharSequence charSequence, String s) {
-                return true;
-            }
-        });
+        provider.setPasswordEncoder(passwordEncoder());
         provider.setMessageSource(messageSource);
         return provider;
     }

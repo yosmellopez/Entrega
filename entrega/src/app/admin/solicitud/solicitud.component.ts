@@ -33,7 +33,7 @@ export class SolicitudComponent implements OnInit {
     parcelas:Parcela[] = [];
     total: number = 0;
     pageSize: number = 10;
-    displayedColumns = ['select','index', 'numExpediente', 'fechaSolicitud','areaSolicitada','estado', 'acciones'];
+    displayedColumns = ['index', 'numExpediente', 'fechaSolicitud','areaSolicitada','estado', 'acciones'];
     selection = new SelectionModel<Solicitud>(false, []);
     url: string = '';
     nombre: string = '';

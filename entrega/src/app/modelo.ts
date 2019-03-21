@@ -67,6 +67,7 @@ export class Persona {
 
 export class Solicitud {
     id: number;
+    municipio: Municipio;
     tipoDecreto: string;
     tipoSolicitud: string;
     fechaSolicitud: Date;
@@ -83,6 +84,7 @@ export class Solicitud {
 export class Parcela {
     id: number;
     consejoPopular: ConsejoPopular;
+    direccion:string;
     persona: Persona;
     zonaCatastral: number;
     parcela: number;

@@ -81,6 +81,7 @@ public class UsuarioController {
 
     @PostMapping(value = "/usuario")
     public ResponseEntity<AppResponse<Usuario>> insertarUsuario(@RequestBody Usuario usuario) {
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         usuarioRepository.saveAndFlush(usuario);
         return ResponseEntity.ok(AppResponse.success("Usuario insertado exitosamente.").elemento(usuario).build());
     }

@@ -6,6 +6,7 @@ import {UsuarioComponent} from './usuario/usuario.component';
 import {AdminComponent} from './admin/admin.component';
 import {LoginComponent} from './components/login/login.component';
 import {RouteInfo} from './modelo';
+import {AdminGuard} from "./guards/admin.guard";
 
 const routes: Routes = [
     {path: '', redirectTo: '/login', pathMatch: 'full'},
@@ -13,11 +14,16 @@ const routes: Routes = [
     {
         path: '',
         component: UsuarioComponent,
-        children: [{path: 'usuario', loadChildren: './usuario/usuario.module#UsuarioModule'}]
+        children: [{path: 'usuario', loadChildren: './usuario/usuario.module#UsuarioModule'}],
+        canActivate: []
     }, {
         path: '',
         component: AdminComponent,
-        children: [{path: 'admin', loadChildren: './admin/admin.module#AdminModule'}]
+        children: [{path: 'admin', loadChildren: './admin/admin.module#AdminModule'}],
+        canActivate: [AdminGuard],
+        data: {
+            roles: ['Administrador']
+        }
     }
 ];
 

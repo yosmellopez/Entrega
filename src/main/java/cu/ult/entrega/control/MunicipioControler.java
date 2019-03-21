@@ -44,6 +44,13 @@ public class MunicipioControler {
         return ResponseEntity.ok(success(municipios).total(municipios.size()).build());
     }
 
+    @RequestMapping(value = "/municipio/{codigo}")
+    public ResponseEntity<AppResponse<Municipio>> listarMunicipioPorCodigo(@PathVariable("codigo") String codigo) {
+        Optional<Municipio> optional = municipioRepositorio.findByCodigo(codigo);
+        Municipio municipio = optional.orElseThrow(()-> new EntityNotFoundException("Municipio no encontrado"));
+        return ResponseEntity.ok(success(municipio).total(1).build());
+    }
+
     @PostMapping(value = "/municipio")
     public ResponseEntity<AppResponse<Municipio>> insertarMunicipio(@Valid @RequestBody Municipio Municipio) {
         municipioRepositorio.saveAndFlush(Municipio);
@@ -62,8 +69,8 @@ public class MunicipioControler {
 
     @DeleteMapping(value = "/municipio/{id}")
     public ResponseEntity<AppResponse> deleteMunicipio(@PathVariable("id") Optional<Municipio> optional) {
-        Municipio Municipio = optional.orElseThrow(() -> new EntityNotFoundException("Municipio no encontrada."));
-        municipioRepositorio.delete(Municipio);
+        Municipio municipio = optional.orElseThrow(() -> new EntityNotFoundException("Municipio no encontrada."));
+        municipioRepositorio.delete(municipio);
         return ResponseEntity.ok(AppResponse.success("Municipio eliminado exitosamente.").build());
     }
 

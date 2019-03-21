@@ -22,6 +22,10 @@ import {MenuComponent} from "./components/menu/menu.component";
 import {CentroComponent} from './layout/centro/centro.component';
 import {DateFormat} from "./modelo";
 import {DateAdapter} from "@angular/material";
+import {AdminGuard} from "./guards/admin.guard";
+import {UserRouteAccessService} from "./guards/user-route-access-service";
+
+
 
 @NgModule({
     declarations: [
@@ -34,7 +38,7 @@ import {DateAdapter} from "@angular/material";
         AdminComponent,
         HeaderComponent,
         MenuComponent,
-        CentroComponent,
+        CentroComponent
     ],
     imports: [
         BrowserModule,
@@ -46,7 +50,10 @@ import {DateAdapter} from "@angular/material";
         ReactiveFormsModule,
         FormsModule,
         MensajeModule,
-        PipesModule
+        PipesModule,
+        AdminGuard,
+        UserRouteAccessService
+
     ],
     providers: [{provide: DateAdapter, useClass: DateFormat}],
     bootstrap: [AppComponent],
