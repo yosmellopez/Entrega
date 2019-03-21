@@ -51,9 +51,6 @@ import {UserRouteAccessService} from "./guards/user-route-access-service";
         FormsModule,
         MensajeModule,
         PipesModule,
-        AdminGuard,
-        UserRouteAccessService
-
     ],
     providers: [{provide: DateAdapter, useClass: DateFormat}],
     bootstrap: [AppComponent],

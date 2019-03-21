@@ -1,10 +1,9 @@
-import {EventEmitter, Injectable} from '@angular/core';
-import {JhiLanguageService} from 'ng-jhipster';
-import {HttpClient, HttpResponse} from '@angular/common/http';
-import {Observable, Subject} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Observable, Subject } from 'rxjs';
 
-import {SERVER_URL} from "../contantes";
-import {Usuario} from "../modelo";
+import { SERVER_URL } from '../contantes';
+import { Usuario } from '../modelo';
 
 
 @Injectable({providedIn: 'root'})
@@ -17,13 +16,13 @@ export class AccountService {
     constructor(
         private http: HttpClient
     ) {
-        this.token = localStorage.getItem("user_token");
+        this.token = localStorage.getItem('user_token');
     }
 
     fetch(): Observable<HttpResponse<Usuario>> {
         return this.http.get<Usuario>(SERVER_URL + 'api/account', {
             observe: 'response',
-            headers: {"Authorization": this.token}
+            headers: {'Authorization': this.token}
         });
     }
 
