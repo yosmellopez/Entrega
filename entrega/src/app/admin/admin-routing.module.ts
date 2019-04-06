@@ -7,6 +7,7 @@ import {TipoDeUsoComponent} from "./tipo-de-uso/tipo-de-uso.component";
 import {SolicitudComponent} from "./solicitud/solicitud.component";
 import {SolicitanteComponent} from "./solicitante/solicitante.component";
 import {ParcelaComponent} from "./parcela/parcela.component";
+import {UsuariosComponent} from "./usuarios/usuarios.component";
 
 
 export const AdminRoutes: Routes = [
@@ -18,4 +19,5 @@ export const AdminRoutes: Routes = [
     {path: 'solicitud', component: SolicitudComponent},
     {path: 'solicitante', component: SolicitanteComponent},
     {path: 'parcela', component: ParcelaComponent},
+    {path: 'usuario',component:UsuariosComponent}
 ];

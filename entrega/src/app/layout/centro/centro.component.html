@@ -38,18 +38,22 @@
                     </a>
                 </li>
                 <li *ngFor="let menu of rutasUsuario" routerLinkActive="active" [class.sub-menu]="menu.hasChildren">
-                    <a href="#">
-                        <i class="{{menu.class}}"></i> {{menu.title}}
-                    </a>
 
-                    <ul *ngIf="menu.hasChildren">
-                        <li *ngFor="let menuItem of menu.routes">
-                            <i class="{{menuItem.class}}"></i>
-                            <a class="active" [routerLink]="menuItem.path">
-                                {{menuItem.title}}
+
+                            <a href="#">
+                                <i class="{{menu.class}}"></i> {{menu.title}}
                             </a>
-                        </li>
-                    </ul>
+
+                            <ul *ngIf="menu.hasChildren">
+                                <li *ngFor="let menuItem of menu.routes">
+                                    <i class="{{menuItem.class}}"></i>
+                                    <a class="active" [routerLink]="menuItem.path">
+                                        {{menuItem.title}}
+                                    </a>
+                                </li>
+                            </ul>
+
+
                 </li>
             </ul>
         </div>

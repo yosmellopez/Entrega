@@ -1,12 +1,10 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ProvinciaService} from "../../servicios/provincia.service";
 import {Router} from "@angular/router";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AccountService} from "../../Servicios/account.service";
 import {Principal} from "../../Servicios/principal.service";
-import {MunicipioService} from "../../servicios/municipio.service";
-import {Municipio, Provincia, TipoDeSuperficie} from "../../modelo";
-import {ReplaySubject} from "rxjs/index";
+import {UsuarioService} from "../../servicios/usuario.service";
+import {Rol, Usuario} from "../../modelo";
 
 @Component({
     selector: 'app-login',
@@ -17,9 +15,11 @@ export class LoginComponent implements OnInit {
     form: FormGroup;
     mensaje: string;
     isLoading: boolean = false;
+    usuario:Usuario;
+    rol:Rol;
     @ViewChild("password") passwordField: ElementRef;
 
-    constructor(private accoutService: AccountService, private principal: Principal, private router: Router) {
+    constructor(private accoutService: AccountService, private principal: Principal, private router: Router, private userService:UsuarioService) {
         this.form = new FormGroup({
             username: new FormControl('', Validators.required),
             password: new FormControl('', Validators.required)
@@ -27,7 +27,47 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit() {
-        document.body.setAttribute("class", "login-content sw-toggled");
+        document.body.setAttribute("class", "login-content sw-toggled")
+
+
+    }
+
+    registrarUsuario(){
+        this.userService.obtenerRol(1).subscribe(response=>{
+            if (response.body.success){
+                this.rol = response.body.elemento;
+                console.log(this.rol);
+            }else {
+                console.log(response.body.msg);
+            }
+        });
+
+        this.accoutService.get().subscribe(response=>{
+            if (response){
+                this.usuario = new Usuario({
+                    name:'Admin',
+                    lastname:'Admin',
+                    username:'Admin',
+                    password:'123',
+                    rol:this.rol
+                });
+
+                console.log(this.usuario);
+
+                this.userService.registrarUsuario(this.usuario).subscribe(response=>{
+                    if (response){
+                        console.log(response);
+                    }
+                });
+
+
+            }else{
+                console.log(response.body.msg);
+            }
+
+        });
+
+
     }
 
     iniciarSesion() {
@@ -40,16 +80,17 @@ export class LoginComponent implements OnInit {
                     localStorage.setItem("username", usuario.username);
                     this.principal.authenticate(usuario);
                     this.principal.hasAuthority("Administrador").then(has => {
-                        console.log(has)
+                        console.log("entro has"+has)
                         if (has) {
                             localStorage.setItem("isAdmin", "true");
                             this.router.navigate(["/admin/provincia"]);
                         } else {
                             localStorage.setItem("isAdmin", "false");
-                            this.router.navigate(["/user/travel-list"]);
+                            this.router.navigate(["/usuario/home"]);
                         }
                     });
                 } else {
+                    console.log('entro else')
                     this.isLoading = false;
                     this.mensaje = response.body.msg;
                     this.passwordField.nativeElement.focus();

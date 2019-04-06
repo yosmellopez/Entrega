@@ -23,10 +23,22 @@ export class Municipio {
 
 export class Usuario {
     id: number;
+    email:string;
     name: string;
     lastname: string;
     username: string;
+    password:string;
     rol: Rol;
+
+    constructor(value?: any) {
+        if (value) {
+            this.name = value.name ? value.name : "";
+            this.lastname = value.lastname ? value.lastname : "";
+            this.username = value.username ? value.username : "";
+            this.password = value.password ? value.password : "";
+            this.rol = value.rol ? value.rol : ""
+        }
+    }
 }
 
 export class Rol {

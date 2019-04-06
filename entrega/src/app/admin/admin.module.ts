@@ -23,6 +23,8 @@ import { ConsejoPopularWindowComponent } from './consejo-popular/consejo-popular
 import { DetallesSolicitudComponent } from './solicitud/detalles-solicitud/detalles-solicitud.component';
 import { SolicitudWindowComponent } from './solicitud/solicitud-window/solicitud-window.component';
 import { PersonaWindowsComponent } from './solicitante/persona-windows/persona-windows.component';
+import { UsuariosComponent } from './usuarios/usuarios.component';
+import { UsuarioWindowComponent } from './usuarios/usuario-window/usuario-window.component';
 
 @NgModule({
     imports: [
@@ -52,9 +54,11 @@ import { PersonaWindowsComponent } from './solicitante/persona-windows/persona-w
         ConsejoPopularWindowComponent,
         DetallesSolicitudComponent,
         SolicitudWindowComponent,
-        PersonaWindowsComponent
+        PersonaWindowsComponent,
+        UsuariosComponent,
+        UsuarioWindowComponent,
     ],
-    entryComponents: [ProvinciaWindowComponent, MunicipioWindowComponent, TipoDeSuperficieWindowComponent, TipoDeUsoWindowComponent, ConsejoPopularWindowComponent, DetallesSolicitudComponent,SolicitudWindowComponent, PersonaWindowsComponent]
+    entryComponents: [ProvinciaWindowComponent, MunicipioWindowComponent, TipoDeSuperficieWindowComponent, TipoDeUsoWindowComponent, ConsejoPopularWindowComponent, DetallesSolicitudComponent,SolicitudWindowComponent, PersonaWindowsComponent, UsuarioWindowComponent]
 })
 export class AdminModule {
 }
