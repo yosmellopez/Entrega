@@ -1,10 +1,31 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from "@angular/forms";
+import {
+    AbstractControl,
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    FormGroupDirective,
+    NgForm,
+    Validators
+} from "@angular/forms";
 import {ErrorStateMatcher, MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material";
 import {ReplaySubject} from "rxjs/index";
 import {Rol, Usuario} from "../../../modelo";
 import {UsuarioService} from "../../../servicios/usuario.service";
 import {MensajeError} from "../../../mensaje/window.mensaje";
+import {getToken} from "@angular/router/src/utils/preactivation";
+import {AccountService} from "../../../guards/account.service";
+
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+    isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+        const invalidCtrl = !!(control && control.invalid && control.parent.dirty);
+        const invalidParent = !!(control && control.parent && control.parent.invalid && control.parent.dirty);
+
+        return (invalidCtrl || invalidParent);
+    }
+}
+
 
 @Component({
   selector: 'app-usuario-window',
@@ -20,25 +41,36 @@ export class UsuarioWindowComponent implements OnInit {
     insertar = false;
     usuario: Usuario;
     roles: Rol[] = [];
-    igual:boolean;
+    //igual:boolean;
     public rolesFiltrados: ReplaySubject<Rol[]> = new ReplaySubject<Rol[]>(1);
 
+    matcher = new MyErrorStateMatcher();
+
   constructor(public dialogRef: MatDialogRef<UsuarioWindowComponent>, @Inject(MAT_DIALOG_DATA) {id, email, name, lastname, username, rol}: Usuario,
-              private service: UsuarioService, private dialog: MatDialog) {
+              private service: UsuarioService, private dialog: MatDialog, private formBuilder: FormBuilder) {
       this.insertar = id == null;
       this.idUsuario = id;
-      this.form = new FormGroup({
-          email: new FormControl(email,[Validators.required, Validators.email,]),
-          name: new FormControl(name,[Validators.required]),
-          lastname: new FormControl(lastname,[Validators.required]),
-          username: new FormControl(username,[Validators.required]),
-          password: new FormControl('',[Validators.required]),
-          confirmPassword: new FormControl('',[Validators.required]),
-          rol:new FormControl(rol,[Validators.required])
-      });
+      if (this.insertar){
+          this.form = this.formBuilder.group({
+              email: new FormControl(email,[Validators.required, Validators.email,]),
+              name: new FormControl(name,[Validators.required]),
+              lastname: new FormControl(lastname,[Validators.required]),
+              username: new FormControl(username,[Validators.required]),
+              password: new FormControl('',[Validators.required]),
+              confirmPassword: new FormControl('',[Validators.required]),
+              rol:new FormControl(rol,[Validators.required])
+          },{validators:this.checkPasswords});
+      } else {
+          this.form = this.formBuilder.group({
+              email: new FormControl(email,[Validators.required, Validators.email,]),
+              name: new FormControl(name,[Validators.required]),
+              lastname: new FormControl(lastname,[Validators.required]),
+              username: new FormControl(username,[Validators.required]),
+              rol:new FormControl(rol,[Validators.required])
+          });
+      }
 
-
-  }
+    }
 
     onNoClick(): void {
         this.dialogRef.close(false);
@@ -79,6 +111,8 @@ export class UsuarioWindowComponent implements OnInit {
                     this.isLoadingResults = false;
                 });
             }
+        }else {
+            console.log(this.form);
         }
     }
 
@@ -86,17 +120,11 @@ export class UsuarioWindowComponent implements OnInit {
         return inicio && fin && inicio.id === fin.id;
     }
 
-    passwordMatchValidator():boolean{
-        console.log(this.form.get('password').value);
-        console.log(this.form.get('confirmPassword').value);
+    checkPasswords(group: FormGroup) { // here we have the 'passwords' group
+        let pass = group.controls.password.value;
+        let confirmPass = group.controls.confirmPassword.value;
 
-      if (this.form.get('password').value == this.form.get('confirmPassword').value) {
-          return true;
-      }else{
-          return false;
-      }
-
-
+        return pass === confirmPass ? null : { notSame: true }
     }
 
 

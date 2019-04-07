@@ -106,11 +106,12 @@ public class UsuarioController {
 
     @PutMapping(value = "/usuario/{idUsuario}")
     public ResponseEntity<AppResponse<Usuario>> actualizarUsuario(@PathVariable("idUsuario") Usuario usuarioBd, @RequestBody Usuario usuario) {
-        Optional.ofNullable(usuario.getPassword()).ifPresent(password -> {
+        Optional.ofNullable(usuarioBd.getPassword()).ifPresent(password -> {
             if (!password.isEmpty())
-                usuario.setPassword(passwordEncoder.encode(password));
+                usuarioBd.setPassword(passwordEncoder.encode(password));
         });
         //usuarioBd.clonarDatos(usuario);
+        usuarioBd.setRol(usuario.getRol());
         usuarioRepository.saveAndFlush(usuarioBd);
         return ResponseEntity.ok(AppResponse.success(usuarioBd).build());
     }

@@ -76,7 +76,7 @@ export class UsuariosComponent implements OnInit {
 
     abrirVentana() {
         let dialogRef = this.dialog.open(UsuarioWindowComponent, {
-            width: '400px', disableClose: true, data: new Municipio(),
+            width: '400px', disableClose: true, data: new Usuario(),
         });
 
         dialogRef.afterClosed().subscribe(result => {
@@ -91,8 +91,9 @@ export class UsuariosComponent implements OnInit {
         });
     }
 
-    editarMunicipio(event: Event, usuario: Usuario): void {
+    editarUsuario(event: Event, usuario: Usuario): void {
         event.stopPropagation();
+        console.log(usuario);
         let editDialogRef = this.dialog.open(UsuarioWindowComponent, {
             width: '400px', data: usuario, disableClose: true
         });
@@ -108,7 +109,7 @@ export class UsuariosComponent implements OnInit {
         });
     }
 
-    eliminarMunicipio(event: Event, usuario: Usuario): void {
+    eliminarUsuario(event: Event, usuario: Usuario): void {
         event.stopPropagation();
         let dialogRef = this.dialog.open(Confirm, {
             width: '400px',

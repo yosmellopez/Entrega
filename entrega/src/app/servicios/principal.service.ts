@@ -118,5 +118,6 @@ export class Principal {
         this.userIdentity = null;
         this.authenticated = false;
         this.authenticationState.next(false);
+        //this.account.CerrarSesion();
     }
 }

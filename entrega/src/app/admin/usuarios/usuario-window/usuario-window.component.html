@@ -30,22 +30,22 @@
                 Debe insertar un nombre de usurio.
             </mat-error>
         </mat-form-field>
-        <mat-form-field class="full-width">
+        <mat-form-field class="full-width" *ngIf="insertar">
             <input matInput placeholder="Contraseña" formControlName="password">
             <mat-error *ngIf="form.controls['password'].errors?.required">
                 Debe insertar una contraseña.
             </mat-error>
         </mat-form-field>
-        <mat-form-field class="full-width">
-            <input matInput placeholder="Confirme Contraseña" formControlName="confirmPassword">
+        <mat-form-field class="full-width" *ngIf="insertar">
+            <input matInput placeholder="Confirme Contraseña" formControlName="confirmPassword" [errorStateMatcher]="matcher">
             <mat-error *ngIf="form.controls['confirmPassword'].errors?.required">
                 Debe confirmar la contraseña.
             </mat-error>
-            <mat-error *ngIf="passwordMatchValidator()">
-                Las contraseña no coincide.
+            <mat-error *ngIf="form.hasError('notSame')">
+               Las contrase;as no coincides.
             </mat-error>
         </mat-form-field>
-        <p>{{igual}}</p>
+
         <mat-form-field class="full-width">
             <mat-select matInput placeholder="Seleccione el rol" formControlName="rol" [compareWith]="compararRol">
                 <mat-option *ngFor="let rol of roles" [value]="rol">
