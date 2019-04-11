@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
-import {AccountService} from "./account.service";
+import {AuthenticationService} from "./authentication.service";
 import {Observable, Subject} from "rxjs/index";
 import {Usuario} from "../modelo";
+import {Router} from "@angular/router";
 
 @Injectable({providedIn: 'root'})
 export class Principal {
@@ -9,7 +10,7 @@ export class Principal {
     private authenticated = false;
     public authenticationState = new Subject<any>();
 
-    constructor(private account: AccountService) {
+    constructor(private account: AuthenticationService, private router:Router) {
     }
 
     authenticate(identity) {
@@ -114,10 +115,5 @@ export class Principal {
         return this.isIdentityResolved() ? this.userIdentity.imageUrl : null;
     }
 
-    logout() {
-        this.userIdentity = null;
-        this.authenticated = false;
-        this.authenticationState.next(false);
-        //this.account.CerrarSesion();
-    }
+
 }

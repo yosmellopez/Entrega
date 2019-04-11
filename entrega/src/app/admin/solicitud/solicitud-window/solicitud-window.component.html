@@ -36,26 +36,49 @@
                                     <mat-radio-button value="Juridica">Juridica</mat-radio-button>
                                 </mat-radio-group>
                             </td>
+                            <td>
+                                <mat-form-field class="full-width">
+                                    <mat-select matInput placeholder="Seleccione el consejo popular" formControlName="consejoPopular" [compareWith]="compararConsejoPopulares">
+                                        <mat-option *ngFor="let consejoP of consejoPopulares" [value]="consejoP">
+                                            {{consejoP.nombre}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="formPersona.controls['consejoPopular'].errors?.required">Debe seleccionar el consejo popular.</mat-error>
+                                </mat-form-field>
+                            </td>
                         </tr>
                         <tr>
                             <td>
                                 <mat-form-field>
-                                    <input matInput maxlength="11" placeholder="CI" formControlName="ci">
+                                    <input  #input matInput maxlength="11" placeholder="CI" formControlName="ci">
+                                    <mat-error *ngIf="formPersona.controls['ci'].errors?.required">
+                                        Debe insertar el NIT de la persona.
+                                    </mat-error>
+                                    <mat-hint align="end">{{input.value?.length || 0}}/11</mat-hint>
                                 </mat-form-field>
                             </td>
                             <td>
                                 <mat-form-field>
                                     <input matInput placeholder="Nombre" formControlName="nombre">
+                                    <mat-error *ngIf="formPersona.controls['nombre'].errors?.required">
+                                        Debe insertar el Nombre de la persona.
+                                    </mat-error>
                                 </mat-form-field>
                             </td>
                             <td>
                                 <mat-form-field>
                                     <input matInput placeholder="Primer Apellido" formControlName="primerApellido">
+                                    <mat-error *ngIf="formPersona.controls['primerApellido'].errors?.required">
+                                        Debe insertar el primer Apellido de la persona.
+                                    </mat-error>
                                 </mat-form-field>
                             </td>
                             <td>
                                 <mat-form-field>
                                     <input matInput placeholder="Segundo Apellido" formControlName="segundoApellido">
+                                    <mat-error *ngIf="formPersona.controls['segundoApellido'].errors?.required">
+                                        Debe insertar el segundo Apellido de la persona.
+                                    </mat-error>
                                 </mat-form-field>
                             </td>
                         </tr>
@@ -74,6 +97,9 @@
                                 <td colspan="2">
                                     <mat-form-field class="full-width">
                                         <input matInput placeholder="Dirección Particular" formControlName="dirParticular">
+                                        <mat-error *ngIf="formPersona.controls['dirParticular'].errors?.required">
+                                            Debe insertar la direccion de particular.
+                                        </mat-error>
                                     </mat-form-field>
                                 </td>
                                 <td>
@@ -87,12 +113,14 @@
                             <tr>
                                 <td>
                                     <mat-form-field class="full-width">
-                                        <input matInput type="number" maxlength="8" placeholder="Teléfono Movil" formControlName="movil">
+                                        <input #inputTM matInput type="number" maxlength="8" placeholder="Teléfono Movil" formControlName="movil">
+                                        <mat-hint align="end">{{inputTM.value?.length || 0}}/8</mat-hint>
                                     </mat-form-field>
                                 </td>
                                 <td>
                                     <mat-form-field class="full-width">
-                                        <input matInput type="number" maxlength="8" placeholder="Teléfono Fijo" formControlName="telFijo">
+                                        <input #inputTF matInput type="number" maxlength="8" placeholder="Teléfono Fijo" formControlName="telFijo">
+                                        <mat-hint align="end">{{inputTF.value?.length || 0}}/8</mat-hint>
                                     </mat-form-field>
                                 </td>
                                 <td>
@@ -114,9 +142,13 @@
                     <div *ngIf="formPersona.value.tipoPersona == 'Juridica'">
                         <mat-form-field>
                             <input matInput placeholder="Dirección Particular" formControlName="dirParticular">
+                            <mat-error *ngIf="formPersona.controls['dirParticular'].errors?.required">
+                                Debe insertar la direccion de la entidad.
+                            </mat-error>
                         </mat-form-field>
                         <mat-form-field>
-                            <input matInput type="number" maxlength="8" placeholder="Teléfono De la Entidad" formControlName="telFijo">
+                            <input #inputTF matInput type="number" maxlength="8" placeholder="Teléfono De la Entidad" formControlName="telFijo">
+                            <mat-hint align="end">{{inputTF.value?.length || 0}}/8</mat-hint>
                         </mat-form-field>
                     </div>
                     <div>
@@ -142,26 +174,59 @@
                 <ng-template matStepLabel>Parcelas</ng-template>
                 <form [formGroup]="formParcela" (submit)="addParcela()">
                     <input type="hidden" formControlName="contador">
-                    <mat-form-field>
-                        <input type="number" matInput placeholder="Numero de Solicitud" formControlName="limiteN">
-                        <mat-error *ngIf="formParcela.controls['limiteN'].errors?.required">Debe insertar el numero de la solicitud</mat-error>
-                    </mat-form-field>
-                    <mat-form-field>
-                        <input type="number" matInput placeholder="Área Solicitada(Ha)" formControlName="limiteS">
-                        <mat-error *ngIf="formParcela.controls['limiteS'].errors?.required">Debe insertar el área solicitada</mat-error>
-                    </mat-form-field>
-                    <mat-form-field>
-                        <input type="number" matInput placeholder="Área Solicitada(Ha)" formControlName="limiteE">
-                        <mat-error *ngIf="formParcela.controls['limiteE'].errors?.required">Debe insertar el área solicitada</mat-error>
-                    </mat-form-field>
-                    <mat-form-field>
-                        <input type="number" matInput placeholder="Área Solicitada(Ha)" formControlName="limiteW">
-                        <mat-error *ngIf="formParcela.controls['limiteW'].errors?.required">Debe insertar el área solicitada</mat-error>
-                    </mat-form-field>
+
+                    <table class="example-full-width" cellspacing="0">
+                        <tr>
+                            <td>
+                                <mat-form-field>
+                                    <input type="number" matInput placeholder="ZC" formControlName="zonaCatastral">
+                                    <mat-error *ngIf="formParcela.controls['zonaCatastral'].errors?.required">Debe insertar el numero de zona catastral</mat-error>
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <input type="number" matInput placeholder="Parcela" formControlName="parcela">
+                                    <mat-error *ngIf="formParcela.controls['parcela'].errors?.required">Debe insertar el numero de parcela</mat-error>
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <input type="number" matInput placeholder="Divicion" formControlName="divicion">
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <input type="number" matInput placeholder="Área (Ha)" formControlName="area">
+                                    <mat-error *ngIf="formParcela.controls['area'].errors?.required">Debe insertar el área de la parcela</mat-error>
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="full-width">
+                                    <input type="text" matInput placeholder="Direccion" formControlName="direccion">
+                                    <mat-error *ngIf="formParcela.controls['direccion'].errors?.required">Debe proporcionar la dirección de la parcela</mat-error>
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field>
+                                    <input type="number" matInput placeholder="Limite Norte" formControlName="limiteN">
+                                    <mat-error *ngIf="formParcela.controls['area'].errors?.required">Debe insertar el área de la parcela</mat-error>
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <input type="number" matInput placeholder="Limite Sur" formControlName="limiteS">
+                                    <mat-error *ngIf="formParcela.controls['area'].errors?.required">Debe insertar el área de la parcela</mat-error>
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <input type="number" matInput placeholder="Limite Este" formControlName="limiteE">
+                                    <mat-error *ngIf="formParcela.controls['area'].errors?.required">Debe insertar el área de la parcela</mat-error>
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <input type="number" matInput placeholder="Limite Oeste" formControlName="limiteW">
+                                    <mat-error *ngIf="formParcela.controls['area'].errors?.required">Debe insertar el área de la parcela</mat-error>
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>
                     <button mat-mini-fab color="primary" style="margin-right: 10px;" matTooltip="Añadir Parcela">
                         <mat-icon>add</mat-icon>
                     </button>
-
                     <div class="example-container mat-elevation-z8" style="top: 10px;position:relative;">
                         <table mat-table [dataSource]="dataSourceParcela">
                             <!-- Position Column -->

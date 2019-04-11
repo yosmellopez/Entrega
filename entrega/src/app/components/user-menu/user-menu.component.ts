@@ -27,12 +27,9 @@ export class UserMenuComponent implements OnInit {
   	}
 
 
-  	constructor(private elementRef: ElementRef, private principal:Principal) { }
+  	constructor(private elementRef: ElementRef ) { }
 
 
-  	salir (){
-  	    this.principal.logout();
-    }
 
   	ngOnInit() {
   	}

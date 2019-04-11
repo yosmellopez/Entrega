@@ -8,7 +8,16 @@ import {
     MatHorizontalStepper, MatStepper, matStepperAnimations,
     MatTableDataSource
 } from '@angular/material';
-import {ConsejoPopular, LineaDeProduccion, Municipio, Parcela, Persona, Solicitud, TipoDeUso} from '../../../modelo';
+import {
+    ConsejoPopular,
+    LineaDeProduccion,
+    Municipio,
+    Parcela,
+    Persona,
+    Provincia,
+    Solicitud,
+    TipoDeUso
+} from '../../../modelo';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Information, MensajeError} from '../../../mensaje/window.mensaje';
 import {ConsejoPopularService} from '../../../servicios/consejo-popular.service';
@@ -53,7 +62,7 @@ export class SolicitudWindowComponent implements OnInit {
     solicitud: Solicitud;
     contadorParcela: number = 0;
     contadorLinea: number = 0;
-    consejoPopular: ConsejoPopular;
+    consejoPopulares: ConsejoPopular[]=[];
     tipoDeUso: TipoDeUso;
     startDate = new Date(1988, 0, 1);
     personas: Persona[];
@@ -69,16 +78,14 @@ export class SolicitudWindowComponent implements OnInit {
     dataSourceParcela = new MatTableDataSource<Parcela>();
     dataSourceLinea = new MatTableDataSource<LineaDeProduccion>();
     public personasFiltradas: ReplaySubject<Persona[]> = new ReplaySubject<Persona[]>(1);
+    public consejoPopularFiltrados: ReplaySubject<ConsejoPopular[]> = new ReplaySubject<ConsejoPopular[]>(1);
 
     constructor(public dialogRef: MatDialogRef<SolicitudWindowComponent>,
                 @Inject(MAT_DIALOG_DATA){id, municipio, tipoDecreto = '300', tipoSolicitud = 'Nueva', fechaSolicitud = new Date(), numExpediente, persona, parcelas, lineasDeProduccion, areaSolicitada, estado = 'Por Tramitar'}: Solicitud,
-                @Inject(MAT_DIALOG_DATA){tipoPersona = 'Natural', ci, nombre, primerApellido, segundoApellido, sexo = 'M', dirParticular, fechaNacimiento, movil, telFijo, situacionLaboral, asociado}: Persona,
-                @Inject(MAT_DIALOG_DATA){consejoPopular, tipoDeUso, limiteS, limiteN, limiteE, limiteW}: Parcela,
-                @Inject(MAT_DIALOG_DATA){lineaDeProduccion, areaDedicada, estudioSuelo}: LineaDeProduccion, private service: SolicitudService, private consejoPopularService: ConsejoPopularService, private tipodeUsoService: TipoDeUsoService, private personaService: PersonaService,private municipioService:MunicipioService, private dialog: MatDialog) {
+                @Inject(MAT_DIALOG_DATA){tipoPersona = 'Natural',consejoPopular, ci, nombre, primerApellido, segundoApellido, sexo = 'M', dirParticular, fechaNacimiento, movil, telFijo, situacionLaboral, asociado}: Persona,
+                private service: SolicitudService, private consejoPopularService: ConsejoPopularService, private tipodeUsoService: TipoDeUsoService, private personaService: PersonaService,private municipioService:MunicipioService, private dialog: MatDialog) {
         this.insertar = id == null;
         this.municipio = municipio;
-        this.consejoPopular = consejoPopular;
-        this.tipoDeUso = tipoDeUso;
         this.idSolicitud = id;
         this.persona=persona;
         this.formSolicitud = new FormGroup({
@@ -93,6 +100,7 @@ export class SolicitudWindowComponent implements OnInit {
 
         this.formPersona = new FormGroup({
             tipoPersona: new FormControl(tipoPersona, [Validators.required]),
+            consejoPopular: new FormControl(consejoPopular, [Validators.required]),
             ci: new FormControl(ci, [Validators.required, Validators.maxLength(11)]),
             nombre: new FormControl(nombre, [Validators.required]),
             primerApellido: new FormControl(primerApellido, [Validators.required]),
@@ -110,10 +118,11 @@ export class SolicitudWindowComponent implements OnInit {
             contador: new FormControl(this.contadorParcela, []),
             consejoPopular: new FormControl('', [Validators.required]),
             tipoDeUso: new FormControl('', [Validators.required]),
-            direccion: new FormControl('', [Validators.required]),
             zonaCatastral: new FormControl('', [Validators.required]),
             parcela: new FormControl('', [Validators.required]),
-            divicion: new FormControl('', [Validators.required]),
+            divicion: new FormControl(''),
+            direccion: new FormControl('', [Validators.required]),
+            area: new FormControl('', [Validators.required]),
             limiteN: new FormControl('', [Validators.required]),
             limiteS: new FormControl('', [Validators.required]),
             limiteE: new FormControl('', [Validators.required]),
@@ -133,6 +142,7 @@ export class SolicitudWindowComponent implements OnInit {
 
     ngOnInit() {
         if (this.insertar) {
+
             this.consejoPopularService.listarConsejoPopularNoDefinido('No Definido').subscribe(resp => {
                 if (resp.body.success) {
                     this.formParcela.get('consejoPopular').setValue(resp.body.elemento);
@@ -159,7 +169,17 @@ export class SolicitudWindowComponent implements OnInit {
                 }
             });
         }
+
+        this.consejoPopularService.listarTodasConsejoPopular().subscribe(resp =>{
+            if (resp.body.success){
+                this.consejoPopulares = resp.body.elementos;
+                this.consejoPopularFiltrados.next(this.consejoPopulares);
+            }
+        });
+
         console.log(this.formSolicitud.value);
+
+
     }
 
     abrirVentana() {
@@ -271,6 +291,10 @@ export class SolicitudWindowComponent implements OnInit {
     }
 
     compararPersonas(inicio: Persona, fin: Persona) {
+        return inicio && fin && inicio.id === fin.id;
+    }
+
+    compararConsejoPopulares(inicio: ConsejoPopular, fin: ConsejoPopular) {
         return inicio && fin && inicio.id === fin.id;
     }
 
