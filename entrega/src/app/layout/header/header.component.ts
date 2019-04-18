@@ -3,6 +3,7 @@ import {MediaMatcher} from "@angular/cdk/layout";
 import {Principal} from "../../servicios/principal.service";
 import {AuthenticationService} from "../../servicios/authentication.service";
 import {AccountService} from "../../guards/account.service";
+import {SolicitudComponent} from "../../admin/solicitud/solicitud.component";
 
 
 @Component({
@@ -12,6 +13,7 @@ import {AccountService} from "../../guards/account.service";
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
+    solicitud:SolicitudComponent;
 
     searchOpen: boolean = false;
     mobileQuery: MediaQueryList;
@@ -33,10 +35,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this._mobileQueryListener = () => changeDetectorRef.detectChanges();
         this.mobileQuery.addListener(this._mobileQueryListener);
         this.token = localStorage.getItem('user_token');
+
+        console.log(this.token);
     }
 
     ngOnInit() {
-        //this.acountService.identity()
     }
 
     ngOnDestroy(): void {
@@ -46,5 +49,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     logout (){
         this.acount.logout();
     }
+
+
 
 }

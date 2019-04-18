@@ -153,12 +153,12 @@
                     </div>
                     <div>
                         <mat-form-field class="full-width">
-                            <mat-select matInput placeholder="Seleccione La Entidad A Vincular" formControlName="asociado" [compareWith]="compararPersonas">
+                            <mat-select matInput placeholder="Seleccione la entiodad a vincular" formControlName="asociado" [compareWith]="compararPersonas">
                                 <mat-option *ngFor="let persona of personas" [value]="persona">
                                     {{persona|persona}}
                                 </mat-option>
                             </mat-select>
-                            <mat-error *ngIf="formPersona.controls['asociado'].errors?.required">Debe vincular a una Entidad.</mat-error>
+                            <mat-error *ngIf="formPersona.controls['dirParticular'].errors?.required">Debe seleccionar un organismo a para vincular.</mat-error>
                         </mat-form-field>
                         <button *ngIf="formPersona.controls['tipoPersona'].value =='Natural'" mat-mini-fab color="primary" (click)="abrirVentana()" matTooltip="Nueva Persona Juridica">
                             <mat-icon style="font-size: 25px">add</mat-icon>
@@ -170,7 +170,7 @@
                     <button mat-button matStepperNext>Next</button>
                 </div>
             </mat-step>
-            <mat-step [stepControl]="formParcela" >
+            <mat-step [stepControl]="formParcela">
                 <ng-template matStepLabel>Parcelas</ng-template>
                 <form [formGroup]="formParcela" (submit)="addParcela()">
                     <input type="hidden" formControlName="contador">
@@ -190,7 +190,7 @@
                                     <input type="number" matInput placeholder="Divicion" formControlName="divicion">
                                 </mat-form-field>
                                 <mat-form-field>
-                                    <input type="number" matInput placeholder="Área (Ha)" formControlName="area">
+                                    <input type="number" matInput placeholder="Área(Ha)" formControlName="area">
                                     <mat-error *ngIf="formParcela.controls['area'].errors?.required">Debe insertar el área de la parcela</mat-error>
                                 </mat-form-field>
                             </td>
@@ -206,20 +206,16 @@
                         <tr>
                             <td>
                                 <mat-form-field>
-                                    <input type="number" matInput placeholder="Limite Norte" formControlName="limiteN">
-                                    <mat-error *ngIf="formParcela.controls['area'].errors?.required">Debe insertar el área de la parcela</mat-error>
+                                    <input type="text" matInput placeholder="Limite Norte" formControlName="limiteN">
                                 </mat-form-field>
                                 <mat-form-field>
-                                    <input type="number" matInput placeholder="Limite Sur" formControlName="limiteS">
-                                    <mat-error *ngIf="formParcela.controls['area'].errors?.required">Debe insertar el área de la parcela</mat-error>
+                                    <input type="text" matInput placeholder="Limite Sur" formControlName="limiteS">
                                 </mat-form-field>
                                 <mat-form-field>
-                                    <input type="number" matInput placeholder="Limite Este" formControlName="limiteE">
-                                    <mat-error *ngIf="formParcela.controls['area'].errors?.required">Debe insertar el área de la parcela</mat-error>
+                                    <input type="text" matInput placeholder="Limite Este" formControlName="limiteE">
                                 </mat-form-field>
                                 <mat-form-field>
-                                    <input type="number" matInput placeholder="Limite Oeste" formControlName="limiteW">
-                                    <mat-error *ngIf="formParcela.controls['area'].errors?.required">Debe insertar el área de la parcela</mat-error>
+                                    <input type="text" matInput placeholder="Limite Oeste" formControlName="limiteW">
                                 </mat-form-field>
                             </td>
                         </tr>
@@ -230,35 +226,50 @@
                     <div class="example-container mat-elevation-z8" style="top: 10px;position:relative;">
                         <table mat-table [dataSource]="dataSourceParcela">
                             <!-- Position Column -->
-                            <ng-container matColumnDef="limiteN">
-                                <th mat-header-cell *matHeaderCellDef> Nombre</th>
-                                <td mat-cell *matCellDef="let element"> {{element.limiteN}}</td>
+                            <ng-container matColumnDef="contador">
+                                <th mat-header-cell *matHeaderCellDef>No.</th>
+                                <td mat-cell *matCellDef="let element"> {{element.contador}}</td>
                                 <!--<td mat-footer-cell *matFooterCellDef><strong> Total</strong></td>-->
                             </ng-container>
 
                             <!-- Name Column -->
-                            <ng-container matColumnDef="limiteS">
-                                <th mat-header-cell *matHeaderCellDef> Apellidos</th>
-                                <td mat-cell *matCellDef="let element"> {{element.limiteS}}</td>
+                            <ng-container matColumnDef="zonaCatastral">
+                                <th mat-header-cell *matHeaderCellDef> ZC</th>
+                                <td mat-cell *matCellDef="let element"> {{element.zonaCatastral}}</td>
                                 <!--<td mat-footer-cell *matFooterCellDef><strong>{{getTotal()}}</strong></td>-->
                             </ng-container>
 
                             <!-- Weight Column -->
-                            <ng-container matColumnDef="limiteE">
-                                <th mat-header-cell *matHeaderCellDef> DNI</th>
-                                <td mat-cell *matCellDef="let element"> {{element.limiteE}}</td>
+                            <ng-container matColumnDef="parcela">
+                                <th mat-header-cell *matHeaderCellDef>Parcela</th>
+                                <td mat-cell *matCellDef="let element"> {{element.parcela}}</td>
                                 <!--<td mat-footer-cell *matFooterCellDef></td>-->
                             </ng-container>
 
                             <!-- Symbol Column -->
-                            <ng-container matColumnDef="limiteW">
-                                <th mat-header-cell *matHeaderCellDef> Lugar</th>
-                                <td mat-cell *matCellDef="let element"> {{element.limiteW}}</td>
+                            <ng-container matColumnDef="divicion">
+                                <th mat-header-cell *matHeaderCellDef>Divicion</th>
+                                <td mat-cell *matCellDef="let element"> {{element.divicion}}</td>
                                 <!--<td mat-footer-cell *matFooterCellDef></td>-->
                             </ng-container>
+
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="direccion">
+                                <th mat-header-cell *matHeaderCellDef>Divicion</th>
+                                <td mat-cell *matCellDef="let element"> {{element.divicion}}</td>
+                                <!--<td mat-footer-cell *matFooterCellDef></td>-->
+                            </ng-container>
+
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="area">
+                                <th mat-header-cell *matHeaderCellDef>Divicion</th>
+                                <td mat-cell *matCellDef="let element"> {{element.divicion}}</td>
+                                <!--<td mat-footer-cell *matFooterCellDef></td>-->
+                            </ng-container>
+
                             <!-- Symbol Column -->
                             <ng-container matColumnDef="acciones" stickyEnd>
-                                <th mat-header-cell *matHeaderCellDef> Acciones</th>
+                                <th mat-header-cell *matHeaderCellDef>Acciones</th>
                                 <td mat-cell *matCellDef="let element">
                                     <button mat-mini-fab type="button" color="accent" (click)="editParcela($event,element)" matTooltip="Editar Pasajero">
                                         <mat-icon>mode_edit</mat-icon>
@@ -276,8 +287,10 @@
             </mat-step>
             <mat-step [stepControl]="formLineaProduccion">
                 <ng-template matStepLabel>Linea de Produccion</ng-template>
+
                 <form [formGroup]="formLineaProduccion" (submit)="addLineasProduccion()">
                     <input type="hidden" formControlName="contador">
+
                     <mat-form-field class="full-width">
                         <mat-select matInput placeholder="Linea de producción" formControlName="lineaDeProduccion">
                             <mat-option value="Cultivos Varios">Cultivos Varios</mat-option>
@@ -289,25 +302,27 @@
                             <mat-option value="Forestal">Forestal</mat-option>
                         </mat-select>
                     </mat-form-field>
+
                     <mat-form-field>
-                        <input matInput [maxlength]="maxlengthAD" #areaDedi placeholder="Área dedicada(Ha)" formControlName="areaDedicada" value="0.0">
+                        <input matInput #areaDedi placeholder="Área dedicada(Ha)" formControlName="areaDedicada">
                         <mat-error *ngIf="formLineaProduccion.controls['areaDedicada'].errors?.required">Debe insertar el área solicitada</mat-error>
                     </mat-form-field>
-                    <button mat-mini-fab color="primary" style="margin-right: 10px;" matTooltip="Añadir Parcela">
+
+                    <button type="submit" mat-mini-fab color="primary" style="margin-right: 10px;" matTooltip="Añadir Linea de Produccion">
                         <mat-icon>add</mat-icon>
                     </button>
                     <div class="example-container mat-elevation-z8" style="top: 10px;position:relative;">
                         <table mat-table [dataSource]="dataSourceLinea">
                             <!-- Position Column -->
                             <ng-container matColumnDef="lineaDeProduccion">
-                                <th mat-header-cell *matHeaderCellDef> Nombre</th>
+                                <th mat-header-cell *matHeaderCellDef> Linea de producción</th>
                                 <td mat-cell *matCellDef="let element"> {{element.lineaDeProduccion}}</td>
                                 <!--<td mat-footer-cell *matFooterCellDef><strong> Total</strong></td>-->
                             </ng-container>
 
                             <!-- Name Column -->
                             <ng-container matColumnDef="areaDedicada">
-                                <th mat-header-cell *matHeaderCellDef> Apellidos</th>
+                                <th mat-header-cell *matHeaderCellDef> Área Dedicada(Ha)</th>
                                 <td mat-cell *matCellDef="let element"> {{element.areaDedicada}}</td>
                                 <!--<td mat-footer-cell *matFooterCellDef><strong>{{getTotal()}}</strong></td>-->
                             </ng-container>
@@ -316,7 +331,7 @@
                             <ng-container matColumnDef="acciones" stickyEnd>
                                 <th mat-header-cell *matHeaderCellDef> Acciones</th>
                                 <td mat-cell *matCellDef="let element">
-                                    <button mat-mini-fab type="button" color="accent" (click)="editParcela($event,element)" matTooltip="Editar Pasajero">
+                                    <button mat-mini-fab type="button" color="accent" (click)="editParcela($event,element)" [matTooltip]="'Editar Linea de Produccion - ' + element.lineaDeProduccion">
                                         <mat-icon>mode_edit</mat-icon>
                                     </button>
                                 </td>
