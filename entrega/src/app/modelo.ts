@@ -67,6 +67,8 @@ export class Persona {
     movil: string;
     telFijo: string;
     situacionLaboral: string;
+    parentesco:string;
+    integracion:string;
     asociado: Persona;
 
     constructor(value?: any) {
@@ -91,6 +93,8 @@ export class Solicitud {
     tramite: Tramite;
     estado: string;
     fechaAproDes: Date;
+    detallesMT:string;
+    detallesAproDesa:string;
 }
 
 export class Parcela {
@@ -107,6 +111,7 @@ export class Parcela {
     limiteS: string;
     limiteE: string;
     limiteW: string;
+    condicActual: string;
 }
 
 export class LineaDeProduccion {

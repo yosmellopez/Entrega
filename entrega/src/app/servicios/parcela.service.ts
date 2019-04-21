@@ -20,7 +20,7 @@ export class ParcelaService {
         let constUrl = `${this.ParcelaUrl}/estado?sort=${sort},${order}&page=${page + 1}&limit=${limit}`;
         return this.http.get<AppResponse<Parcela>>(constUrl, {
             observe: 'response',
-            params: {estado: estado},
+            //params: {estado: estado},
             headers: {'Authorization': this.token}
         });
     }
@@ -29,7 +29,7 @@ export class ParcelaService {
         let constUrl = `${this.ParcelaUrl}/zc=${zc}&parcela:${parcela}&divicion:${divicion}`;
         return this.http.get<AppResponse<Parcela>>(constUrl, {
             observe: 'response',
-            params: {estado: estado},
+            //params: {estado: estado},
             headers: {'Authorization': this.token}
         });
     }

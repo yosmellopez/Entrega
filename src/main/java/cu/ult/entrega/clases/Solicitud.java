@@ -68,11 +68,16 @@ public class Solicitud implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaAproDes;
 
+    @Column(name = "detallesAproDesa")
+    private String detallesAproDesa;
+
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(foreignKey = @ForeignKey (name = "fk_solicitud_municipio"))
     private Municipio municipio;
 
+    @Column(name = "detallesMT")
+    private String detallesMT;
 
     public Long getId() {
         return id;
