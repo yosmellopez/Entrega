@@ -14,6 +14,8 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.CacheControl;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.jasperreports.JasperReportsMultiFormatView;
+import org.springframework.jasperreports.JasperReportsViewResolver;
 import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -87,6 +89,17 @@ public class ConfiguracionWeb implements WebMvcConfigurer, ApplicationContextAwa
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
+    }
+
+    @Override
+    public void configureViewResolvers(ViewResolverRegistry registry) {
+        JasperReportsViewResolver reportsViewResolver = new JasperReportsViewResolver();
+        reportsViewResolver.setPrefix("classpath:reportes/");
+        reportsViewResolver.setSuffix(".jasper");
+        reportsViewResolver.setViewClass(JasperReportsMultiFormatView.class);
+        reportsViewResolver.setOrder(1);
+        registry.viewResolver(viewResolver());
+        registry.viewResolver(reportsViewResolver);
     }
 
     @Bean
