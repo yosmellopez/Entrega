@@ -59,6 +59,7 @@ export class SolicitudWindowComponent implements OnInit {
     formSolicitud: FormGroup;
     formParcela: FormGroup;
     formPersona: FormGroup;
+    formPersonaAyuda:FormGroup;
     formLineaProduccion: FormGroup;
     parcelas: Parcela[] = [];
     lineasProduccion: LineaDeProduccion[] = [];
@@ -72,20 +73,23 @@ export class SolicitudWindowComponent implements OnInit {
     municipio:Municipio;
     //persona:Persona;
     displayedColumnsParcela: string[] = ['contador', 'zonaCatastral', 'parcela', 'divicion','direccion','area', 'acciones'];
-    displayedColumnsLinea: string[] = ['lineaDeProduccion', 'areaDedicada', 'acciones'];
+    displayedColumnsLinea: string[] = ['contador','lineaDeProduccion', 'areaDedicada', 'acciones'];
+    displayedColumnsPersonaAyuda: string[] = ['contador','ci', 'nombre','primerApellido','segundoApellido','parentesco','acciones'];
     dataSourceParcela = new MatTableDataSource<Parcela>();
     dataSourceLinea = new MatTableDataSource<LineaDeProduccion>();
+    dataSourcePersonaAyuda = new MatTableDataSource<Persona>();
     public personasFiltradas: ReplaySubject<Persona[]> = new ReplaySubject<Persona[]>(1);
     public consejoPopularFiltrados: ReplaySubject<ConsejoPopular[]> = new ReplaySubject<ConsejoPopular[]>(1);
 
     constructor(public dialogRef: MatDialogRef<SolicitudWindowComponent>,
-                @Inject(MAT_DIALOG_DATA){id, municipio, tipoDecreto = '300', tipoSolicitud = 'Nueva', fechaSolicitud = new Date(), numExpediente, persona, parcelas, lineasDeProduccion, areaSolicitada, estado = 'Por Tramitar'}: Solicitud,
-                @Inject(MAT_DIALOG_DATA){tipoPersona = 'Natural',consejoPopular, ci, nombre, primerApellido, segundoApellido, sexo = 'M', dirParticular, fechaNacimiento, movil, telFijo, situacionLaboral, asociado}: Persona,
+                @Inject(MAT_DIALOG_DATA){id, municipio, tipoDecreto = '300', tipoSolicitud = 'Nueva', fechaSolicitud = new Date(), numExpediente, persona, parcelas, lineasDeProduccion, areaSolicitada, estado = 'Por Tramitar',detallesMT}: Solicitud,
+                @Inject(MAT_DIALOG_DATA){tipoPersona = 'Natural',consejoPopular, ci, nombre, primerApellido, segundoApellido, sexo = 'M', dirParticular, fechaNacimiento, movil, telFijo, situacionLaboral, asociado, parentesco, integracion}: Persona,
                 private service: SolicitudService, private consejoPopularService: ConsejoPopularService, private tipodeUsoService: TipoDeUsoService, private personaService: PersonaService,private municipioService:MunicipioService, private dialog: MatDialog) {
         this.insertar = id == null;
         this.municipio = municipio;
         this.idSolicitud = id;
         //this.persona=persona;
+
         this.formSolicitud = new FormGroup({
             municipio: new FormControl(municipio),
             tipoDecreto: new FormControl(tipoDecreto),
@@ -93,6 +97,7 @@ export class SolicitudWindowComponent implements OnInit {
             fechaSolicitud: new FormControl(fechaSolicitud),
             numExpediente: new FormControl(numExpediente, [Validators.required]),
             areaSolicitada: new FormControl(areaSolicitada, [Validators.required]),
+            detallesMT: new FormControl(detallesMT,[Validators.required]),
             estado: new FormControl(estado),
         });
 
@@ -109,7 +114,17 @@ export class SolicitudWindowComponent implements OnInit {
             movil: new FormControl(movil, [Validators.required, Validators.maxLength(8)]),
             telFijo: new FormControl(telFijo, [Validators.required, Validators.maxLength(8)]),
             situacionLaboral: new FormControl(situacionLaboral, [Validators.required]),
+            integracion: new FormControl(integracion, [Validators.required]),
             asociado: new FormControl(asociado, [Validators.required])
+        });
+
+        this.formPersonaAyuda = new FormGroup({
+            contador: new FormControl(0, []),
+            ci: new FormControl('', [Validators.required, Validators.maxLength(11)]),
+            nombre: new FormControl('', [Validators.required]),
+            primerApellido: new FormControl('', [Validators.required]),
+            segundoApellido: new FormControl('', [Validators.required]),
+            parentesco: new FormControl('', [Validators.required])
         });
 
         this.formParcela = new FormGroup({
@@ -124,7 +139,8 @@ export class SolicitudWindowComponent implements OnInit {
             limiteN: new FormControl(''),
             limiteS: new FormControl(''),
             limiteE: new FormControl(''),
-            limiteW: new FormControl('')
+            limiteW: new FormControl(''),
+            condicActual: new FormControl('')
         });
 
         this.formLineaProduccion = new FormGroup({
@@ -132,6 +148,10 @@ export class SolicitudWindowComponent implements OnInit {
             lineaDeProduccion: new FormControl('', [Validators.required]),
             areaDedicada: new FormControl('', [Validators.required]),
         });
+
+        this.formPersona.valueChanges.subscribe(value => {
+            console.log(this.formPersona.get('integracion').value);
+        })
 
         this.formParcela.valueChanges.subscribe(value => {
             if (this.formParcela.get('zonaCatastral').value && this.formParcela.get('parcela').value && this.formParcela.get('divicion').value) {
