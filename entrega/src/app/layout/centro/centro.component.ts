@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {RouteInfo} from "../../modelo";
+import {Rol, RouteInfo} from "../../modelo";
 import {APP_RUTAS} from "../../app-routing";
+import {AccountService} from "../../guards/account.service";
+import {RouterLink} from "@angular/router";
+import {forEach} from "@angular/router/src/utils/collection";
 
 @Component({
     selector: 'app-centro',
@@ -9,14 +12,33 @@ import {APP_RUTAS} from "../../app-routing";
 })
 export class CentroComponent implements OnInit {
     rutas: RouteInfo[] = APP_RUTAS;
-    rutasUsuario: RouteInfo[] = [];
+    rutasUsuario: RouteInfo[] = []
+    nameRol:string;
 
-    constructor() {
+    constructor(private accountService: AccountService) {
     }
 
     ngOnInit() {
         document.body.setAttribute("class", "sw-toggled");
-        this.rutasUsuario = this.rutas;
+        //this.rutasUsuario = this.rutas;
+
+        this.accountService.identity().then(account => {
+           this.nameRol= account.rol.name
+           this.cargaRutasDeUsuario();
+        });
+    }
+
+    cargaRutasDeUsuario(){
+        let cont:number = 0;
+        for(let index in this.rutas) {
+            for (let index2 in this.rutas[index].authority){
+                if (this.rutas[index].authority[index2] === this.nameRol){
+                    console.log(this.rutas[index])
+                    this.rutasUsuario[cont] = this.rutas[index];
+                    cont = cont+1;
+                }
+            }
+        }
     }
 
 }

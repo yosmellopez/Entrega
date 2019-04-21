@@ -51,6 +51,12 @@ public class UsuarioController {
         return ResponseEntity.ok(AppResponse.success(roles).build());
     }
 
+    @GetMapping(value = "/roles/{idRol}")
+    public ResponseEntity<AppResponse<Rol>> obtenerRol(@PathVariable ("idRol")Optional<Rol> optional) {
+        Rol rol = optional.orElseThrow(()->new EntityNotFoundException("Rol no encontrado"));
+        return ResponseEntity.ok(AppResponse.success(rol).build());
+    }
+
     @GetMapping(value = "/auth/autenticated")
     public ResponseEntity<Auth> verificarAuthenticated(@AuthenticationPrincipal Usuario usuario) {
         Optional<Usuario> optional = Optional.ofNullable(usuario);
@@ -88,9 +94,11 @@ public class UsuarioController {
 
     @PostMapping(value = "/usuario/registro")
     public ResponseEntity<AppResponse<Usuario>> registro(@RequestBody Usuario usuario) {
-        System.out.println(usuario);
+        System.out.println(usuario.getUsername());
         usuario.setRol(rolRepository.findById(2).orElseThrow(() -> new EntityNotFoundException()));
+        System.out.println(usuario.getRol());
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        System.out.println(usuario.getPassword());
         usuarioRepository.saveAndFlush(usuario);
         return ResponseEntity.ok(AppResponse.success(usuario)
                 .msg(String.format("Usuario %1$s registrado exitosamente", usuario.getNombreCompleto())).build());
@@ -98,11 +106,12 @@ public class UsuarioController {
 
     @PutMapping(value = "/usuario/{idUsuario}")
     public ResponseEntity<AppResponse<Usuario>> actualizarUsuario(@PathVariable("idUsuario") Usuario usuarioBd, @RequestBody Usuario usuario) {
-        Optional.ofNullable(usuario.getPassword()).ifPresent(password -> {
+        Optional.ofNullable(usuarioBd.getPassword()).ifPresent(password -> {
             if (!password.isEmpty())
-                usuario.setPassword(passwordEncoder.encode(password));
+                usuarioBd.setPassword(passwordEncoder.encode(password));
         });
         //usuarioBd.clonarDatos(usuario);
+        usuarioBd.setRol(usuario.getRol());
         usuarioRepository.saveAndFlush(usuarioBd);
         return ResponseEntity.ok(AppResponse.success(usuarioBd).build());
     }

@@ -25,7 +25,7 @@ export class ConsejoPopularService {
     }
 
     listarTodasConsejoPopular(): Observable<Respuesta<ConsejoPopular>> {
-        let constUrl = `${this.consejoPopularUrl}/todas`;
+        let constUrl = `${this.consejoPopularUrl}/todos`;
         return this.http.get<AppResponse<ConsejoPopular>>(constUrl, {
             observe: "response",
             headers: {"Authorization": this.token}

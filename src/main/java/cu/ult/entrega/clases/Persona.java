@@ -7,11 +7,15 @@ package cu.ult.entrega.clases;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -79,6 +83,12 @@ public class Persona implements Serializable {
     @Column(name = "situacionLaboral")
     private String situacionLaboral;
 
+    @Column(name = "parentesco")
+    private String parentesco;
+
+    @Column(name = "integracion")
+    private String integracion;
+
     @JsonIgnore
     @OneToMany(mappedBy = "asociado")
     private List<Persona> persona;
@@ -94,6 +104,12 @@ public class Persona implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "persona")
     private List<Parcela> parcelas;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "persona")
+    @JsonIgnoreProperties(value = {"persona"})
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<PersonaParcela> personaParcelas;
 
     public Long getId() {
         return id;
@@ -233,6 +249,30 @@ public class Persona implements Serializable {
 
     public void setSituacionLaboral(String situacionLaboral) {
         this.situacionLaboral = situacionLaboral;
+    }
+
+    public String getParentesco() {
+        return parentesco;
+    }
+
+    public void setParentesco(String parentesco) {
+        this.parentesco = parentesco;
+    }
+
+    public String getIntegracion() {
+        return integracion;
+    }
+
+    public void setIntegracion(String integracion) {
+        this.integracion = integracion;
+    }
+
+    public Set<PersonaParcela> getPersonaParcelas() {
+        return personaParcelas;
+    }
+
+    public void setPersonaParcelas(Set<PersonaParcela> personaParcelas) {
+        this.personaParcelas = personaParcelas;
     }
 
     @Override

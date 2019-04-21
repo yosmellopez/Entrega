@@ -1,0 +1,63 @@
+<form class="form" [formGroup]="form" (submit)="addPersrovincia()">
+    <h1 mat-dialog-title style="margin: 0 0">{{insertar?'Nueva Provincia':'Modificar Provincia'}}
+        <button type="button" mat-icon-button class="close-button" (click)="onNoClick()">
+            <mat-icon style="font-size: 25px">close</mat-icon>
+        </button>
+        <hr>
+    </h1>
+    <div mat-dialog-content style="min-height: 7em;">
+        <mat-form-field class="full-width" hintLabel="Maximo 2 caracteres">
+            <input matInput #input maxlength="2" placeholder="Codigo de la provincia" formControlName="codigo">
+            <mat-error *ngIf="form.controls['codigo'].errors?.required">Debe insertar el codigo la provincia</mat-error>
+            <mat-hint align="end">{{input.value?.length || 0}}/2</mat-hint>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+            <input matInput placeholder="Nombre de la provincia" formControlName="nombre">
+            <mat-error *ngIf="form.controls['nombre'].errors?.required">Debe insertar el nombre de la provincia</mat-error>
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="boton-theme">
+        <span class="spacer"></span>
+        <button type="submit" mat-raised-button cdkFocusInitial color="primary">
+            <mat-icon>check_circle</mat-icon>
+            {{insertar?'Guardar':'Modificar'}}
+        </button>
+        <button type="button" mat-raised-button (click)="onNoClick()" color="warn">
+            <mat-icon>cancel</mat-icon>
+            Cancelar
+        </button>
+    </div>
+
+    <div class="example-container mat-elevation-z8" style="top: 10px;position:relative;">
+        <table mat-table [dataSource]="dataSourceLinea">
+            <!-- Position Column -->
+            <ng-container matColumnDef="lineaDeProduccion">
+                <th mat-header-cell *matHeaderCellDef> Linea de producción</th>
+                <td mat-cell *matCellDef="let element"> {{element.lineaDeProduccion}}</td>
+                <!--<td mat-footer-cell *matFooterCellDef><strong> Total</strong></td>-->
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="areaDedicada">
+                <th mat-header-cell *matHeaderCellDef> Área Dedicada(Ha)</th>
+                <td mat-cell *matCellDef="let element"> {{element.areaDedicada}}</td>
+                <!--<td mat-footer-cell *matFooterCellDef><strong>{{getTotal()}}</strong></td>-->
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="acciones" stickyEnd>
+                <th mat-header-cell *matHeaderCellDef> Acciones</th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-mini-fab type="button" color="accent" (click)="editParcela($event,element)" [matTooltip]="'Editar Linea de Produccion - ' + element.lineaDeProduccion">
+                        <mat-icon>mode_edit</mat-icon>
+                    </button>
+                </td>
+                <!--<td mat-footer-cell *matFooterCellDef></td>-->
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsLinea; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsLinea;"></tr>
+            <!--<tr mat-footer-row *matFooterRowDef="displayedColumnsParcela; sticky: true"></tr>-->
+        </table>
+    </div>
+</form>

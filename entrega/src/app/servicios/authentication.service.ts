@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs/index";
+import {observable, Observable} from "rxjs/index";
 import {AppResponse, Respuesta, Usuario} from "../modelo";
 import {SERVER_URL} from "../contantes";
 
 @Injectable({providedIn: 'root'})
-export class AccountService {
+export class AuthenticationService {
     private token: string = "";
 
     constructor(private http: HttpClient) {
@@ -30,4 +30,11 @@ export class AccountService {
         console.log(values);
         return this.http.post<AppResponse<Usuario>>(SERVER_URL + 'api/auth/login', values, {observe: 'response'});
     }
+
+    logout():Observable<Respuesta<Usuario>>{
+        console.log('entro');
+        return this.http.post<AppResponse<Usuario>>(SERVER_URL + 'api/auth/logout',{}, {observe: 'response'});
+    }
+
+
 }

@@ -2,13 +2,14 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from "@angular/common/http";
 import {Observable} from "rxjs/index";
 import {SERVER_URL} from "../contantes";
-import {AppResponse, Respuesta, Usuario} from "../modelo";
+import {AppResponse, Respuesta, Rol, Usuario} from "../modelo";
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class UsuarioService {
 
     loginUrl = SERVER_URL + "api/auth/login";
     private usuarioUrl = SERVER_URL + "api/usuario";
+    private rolUrl = SERVER_URL + "api/roles";
     private token: string = "";
 
     constructor(private http: HttpClient) {
@@ -23,8 +24,16 @@ export class UsuarioService {
         });
     }
 
+
     insertarUsuario(usuario: Usuario): Observable<Respuesta<Usuario>> {
         return this.http.post<AppResponse<Usuario>>(this.usuarioUrl, usuario, {
+            observe: "response",
+            headers: {"Authorization": this.token}
+        });
+    }
+
+    registrarUsuario(usuario: Usuario): Observable<Respuesta<Usuario>> {
+        return this.http.post<AppResponse<Usuario>>(this.usuarioUrl+"/registro", usuario, {
             observe: "response",
             headers: {"Authorization": this.token}
         });
@@ -44,4 +53,24 @@ export class UsuarioService {
             headers: {"Authorization": this.token}
         });
     }
+
+    obtenerRol(id:number):Observable<Respuesta<Rol>>{
+       return this.http.get<AppResponse<Rol>>(this.rolUrl+"/"+id,{
+           observe: "response",
+           headers: {"Authorization": this.token}
+       });
+
+    }
+
+    listarRoles():Observable<Respuesta<Rol>>{
+        return this.http.get<AppResponse<Rol>>(this.rolUrl,{
+            observe: "response",
+            headers: {"Authorization": this.token}
+        });
+
+    }
 }
+
+
+
+

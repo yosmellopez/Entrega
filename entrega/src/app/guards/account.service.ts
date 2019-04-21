@@ -4,6 +4,7 @@ import { Observable, Subject } from 'rxjs';
 
 import { SERVER_URL } from '../contantes';
 import { Usuario } from '../modelo';
+import {Router} from "@angular/router";
 
 
 @Injectable({providedIn: 'root'})
@@ -13,10 +14,9 @@ export class AccountService {
     private authenticationState = new Subject<any>();
     token = '';
 
-    constructor(
-        private http: HttpClient
-    ) {
+    constructor(private http: HttpClient, private router:Router) {
         this.token = localStorage.getItem('user_token');
+
     }
 
     fetch(): Observable<HttpResponse<Usuario>> {
@@ -124,5 +124,13 @@ export class AccountService {
 
     unsubscribeToMailList(email: string): Observable<HttpResponse<any>> {
         return this.http.delete(SERVER_URL + `api/mailLists`, {params: {email: email}, observe: 'response'});
+    }
+
+    logout():void {
+        this.userIdentity = null;
+        this.authenticated = false;
+        this.authenticationState.next(this.userIdentity);
+        this.router.navigate(["/login"])
+
     }
 }

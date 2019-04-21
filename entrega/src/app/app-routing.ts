@@ -7,6 +7,7 @@ import {AdminComponent} from './admin/admin.component';
 import {LoginComponent} from './components/login/login.component';
 import {RouteInfo} from './modelo';
 import {AdminGuard} from "./guards/admin.guard";
+import {UserRouteAccessService} from "./guards/user-route-access-service";
 
 const routes: Routes = [
     {path: '', redirectTo: '/login', pathMatch: 'full'},
@@ -15,7 +16,10 @@ const routes: Routes = [
         path: '',
         component: UsuarioComponent,
         children: [{path: 'usuario', loadChildren: './usuario/usuario.module#UsuarioModule'}],
-        canActivate: []
+        canActivate: [UserRouteAccessService],
+        data:{
+            roles:['Registrador','Administrador']
+        }
     }, {
         path: '',
         component: AdminComponent,
@@ -27,8 +31,31 @@ const routes: Routes = [
     }
 ];
 
-export const APP_RUTAS: RouteInfo[] = [
-    {
+export const APP_RUTAS: RouteInfo[] = [{
+        id: 'registrador-actions',
+        title: 'Gestión',
+        icon: '',
+        class: 'zmdi zmdi-accounts-alt',
+        authority: ['Registrador', 'Administrador'],
+        hasChildren: true,
+        path: '',
+        routes:[{
+            path: '/admin/solicitud',
+            title: 'Solicitud',
+            icon: 'supervisor_account',
+            class: 'waves-effect waves-cyan',
+        }, {
+            path: '/admin/solicitante',
+            title: 'Lista de Solicitantes',
+            icon: 'supervisor_account',
+            class: 'waves-effect waves-cyan',
+        }, {
+            path: '/admin/parcela',
+            title: 'Lista de Parcelas',
+            icon: 'supervisor_account',
+            class: 'waves-effect waves-cyan',
+        }]
+    },{
         id: 'admin-actions',
         title: 'Administración',
         icon: 'group',
@@ -36,6 +63,20 @@ export const APP_RUTAS: RouteInfo[] = [
         authority: ['Administrador'],
         hasChildren: true,
         path: '',
+        routes: [{
+            path:'/admin/usuario',
+            title:'Usuario',
+            icon:'',
+            class:'waves-effect waves-cyan',
+        }]
+    }, {
+        id: 'nomencladores',
+        title: 'Nomencladores',
+        icon: 'gps_fixed',
+        class: 'zmdi zmdi-accounts-alt',
+        hasChildren: true,
+        path: '',
+        authority: ['Administrador'],
         routes: [{
             path: '/admin/provincia',
             title: 'Provincias',
@@ -61,71 +102,8 @@ export const APP_RUTAS: RouteInfo[] = [
             title: 'Tipo de Uso',
             icon: 'supervisor_account',
             class: 'waves-effect waves-cyan',
-        }, {
-            path: '/admin/solicitud',
-            title: 'Solicitud',
-            icon: 'supervisor_account',
-            class: 'waves-effect waves-cyan',
-        }, {
-            path: '/admin/solicitante',
-            title: 'Lista de Solicitantes',
-            icon: 'supervisor_account',
-            class: 'waves-effect waves-cyan',
-        }, {
-            path: '/admin/parcela',
-            title: 'Lista de Parcelas',
-            icon: 'supervisor_account',
-            class: 'waves-effect waves-cyan',
         }]
-    }, {
-        id: 'user-actions',
-        title: 'gpsTravel',
-        icon: 'gps_fixed',
-        class: 'tag tag-rounded tag-success tag-sm',
-        hasChildren: true,
-        path: '',
-        authority: ['Usuario', 'Administrador'],
-        routes: [{
-            path: '/user/bus-list',
-            title: 'bus.list',
-            icon: 'directions_bus',
-            class: 'waves-effect waves-cyan',
-        }, {
-            path: '/user/place-list',
-            title: 'place.list',
-            icon: 'place',
-            class: 'waves-effect waves-cyan',
-        }, {
-            path: '/user/route-list',
-            title: 'route.list',
-            icon: 'directions',
-            class: 'waves-effect waves-cyan',
-        }, {
-            path: '/user/travel-list',
-            title: 'travel.list',
-            icon: 'airplanemode_active',
-            class: 'waves-effect waves-cyan',
-        }]
-    }, {
-        id: 'user-profile',
-        path: '/user/profile',
-        title: 'userprofile',
-        icon: 'person',
-        class: 'tag tag-rounded tag-danger tag-sm',
-        authority: ['Administrador', 'Usuario'],
-        hasChildren: false,
-        routes: [],
-    }, {
-        id: 'notifications',
-        path: '/user/notification',
-        title: 'notifications',
-        icon: 'notifications',
-        class: 'tag tag-rounded tag-danger tag-sm',
-        authority: ['Administrador', 'Usuario'],
-        hasChildren: false,
-        routes: [],
-    }
-];
+    }];
 
 
 @NgModule({

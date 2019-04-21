@@ -8,6 +8,8 @@ package cu.ult.entrega.control;
 import cu.ult.entrega.clases.LineaDeProduccion;
 import cu.ult.entrega.clases.Parcela;
 import cu.ult.entrega.clases.Solicitud;
+import cu.ult.entrega.excepcion.MunicipioException;
+import cu.ult.entrega.excepcion.SolicitudException;
 import cu.ult.entrega.repositorio.LineaDeProduccionRepositorio;
 import cu.ult.entrega.repositorio.ParcelaRepositorio;
 import cu.ult.entrega.repositorio.SolicitudRepositorio;
@@ -17,15 +19,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import static cu.ult.entrega.control.AppResponse.failure;
 import static cu.ult.entrega.control.AppResponse.success;
 
 /**
@@ -84,11 +93,14 @@ public class SolicitudControler {
         Set<Parcela> parcelas = solicitud.getParcelas();
         Set<Parcela> parcelasGuardadas = new HashSet<>();
         List<LineaDeProduccion> lineasDeProduccion = solicitud.getLineasDeProduccion();
+
         for (Parcela parcela : parcelas) {
             parcelasGuardadas.add(parcelaRepositorio.saveAndFlush(parcela));
         }
         solicitud.setParcelas(parcelasGuardadas);
+
         solicitudRepositorio.saveAndFlush(solicitud);
+
         for (LineaDeProduccion lineaDeProduccion : lineasDeProduccion) {
             lineaDeProduccion.setSolicitud(solicitud);
             lineaDeProduccionRepositorio.saveAndFlush(lineaDeProduccion);
@@ -118,10 +130,24 @@ public class SolicitudControler {
         return new ResponseEntity<Solicitud>(currentSolicitud, HttpStatus.OK);
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<AppResponse> tratarValidacion(MethodArgumentNotValidException ex, Locale locale) {
+        List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
+        String mensaje = fieldErrors.parallelStream().map(error -> error.getDefaultMessage()).collect(Collectors.joining(", "));
+        return ResponseEntity.ok(failure(mensaje).build());
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<AppResponse> tratarValidacion(ConstraintViolationException ex, Locale locale) {
+        Set<ConstraintViolation<?>> violations = ex.getConstraintViolations();
+        String mensaje = violations.parallelStream().map(error -> error.getMessage()).collect(Collectors.joining(", "));
+        return ResponseEntity.ok(failure(mensaje).build());
+    }
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<AppResponse> tratarExcepciones(Exception e) {
-        e.printStackTrace();
-        return ResponseEntity.ok(AppResponse.failure(e.getLocalizedMessage()).build());
+    public ResponseEntity<AppResponse> mostrarError(Exception e) {
+        SolicitudException generalException = new SolicitudException(e);
+        return ResponseEntity.ok(failure(generalException.tratarExcepcion()).build());
     }
 
 }

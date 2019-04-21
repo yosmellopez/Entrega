@@ -18,7 +18,6 @@ import {UsuarioComponent} from "./usuario/usuario.component";
 import {AdminComponent} from "./admin/admin.component";
 import {HeaderComponent} from "./layout/header/header.component";
 import {PipesModule} from "./pipes/pipes.module";
-import {MenuComponent} from "./components/menu/menu.component";
 import {CentroComponent} from './layout/centro/centro.component';
 import {DateFormat} from "./modelo";
 import {DateAdapter} from "@angular/material";
@@ -37,7 +36,6 @@ import {UserRouteAccessService} from "./guards/user-route-access-service";
         UsuarioComponent,
         AdminComponent,
         HeaderComponent,
-        MenuComponent,
         CentroComponent
     ],
     imports: [

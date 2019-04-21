@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, HostListener, ElementRef } from '@angular/core';
+import {Principal} from "../../servicios/principal.service";
 
 @Component({
   selector: 'cdk-user-menu',
@@ -10,7 +11,7 @@ export class UserMenuComponent implements OnInit {
 
   	//currentUser = null;
   	Hari;
-  	
+
 
   	@Input() currentUser = null;
   	@HostListener('document:click', ['$event', '$event.target'])
@@ -24,9 +25,10 @@ export class UserMenuComponent implements OnInit {
       		this.isOpen = false;
     	}
   	}
-  	
-    
-  	constructor(private elementRef: ElementRef) { }
+
+
+  	constructor(private elementRef: ElementRef ) { }
+
 
 
   	ngOnInit() {

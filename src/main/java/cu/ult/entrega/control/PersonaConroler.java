@@ -59,7 +59,7 @@ public class PersonaConroler {
 
     @RequestMapping(value = "/persona/{tipoPersona}")
     public  ResponseEntity<AppResponse<Persona>> obtenerPersonaPorTipoPersona(@PathVariable("tipoPersona") String tipoPersona) {
-        List<Persona> personas = personaRepositorio.findByTipoPersona(tipoPersona);
+        List<Persona> personas = personaRepositorio.findByTipoPersonaOrderByPrimerApellidoAsc(tipoPersona);
         return ResponseEntity.ok(success(personas).total(personas.size()).build());
     }
 
