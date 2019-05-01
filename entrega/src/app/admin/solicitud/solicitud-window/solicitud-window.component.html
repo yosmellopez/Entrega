@@ -80,8 +80,8 @@
                             <div class="col-xs-12">
                                 <div class="fg-line form-group">
                                     <p class="c-black f-500">Seleccione la organización a la que pertenece:</p>
-                                    <section formArrayName="integracion">
-                                        <mat-checkbox *ngFor="let item of formPersona.get('integracion').controls; let i = index " [formControlName]="i"  class="checkbox-inline">{{organizaciones[i]}}</mat-checkbox>
+                                    <section>
+                                        <mat-checkbox *ngFor="let organizacion of organizaciones" (change)="$event.checked ? agregarIntgra(organizacion.name) : quitarIntgra(organizacion.name)"  class="checkbox-inline">{{organizacion.name}} </mat-checkbox>
                                     </section>
                                 </div>
                             </div>

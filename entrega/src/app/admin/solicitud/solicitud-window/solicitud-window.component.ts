@@ -57,7 +57,6 @@ export const MY_FORMATS = {
 export class SolicitudWindowComponent implements OnInit {
 
     isLoadingResults = false;
-    formBuilder:FormBuilder;
     idSolicitud: number;
     formSolicitud: FormGroup;
     formParcela: FormGroup;
@@ -77,7 +76,13 @@ export class SolicitudWindowComponent implements OnInit {
     //datePipe: DatePipe = new DatePipe(undefined);
     ci:string;
 
-    organizaciones = ['PCC','CTC','ANAP','MTT','CDR', 'ACRC','FMC',];
+    organizaciones = [{name:'PCC',activo:true},
+                    {name:'CTC',activo:false},
+                    {name:'ANAP',activo:false},
+                    {name:'MTT',activo:false},
+                    {name:'CDR',activo:false},
+                    {name:'ACRC',activo:false},
+                    {name:'FMC',activo:false}];
 
     displayedColumnsParcela: string[] = ['contador', 'zonaCatastral', 'parcela', 'divicion','direccion','area', 'acciones'];
     displayedColumnsLinea: string[] = ['contador','lineaDeProduccion', 'areaDedicada', 'acciones'];
@@ -122,7 +127,7 @@ export class SolicitudWindowComponent implements OnInit {
             movil: new FormControl(movil, [Validators.required, Validators.maxLength(8)]),
             telFijo: new FormControl(telFijo, [Validators.required, Validators.maxLength(8)]),
             situacionLaboral: new FormControl(situacionLaboral, [Validators.required]),
-            integracion: this.buildOrganizaciones(),
+            integracion: new FormControl(integracion),
             asociado: new FormControl(asociado, [Validators.required])
         });
 
@@ -225,10 +230,6 @@ export class SolicitudWindowComponent implements OnInit {
 
     }
 
-    buildOrganizaciones(){
-        const values = this.organizaciones.map(v => new FormControl(false))
-        return this.formBuilder.array(values);
-    }
 
     abrirVentana() {
         let dialogRef = this.dialog.open(PersonaWindowsComponent, {
@@ -299,6 +300,48 @@ export class SolicitudWindowComponent implements OnInit {
         }else {
             stepper.previous();
         }
+    }
+
+    agregarIntgra(valor:string){
+        if (!this.formPersona.get('integracion').value){
+            this.formPersona.get('integracion').setValue(valor);
+        } else {
+            this.formPersona.get('integracion').setValue(this.formPersona.get('integracion').value+","+valor);
+        }
+        console.log(this.formPersona.get('integracion').value);
+    }
+
+    quitarIntgra(valor:string){
+        var str = this.formPersona.get('integracion').value;
+        var arregIntegra = str.split(",");
+        console.log(arregIntegra);
+
+        arregIntegra.delete(valor);
+        /*for (var cont in arregIntegra){
+            console.log(cont);
+            if (arregIntegra[cont] == valor){
+                arregIntegra[cont] = '';
+            }
+            console.log(arregIntegra[cont]);
+        }
+
+        this.formPersona.get('integracion').setValue('');
+
+        setValue(this.formPersona.get('integracion').value+","+valor);
+
+        for (var cont in arregIntegra){
+            console.log(cont);
+            if (!arregIntegra[cont] == ""){
+                arregIntegra[cont] = '';
+            }
+            console.log(arregIntegra[cont]);
+        }*/
+
+
+        //arrayIntegracion.split(,);
+        console.log(arregIntegra);
+
+
     }
 
    /* onChecked (chekec:MatCheckbox,valor:string, event:Event):void{
