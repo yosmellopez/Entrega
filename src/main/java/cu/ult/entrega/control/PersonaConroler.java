@@ -51,7 +51,7 @@ public class PersonaConroler {
         return ResponseEntity.ok(success(personas).total(page.getTotalElements()).build());
     }
 
-    @RequestMapping(value = "/persona/ci{ci}")
+    @RequestMapping(value = "/persona/ci/{ci}")
     public  ResponseEntity<AppResponse<Persona>> obtenerPersonaPorCI(@PathVariable("ci") String ci) {
         Persona persona = personaRepositorio.findByCi(ci);
         return ResponseEntity.ok(success(persona).build());

@@ -32,6 +32,14 @@ export class PersonaService {
         });
     }
 
+    obtenerPorCI(ci:string): Observable<Respuesta<Persona>> {
+        let constUrl = `${this.personaUrl+'/ci/'}${ci}`;
+        return this.http.get<AppResponse<Persona>>(constUrl, {
+            observe: "response",
+            headers: {"Authorization": this.token}
+        });
+    }
+
     insertarPersona(persona: Persona): Observable<Respuesta<Persona>> {
         return this.http.post<AppResponse<Persona>>(this.personaUrl, persona, {
             observe: "response",

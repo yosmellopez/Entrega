@@ -1,8 +1,8 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {
     FloatLabelType,
     MAT_DATE_FORMATS,
-    MAT_DIALOG_DATA,
+    MAT_DIALOG_DATA, MatCheckbox,
     MatDialog,
     MatDialogRef,
     MatHorizontalStepper, MatStepper, matStepperAnimations,
@@ -18,7 +18,7 @@ import {
     Solicitud,
     TipoDeUso
 } from '../../../modelo';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {CheckboxControlValueAccessor, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Information, MensajeError} from '../../../mensaje/window.mensaje';
 import {ConsejoPopularService} from '../../../servicios/consejo-popular.service';
 import {TipoDeUsoService} from '../../../servicios/tipo-de-uso.service';
@@ -31,8 +31,10 @@ import {StepperSelectionEvent} from "@angular/cdk/stepper";
 import {MunicipioService} from "../../../servicios/municipio.service";
 import {map, startWith} from "rxjs/internal/operators";
 import {PersonaPipe} from "../../../pipes/persona.pipe";
-import {forEach} from "@angular/router/src/utils/collection";
+import {and, forEach} from "@angular/router/src/utils/collection";
 import {Error} from "tslint/lib/error";
+import {isLineBreak} from "codelyzer/angular/sourceMappingVisitor";
+import {DatePipe, formatDate} from "@angular/common";
 
 export const MY_FORMATS = {
     parse: {
@@ -55,6 +57,7 @@ export const MY_FORMATS = {
 export class SolicitudWindowComponent implements OnInit {
 
     isLoadingResults = false;
+    formBuilder:FormBuilder;
     idSolicitud: number;
     formSolicitud: FormGroup;
     formParcela: FormGroup;
@@ -71,7 +74,11 @@ export class SolicitudWindowComponent implements OnInit {
     personas: Persona[]=[];
     indexStepper: number =0;
     municipio:Municipio;
-    //persona:Persona;
+    //datePipe: DatePipe = new DatePipe(undefined);
+    ci:string;
+
+    organizaciones = ['PCC','CTC','ANAP','MTT','CDR', 'ACRC','FMC',];
+
     displayedColumnsParcela: string[] = ['contador', 'zonaCatastral', 'parcela', 'divicion','direccion','area', 'acciones'];
     displayedColumnsLinea: string[] = ['contador','lineaDeProduccion', 'areaDedicada', 'acciones'];
     displayedColumnsPersonaAyuda: string[] = ['contador','ci', 'nombre','primerApellido','segundoApellido','parentesco','acciones'];
@@ -88,7 +95,8 @@ export class SolicitudWindowComponent implements OnInit {
         this.insertar = id == null;
         this.municipio = municipio;
         this.idSolicitud = id;
-        //this.persona=persona;
+
+        //this.checked = false;
 
         this.formSolicitud = new FormGroup({
             municipio: new FormControl(municipio),
@@ -104,7 +112,7 @@ export class SolicitudWindowComponent implements OnInit {
         this.formPersona = new FormGroup({
             tipoPersona: new FormControl(tipoPersona, [Validators.required]),
             consejoPopular: new FormControl(consejoPopular, [Validators.required]),
-            ci: new FormControl(ci, [Validators.required, Validators.maxLength(11)]),
+            ci: new FormControl(ci, [Validators.required, Validators.maxLength(11), Validators.minLength(11)]),
             nombre: new FormControl(nombre, [Validators.required]),
             primerApellido: new FormControl(primerApellido, [Validators.required]),
             segundoApellido: new FormControl(segundoApellido, [Validators.required]),
@@ -114,7 +122,7 @@ export class SolicitudWindowComponent implements OnInit {
             movil: new FormControl(movil, [Validators.required, Validators.maxLength(8)]),
             telFijo: new FormControl(telFijo, [Validators.required, Validators.maxLength(8)]),
             situacionLaboral: new FormControl(situacionLaboral, [Validators.required]),
-            integracion: new FormControl(integracion, [Validators.required]),
+            integracion: this.buildOrganizaciones(),
             asociado: new FormControl(asociado, [Validators.required])
         });
 
@@ -149,19 +157,34 @@ export class SolicitudWindowComponent implements OnInit {
             areaDedicada: new FormControl('', [Validators.required]),
         });
 
-        this.formPersona.valueChanges.subscribe(value => {
-            console.log(this.formPersona.get('integracion').value);
+        this.formPersona.get('ci').valueChanges.subscribe(value => {
+            if (this.formPersona.get('ci').valid){
+                if (this.ci != value){
+                    this.ci = value;
+                    console.log(value);
+                    this.personaService.obtenerPorCI(value).subscribe(resp=>{
+                        if (resp.body.success && resp.body.elemento){
+                            this.formPersona.patchValue(resp.body.elemento);
+                            this.formPersona.get('fechaNacimiento').setValue(new Date(resp.body.elemento.fechaNacimiento));
+                        }else {
+                            this.formPersona.reset();
+                            this.formPersona.get('ci').setValue(this.ci);
+                            this.formPersona.get('tipoPersona').setValue('Natural');
+
+                        }
+                    });
+                }
+            }
         })
 
         this.formParcela.valueChanges.subscribe(value => {
             if (this.formParcela.get('zonaCatastral').value && this.formParcela.get('parcela').value && this.formParcela.get('divicion').value) {
-
             }
-
         });
     }
 
     ngOnInit() {
+
         if (this.insertar) {
 
             this.consejoPopularService.listarConsejoPopularNoDefinido('No Definido').subscribe(resp => {
@@ -202,6 +225,11 @@ export class SolicitudWindowComponent implements OnInit {
 
     }
 
+    buildOrganizaciones(){
+        const values = this.organizaciones.map(v => new FormControl(false))
+        return this.formBuilder.array(values);
+    }
+
     abrirVentana() {
         let dialogRef = this.dialog.open(PersonaWindowsComponent, {
             width: '400px', disableClose: true, data: new Persona('Juridica'),
@@ -212,10 +240,9 @@ export class SolicitudWindowComponent implements OnInit {
                 console.log(result);
                 this.dialog.open(Information, {
                     width: '400px',
-                    data: {mensaje: 'Se ha insertardo la solicitud:' + result.elemento.nombre}
+                    data: {mensaje: 'Se ha insertado la persona juridica:' + result.elemento.nombre}
                 });
                 this.listarTipoPersonaJuridica();
-                //this.paginator.page.emit();
             }
         });
     }
@@ -243,20 +270,12 @@ export class SolicitudWindowComponent implements OnInit {
         }
     }
 
-    deleteParcela(i) {
-       // this.parcelasForm.removeAt(i)
-    }
-
     addLineasProduccion() {
         if (this.formLineaProduccion.valid) {
             this.formLineaProduccion.get('contador').setValue(this.formLineaProduccion.get('contador').value + 1);
             this.lineasProduccion.push(this.formLineaProduccion.value);
             this.dataSourceLinea = new MatTableDataSource<LineaDeProduccion>(this.lineasProduccion);
         }
-    }
-
-    deleteLineasDeProduccion(i) {
-       // this.lineasDeProduccionForm.removeAt(i)
     }
 
     listarTipoPersonaJuridica() {
@@ -281,6 +300,49 @@ export class SolicitudWindowComponent implements OnInit {
             stepper.previous();
         }
     }
+
+   /* onChecked (chekec:MatCheckbox,valor:string, event:Event):void{
+        event.stopPropagation();
+
+        console.log(chekec);
+            this.formPersona.get('integracion').setValue('');
+            console.log(valor);
+            for (let cont of this.organizaciones){
+                if (cont.name === valor){
+                    console.log(cont);
+                    if (cont.checked === 'true' || cont.checked === '' ){
+                        cont.checked = 'false';
+                       chekec._onInputClick(event);
+                       chekec.checked = false;
+                        // = false;
+                        console.log('if');
+                        //break;
+
+                    }else{
+                        console.log('else');
+                        cont.checked = 'true';
+                        chekec.checked = true;
+                       // break;
+                    }
+                    console.log(cont);
+                    console.log(chekec);
+                }
+
+            }
+            for (let cont of this.organizaciones){
+                if (cont.checked==='true'){
+                    if (!this.formPersona.get('integracion').value){
+                        this.formPersona.get('integracion').setValue(cont.name);
+                    } else {
+                        this.formPersona.get('integracion').setValue(this.formPersona.get('integracion').value+","+cont.name);
+                    }
+
+                }
+            }
+
+            console.log(this.organizaciones);
+            console.log(this.formPersona.get('integracion').value);
+    }*/
 
 
 
@@ -330,16 +392,6 @@ export class SolicitudWindowComponent implements OnInit {
 
     compararConsejoPopulares(inicio: ConsejoPopular, fin: ConsejoPopular) {
         return inicio && fin && inicio.id === fin.id;
-    }
-
-    displayFn(personaJur?: Persona): string | undefined {
-        return personaJur ? personaJur.nombre : undefined;
-    }
-
-    private _filter(nombre: string): Persona[] {
-        const filterValue = nombre.toLowerCase();
-
-        return this.personas.filter(persona => persona.nombre.toLowerCase().indexOf(filterValue) === 0);
     }
 
     onNoClick(): void {

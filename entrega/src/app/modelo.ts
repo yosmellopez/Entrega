@@ -73,6 +73,7 @@ export class Persona {
 
     constructor(value?: any) {
         if (value) {
+            this.ci = value? value : ""
             this.tipoPersona = value? value : "";
             //this.nombre = value.nombre ? value.nombre : "";
         }

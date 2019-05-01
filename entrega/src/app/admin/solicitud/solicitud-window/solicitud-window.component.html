@@ -80,14 +80,8 @@
                             <div class="col-xs-12">
                                 <div class="fg-line form-group">
                                     <p class="c-black f-500">Seleccione la organización a la que pertenece:</p>
-                                    <section formControlName="integracion">
-                                        <mat-checkbox class="checkbox-inline" value="PCC">PCC</mat-checkbox>
-                                        <mat-checkbox class="checkbox-inline" value="CTC">CTC</mat-checkbox>
-                                        <mat-checkbox class="checkbox-inline" value="ANAP">ANAP</mat-checkbox>
-                                        <mat-checkbox class="checkbox-inline" value="MTT">MTT</mat-checkbox>
-                                        <mat-checkbox class="checkbox-inline" value="CDR">CDR</mat-checkbox>
-                                        <mat-checkbox class="checkbox-inline" value="ACRC">ACRC</mat-checkbox>
-                                        <mat-checkbox class="checkbox-inline" value="FMC">FMC</mat-checkbox>
+                                    <section formArrayName="integracion">
+                                        <mat-checkbox *ngFor="let item of formPersona.get('integracion').controls; let i = index " [formControlName]="i"  class="checkbox-inline">{{organizaciones[i]}}</mat-checkbox>
                                     </section>
                                 </div>
                             </div>
@@ -98,6 +92,9 @@
                                     <input  #inputCIP matInput maxlength="11" placeholder="CI" formControlName="ci">
                                     <mat-error *ngIf="formPersona.controls['ci'].errors?.required">
                                         Debe insertar el NIT de la persona.
+                                    </mat-error>
+                                    <mat-error *ngIf="formPersona.controls['ci'].errors?.minlength">
+                                        El CI no puede ser menor de 11 dijitos.
                                     </mat-error>
                                     <mat-hint align="end">{{inputCIP.value?.length || 0}}/11</mat-hint>
                                 </mat-form-field>

@@ -15,6 +15,7 @@ import java.util.List;
  * @author Pablo Caram Local
  */
 public interface PersonaRepositorio extends JpaRepository<Persona, Long>{
+
     public List<Persona> findByTipoPersonaOrderByPrimerApellidoAsc(String tipoPersona);
     
     public Persona findByCi(String ci);
