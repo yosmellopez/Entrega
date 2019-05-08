@@ -81,7 +81,7 @@
                                 <div class="fg-line form-group">
                                     <p class="c-black f-500">Seleccione la organización a la que pertenece:</p>
                                     <section>
-                                        <mat-checkbox *ngFor="let organizacion of organizaciones" (change)="$event.checked ? agregarIntgra(organizacion.name) : quitarIntgra(organizacion.name)"  class="checkbox-inline">{{organizacion.name}} </mat-checkbox>
+                                        <mat-checkbox *ngFor="let organizacion of organizaciones" [checked]="organizacion.activo" (change)="$event.checked ? agregarIntgra(organizacion.name) : quitarIntgra(organizacion.name)"  class="checkbox-inline">{{organizacion.name}} </mat-checkbox>
                                     </section>
                                 </div>
                             </div>
@@ -125,25 +125,12 @@
                             </div>
                         </div>
                         <div class="row" *ngIf="formPersona.value.tipoPersona == 'Natural'">
-                            <div class="col-xs-2">
-                                <mat-radio-group class="example-radio-group" formControlName="sexo">
-                                    <mat-radio-button value="M">Masculino</mat-radio-button>
-                                    <mat-radio-button value="F">Femenino</mat-radio-button>
-                                </mat-radio-group>
-                            </div>
                             <div class="col-xs-6">
                                 <mat-form-field class="full-width">
                                     <input matInput placeholder="Dirección Particular" formControlName="dirParticular">
                                     <mat-error *ngIf="formPersona.controls['dirParticular'].errors?.required">
                                         Debe insertar la direccion de particular.
                                     </mat-error>
-                                </mat-form-field>
-                            </div>
-                            <div class="col-xs-4">
-                                <mat-form-field class="full-width">
-                                    <input matInput [matDatepicker]="nacimentoDatePicker" formControlName="fechaNacimiento" placeholder="Fecha de Nacimiento">
-                                    <mat-datepicker-toggle matSuffix [for]="nacimentoDatePicker"></mat-datepicker-toggle>
-                                    <mat-datepicker #nacimentoDatePicker [startAt]="startDate"></mat-datepicker>
                                 </mat-form-field>
                             </div>
                             <div class="col-xs-4">
@@ -211,8 +198,11 @@
                             <div class="col-xs-3">
                                 <mat-form-field>
                                     <input  #input matInput maxlength="11" placeholder="CI" formControlName="ci">
-                                    <mat-error *ngIf="formPersona.controls['ci'].errors?.required">
+                                    <mat-error *ngIf="formPersonaAyuda.controls['ci'].errors?.required">
                                         Debe insertar el NIT de la persona.
+                                    </mat-error>
+                                    <mat-error *ngIf="formPersonaAyuda.controls['ci'].errors?.minlength">
+                                        El CI no puede ser menor de 11 dijitos.
                                     </mat-error>
                                     <mat-hint align="end">{{input.value?.length || 0}}/11</mat-hint>
                                 </mat-form-field>
@@ -239,6 +229,25 @@
                                     <mat-error *ngIf="formPersona.controls['segundoApellido'].errors?.required">
                                         Debe insertar el segundo Apellido de la persona.
                                     </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-xs-2">
+                                <mat-form-field class="full-width">
+                                    <mat-select matInput placeholder="Parentesco" formControlName="parentesco">
+                                        <mat-option value="Padre">Padre</mat-option>
+                                        <mat-option value="Madre">Madre</mat-option>
+                                        <mat-option value="Hijo">Hijo</mat-option>
+                                        <mat-option value="Hija">Hija</mat-option>
+                                        <mat-option value="Abuelo">Abuelo</mat-option>
+                                        <mat-option value="Abuela">Abuela</mat-option>
+                                        <mat-option value="Nieto">Nieto</mat-option>
+                                        <mat-option value="Tio">Tio</mat-option>
+                                        <mat-option value="Tia">Tia</mat-option>
+                                        <mat-option value="Sobrino">Sobrino</mat-option>
+                                        <mat-option value="Sobrina">Sobrina</mat-option>
+                                        <mat-option value="Primo">Primo</mat-option>
+                                        <mat-option value="Primo">Prima</mat-option>
+                                    </mat-select>
                                 </mat-form-field>
                             </div>
                         </div>

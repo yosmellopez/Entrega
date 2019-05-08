@@ -70,6 +70,14 @@ public class PersonaConroler {
         return ResponseEntity.ok(success(persona).build());
     }
 
+    @PostMapping (value = "/Persona/insrtList")
+    public ResponseEntity<AppResponse<Persona>> insertarListPersona (@Valid @RequestBody List<Persona> personas){
+        for (Persona persona : personas) {
+            personaRepositorio.saveAndFlush(persona);
+        }
+        return ResponseEntity.ok(success(personas).total(personas.size()).build());
+    }
+
     //Clases de Execciones.
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<AppResponse> tratarValidacion(MethodArgumentNotValidException ex, Locale locale) {

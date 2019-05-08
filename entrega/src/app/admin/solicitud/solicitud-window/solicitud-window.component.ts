@@ -16,7 +16,7 @@ import {
     Persona,
     Provincia,
     Solicitud,
-    TipoDeUso
+    TipoDeUso, Usuario
 } from '../../../modelo';
 import {CheckboxControlValueAccessor, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Information, MensajeError} from '../../../mensaje/window.mensaje';
@@ -35,6 +35,8 @@ import {and, forEach} from "@angular/router/src/utils/collection";
 import {Error} from "tslint/lib/error";
 import {isLineBreak} from "codelyzer/angular/sourceMappingVisitor";
 import {DatePipe, formatDate} from "@angular/common";
+import {Data} from "@angular/router";
+import {parseIntAutoRadix} from "@angular/common/src/i18n/format_number";
 
 export const MY_FORMATS = {
     parse: {
@@ -71,6 +73,8 @@ export class SolicitudWindowComponent implements OnInit {
     tipoDeUso: TipoDeUso;
     startDate = new Date(1988, 0, 1);
     personas: Persona[]=[];
+    tipoPersona: string;
+    listPersonaAyuda: Persona[]=[];
     indexStepper: number =0;
     municipio:Municipio;
     //datePipe: DatePipe = new DatePipe(undefined);
@@ -95,11 +99,12 @@ export class SolicitudWindowComponent implements OnInit {
 
     constructor(public dialogRef: MatDialogRef<SolicitudWindowComponent>,
                 @Inject(MAT_DIALOG_DATA){id, municipio, tipoDecreto = '300', tipoSolicitud = 'Nueva', fechaSolicitud = new Date(), numExpediente, persona, parcelas, lineasDeProduccion, areaSolicitada, estado = 'Por Tramitar',detallesMT}: Solicitud,
-                @Inject(MAT_DIALOG_DATA){tipoPersona = 'Natural',consejoPopular, ci, nombre, primerApellido, segundoApellido, sexo = 'M', dirParticular, fechaNacimiento, movil, telFijo, situacionLaboral, asociado, parentesco, integracion}: Persona,
+                @Inject(MAT_DIALOG_DATA){tipoPersona = 'Natural',consejoPopular, ci, nombre, primerApellido, segundoApellido, sexo = 'M', dirParticular, edad, movil, telFijo, situacionLaboral, asociado, parentesco, integracion}: Persona,
                 private service: SolicitudService, private consejoPopularService: ConsejoPopularService, private tipodeUsoService: TipoDeUsoService, private personaService: PersonaService,private municipioService:MunicipioService, private dialog: MatDialog) {
         this.insertar = id == null;
         this.municipio = municipio;
         this.idSolicitud = id;
+        this.tipoPersona = tipoPersona;
 
         //this.checked = false;
 
@@ -123,21 +128,30 @@ export class SolicitudWindowComponent implements OnInit {
             segundoApellido: new FormControl(segundoApellido, [Validators.required]),
             sexo: new FormControl(sexo, [Validators.required]),
             dirParticular: new FormControl(dirParticular, [Validators.required]),
-            fechaNacimiento: new FormControl(fechaNacimiento, [Validators.required]),
+            edad: new FormControl(edad, [Validators.required]),
             movil: new FormControl(movil, [Validators.required, Validators.maxLength(8)]),
             telFijo: new FormControl(telFijo, [Validators.required, Validators.maxLength(8)]),
             situacionLaboral: new FormControl(situacionLaboral, [Validators.required]),
             integracion: new FormControl(integracion),
-            asociado: new FormControl(asociado, [Validators.required])
+            asociado: new FormControl(asociado, [Validators.required]),
+            parentesco: new FormControl('Vinculacion', [Validators.required]),
         });
 
         this.formPersonaAyuda = new FormGroup({
+            tipoPersona: new FormControl('Natural', [Validators.required]),
             contador: new FormControl(0, []),
-            ci: new FormControl('', [Validators.required, Validators.maxLength(11)]),
+            ci: new FormControl('', [Validators.required, Validators.maxLength(11), Validators.minLength(11)]),
             nombre: new FormControl('', [Validators.required]),
             primerApellido: new FormControl('', [Validators.required]),
             segundoApellido: new FormControl('', [Validators.required]),
-            parentesco: new FormControl('', [Validators.required])
+            parentesco: new FormControl('', [Validators.required]),
+            consejoPopular: new FormControl('', [Validators.required]),
+            edad: new FormControl('', [Validators.required]),
+            sexo: new FormControl('', [Validators.required]),
+            movil: new FormControl('-'),
+            telFijo: new FormControl('-'),
+            situacionLaboral: new FormControl('-'),
+            dirParticular: new FormControl('-'),
         });
 
         this.formParcela = new FormGroup({
@@ -162,25 +176,41 @@ export class SolicitudWindowComponent implements OnInit {
             areaDedicada: new FormControl('', [Validators.required]),
         });
 
+
         this.formPersona.get('ci').valueChanges.subscribe(value => {
             if (this.formPersona.get('ci').valid){
                 if (this.ci != value){
                     this.ci = value;
                     console.log(value);
+
                     this.personaService.obtenerPorCI(value).subscribe(resp=>{
                         if (resp.body.success && resp.body.elemento){
                             this.formPersona.patchValue(resp.body.elemento);
-                            this.formPersona.get('fechaNacimiento').setValue(new Date(resp.body.elemento.fechaNacimiento));
                         }else {
-                            this.formPersona.reset();
-                            this.formPersona.get('ci').setValue(this.ci);
-                            this.formPersona.get('tipoPersona').setValue('Natural');
-
+                            if (this.formPersona.get('tipoPersona').value == 'Natural'){
+                                this.formPersona.get('edad').setValue(this.obtenerEdad());
+                                this.formPersona.get('sexo').setValue(this.obtenerSexo());
+                            }
                         }
                     });
                 }
+            }else {
+                this.resetForm('Persona');
             }
-        })
+        });
+
+        this.formPersonaAyuda.get('ci').valueChanges.subscribe(value => {
+
+            if (this.formPersonaAyuda.get('ci').valid){
+                if (this.ci != value) {
+
+                    this.ci = value;
+                    console.log(value);
+                    this.formPersonaAyuda.get('edad').setValue(this.obtenerEdad());
+                    this.formPersonaAyuda.get('sexo').setValue(this.obtenerSexo());
+                }
+            }
+        });
 
         this.formParcela.valueChanges.subscribe(value => {
             if (this.formParcela.get('zonaCatastral').value && this.formParcela.get('parcela').value && this.formParcela.get('divicion').value) {
@@ -195,6 +225,7 @@ export class SolicitudWindowComponent implements OnInit {
             this.consejoPopularService.listarConsejoPopularNoDefinido('No Definido').subscribe(resp => {
                 if (resp.body.success) {
                     this.formParcela.get('consejoPopular').setValue(resp.body.elemento);
+                    this.formPersonaAyuda.get('consejoPopular').setValue(resp.body.elemento);
                 }
             });
 
@@ -213,7 +244,7 @@ export class SolicitudWindowComponent implements OnInit {
             this.listarTipoPersonaJuridica();
 
             this.service.obtenerUltimSolicitud().subscribe(resp => {
-                if (resp.body.success) {
+                if (resp.body.success && resp.body.total!=0) {
                     this.formSolicitud.get('numExpediente').setValue((resp.body.elemento.numExpediente) + 1);
                 }
             });
@@ -248,6 +279,7 @@ export class SolicitudWindowComponent implements OnInit {
         });
     }
 
+
     addParcela() {
         let esta = false;
         if (this.formParcela.valid) {
@@ -265,17 +297,55 @@ export class SolicitudWindowComponent implements OnInit {
             }else {
                 this.dialog.open(MensajeError, {
                     width: '400px',
-                    data: {mensaje: 'La parcela ya se encuentra insertada:'}
+                    data: {mensaje: 'La parcela ya se encuentra en la lista:'}
                 })
             }
         }
     }
 
     addLineasProduccion() {
+        let esta = false;
         if (this.formLineaProduccion.valid) {
-            this.formLineaProduccion.get('contador').setValue(this.formLineaProduccion.get('contador').value + 1);
-            this.lineasProduccion.push(this.formLineaProduccion.value);
-            this.dataSourceLinea = new MatTableDataSource<LineaDeProduccion>(this.lineasProduccion);
+            for (let lineaDeProduccion of this.lineasProduccion){
+                if (lineaDeProduccion.lineaDeProduccion == this.formLineaProduccion.get('lineaDeProduccion').value) {
+                    esta = true;
+                    break;
+                }
+            }
+
+            if (esta != true){
+                this.formLineaProduccion.get('contador').setValue(this.formLineaProduccion.get('contador').value + 1);
+                this.lineasProduccion.push(this.formLineaProduccion.value);
+                this.dataSourceLinea = new MatTableDataSource<LineaDeProduccion>(this.lineasProduccion);
+            }else {
+                this.dialog.open(MensajeError, {
+                    width: '400px',
+                    data: {mensaje: 'La linea de producción ya se encuentra en la lista:'}
+                })
+            }
+        }
+    }
+
+    addPersonaAyuda() {
+        let esta = false;
+        if (this.formPersonaAyuda.valid) {
+            for (let personaAyuda of this.listPersonaAyuda){
+                if (personaAyuda.ci == this.formPersonaAyuda.get('ci').value) {
+                    esta = true;
+                    break;
+                }
+            }
+
+            if (esta != true){
+                this.formPersonaAyuda.get('contador').setValue(this.formPersonaAyuda.get('contador').value + 1);
+                this.listPersonaAyuda.push(this.formPersonaAyuda.value);
+                this.dataSourcePersonaAyuda = new MatTableDataSource<Persona>(this.listPersonaAyuda);
+            }else {
+                this.dialog.open(MensajeError, {
+                    width: '400px',
+                    data: {mensaje: 'La persona ya se encuentra en la lista:'}
+                })
+            }
         }
     }
 
@@ -302,6 +372,51 @@ export class SolicitudWindowComponent implements OnInit {
         }
     }
 
+    obtenerEdad():number{
+        var str = new String(this.ci);
+        const anio: number = parseInt(str.charAt(0)+''+str.charAt(1));
+        const mes: number = parseInt(str.charAt(2)+''+str.charAt(3));
+        const dia: number = parseInt(str.charAt(4)+''+str.charAt(5));
+
+        var anioA: number = new Date().getFullYear()-2000;
+        var mesA: number = new Date().getMonth()+1;
+        var diaA: number = new Date().getDate();
+
+
+        var edad:number;
+
+        if (mes == mesA){
+            if (diaA>dia || diaA==dia ){
+                edad = 100-anio+anioA;
+            }else {
+                edad = 100-anio+anioA-1;
+            }
+        } else if (mesA > mes ){
+            edad = 100-anio+anioA;
+        } else {
+            edad = 100-anio+anioA-1;
+        }
+
+       str = new String (edad);
+
+        if(str.length == 3){
+            edad = parseInt(str.slice(1));
+        }
+
+        return edad;
+    }
+
+    obtenerSexo():string{
+        var str = new String(this.ci);
+        const sexoCI: number = parseInt(str.charAt(9));
+
+        if (sexoCI % 2 === 0){
+            return 'M';
+        }else{
+            return 'F';
+        }
+    }
+
     agregarIntgra(valor:string){
         if (!this.formPersona.get('integracion').value){
             this.formPersona.get('integracion').setValue(valor);
@@ -316,81 +431,24 @@ export class SolicitudWindowComponent implements OnInit {
         var arregIntegra = str.split(",");
         console.log(arregIntegra);
 
-        arregIntegra.delete(valor);
-        /*for (var cont in arregIntegra){
+        for (var cont in arregIntegra){
             console.log(cont);
             if (arregIntegra[cont] == valor){
-                arregIntegra[cont] = '';
+                arregIntegra.splice(cont,1);
+                break;
             }
             console.log(arregIntegra[cont]);
         }
 
-        this.formPersona.get('integracion').setValue('');
-
-        setValue(this.formPersona.get('integracion').value+","+valor);
-
-        for (var cont in arregIntegra){
-            console.log(cont);
-            if (!arregIntegra[cont] == ""){
-                arregIntegra[cont] = '';
-            }
-            console.log(arregIntegra[cont]);
-        }*/
-
+        this.formPersona.get('integracion').setValue(arregIntegra.toString());
 
         //arrayIntegracion.split(,);
         console.log(arregIntegra);
-
-
+        console.log(this.formPersona.get('integracion').value);
     }
 
-   /* onChecked (chekec:MatCheckbox,valor:string, event:Event):void{
-        event.stopPropagation();
-
-        console.log(chekec);
-            this.formPersona.get('integracion').setValue('');
-            console.log(valor);
-            for (let cont of this.organizaciones){
-                if (cont.name === valor){
-                    console.log(cont);
-                    if (cont.checked === 'true' || cont.checked === '' ){
-                        cont.checked = 'false';
-                       chekec._onInputClick(event);
-                       chekec.checked = false;
-                        // = false;
-                        console.log('if');
-                        //break;
-
-                    }else{
-                        console.log('else');
-                        cont.checked = 'true';
-                        chekec.checked = true;
-                       // break;
-                    }
-                    console.log(cont);
-                    console.log(chekec);
-                }
-
-            }
-            for (let cont of this.organizaciones){
-                if (cont.checked==='true'){
-                    if (!this.formPersona.get('integracion').value){
-                        this.formPersona.get('integracion').setValue(cont.name);
-                    } else {
-                        this.formPersona.get('integracion').setValue(this.formPersona.get('integracion').value+","+cont.name);
-                    }
-
-                }
-            }
-
-            console.log(this.organizaciones);
-            console.log(this.formPersona.get('integracion').value);
-    }*/
-
-
-
     insertarSolicitud(): void {
-        if (this.formSolicitud.valid && this.formPersona.valid && this.formParcela.valid && this.formLineaProduccion.valid) {
+        if (this.formSolicitud.valid && this.formPersona.valid && this.formPersonaAyuda.valid && this.formParcela.valid && this.formLineaProduccion.valid) {
             const solicitud = this.formSolicitud.value;
             solicitud.persona = {...this.formPersona.value};
             solicitud.parcelas = [...this.parcelas];
@@ -402,7 +460,15 @@ export class SolicitudWindowComponent implements OnInit {
                     let appResp = resp.body;
                     console.log(resp);
                     if (appResp.success) {
-                        this.dialogRef.close(resp.body);
+                        for (let personaAyuda of this.listPersonaAyuda){
+                            personaAyuda.asociado = appResp.elemento.persona;
+                        }
+                        this.personaService.insertarlistPersona(this.listPersonaAyuda).subscribe(resp=>{
+                            if (resp.body.success ){
+                                console.log(resp.body.elementos);
+                            }
+                        });
+                        this.dialogRef.close(appResp);
                     } else {
                         this.dialog.open(MensajeError, {width: '400px', data: {mensaje: appResp.msg}});
                     }
@@ -422,10 +488,16 @@ export class SolicitudWindowComponent implements OnInit {
         }else{
             const solicitud = this.formSolicitud.value;
             solicitud.persona = {...this.formPersona.value};
+            solicitud.persona.perosnas = [...this.listPersonaAyuda];
             solicitud.parcelas = [...this.parcelas];
             solicitud.lineasDeProduccion = [...this.lineasProduccion];
             this.solicitud = solicitud;
             console.log(this.solicitud);
+            for (let personaAyuda of this.listPersonaAyuda){
+                personaAyuda.asociado = this.formPersona.value;
+                console.log(personaAyuda);
+            }
+            console.log(this.listPersonaAyuda);
         }
     }
 
@@ -439,5 +511,18 @@ export class SolicitudWindowComponent implements OnInit {
 
     onNoClick(): void {
         this.dialogRef.close(false);
+    }
+
+    resetForm(form:string){
+        if (form == 'Persona'){
+            this.formPersona.get('nombre').reset();
+            this.formPersona.get('primerApellido').reset();
+            this.formPersona.get('segundoApellido').reset();
+            this.formPersona.get('sexo').setValue('M');
+            this.formPersona.get('edad').reset();
+            this.formPersona.get('telFijo').reset();
+            this.formPersona.get('movil').reset();
+            this.formPersona.get('situacionLaboral').reset();
+        }
     }
 }

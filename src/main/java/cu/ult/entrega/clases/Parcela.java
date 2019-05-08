@@ -43,10 +43,6 @@ public class Parcela implements Serializable {
     @Column(name = "direccion")
     private String direccion;
 
-    @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_parcela_poseedor"))
-    private Persona persona;
-
     @Column(name = "zonaCatastral")
     private Integer zonaCatastral;
 
@@ -118,14 +114,6 @@ public class Parcela implements Serializable {
 
     public void setConsejoPopular(ConsejoPopular consejoPopular) {
         this.consejoPopular = consejoPopular;
-    }
-
-    public Persona getPersona() {
-        return persona;
-    }
-
-    public void setPersona(Persona persona) {
-        this.persona = persona;
     }
 
     public Integer getZonaCatastral() {
@@ -238,7 +226,6 @@ public class Parcela implements Serializable {
         return "Parcela{" +
                 "id=" + id +
                 ", consejoPopular=" + consejoPopular +
-                ", persona=" + persona +
                 ", zonaCatastral=" + zonaCatastral +
                 ", parcela=" + parcela +
                 ", divicion=" + divicion +

@@ -47,6 +47,13 @@ export class PersonaService {
         });
     }
 
+    insertarlistPersona(personas: Persona[]): Observable<Respuesta<Persona>> {
+        return this.http.post<AppResponse<Persona>>(this.personaUrl+'/insrtList', personas, {
+            observe: "response",
+            headers: {"Authorization": this.token}
+        });
+    }
+
     modificarPersona(id: number, persona: Persona): Observable<Respuesta<Persona>> {
         persona.id = id;
         return this.http.put<AppResponse<Persona>>(`${this.personaUrl}/${id}`, persona, {

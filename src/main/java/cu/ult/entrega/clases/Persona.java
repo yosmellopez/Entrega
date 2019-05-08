@@ -5,9 +5,7 @@
  */
 package cu.ult.entrega.clases;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -70,9 +68,8 @@ public class Persona implements Serializable {
     @Column(name = "dirParticular")
     private String dirParticular;
 
-    @Column(name = "fechaNacimiento")
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fechaNacimiento;
+    @Column(name = "edad")
+    private int edad;
 
     @Column(name = "movil")
     private String movil;
@@ -91,7 +88,7 @@ public class Persona implements Serializable {
 
     @JsonIgnore
     @OneToMany(mappedBy = "asociado")
-    private List<Persona> persona;
+    private List<Persona> personas;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_persona_asociado"))
@@ -100,10 +97,6 @@ public class Persona implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "persona")
     private List<Solicitud> solicitud;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "persona")
-    private List<Parcela> parcelas;
 
     @JsonIgnore
     @OneToMany(mappedBy = "persona")
@@ -183,12 +176,11 @@ public class Persona implements Serializable {
         this.dirParticular = dirParticular;
     }
 
-    public Date getFechaNacimiento() {
-        return fechaNacimiento;
+    public int getEdad() {return edad;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
+    public void setEdad(int edad) {
+        this.edad = edad;
     }
 
     public String getMovil() {
@@ -207,12 +199,12 @@ public class Persona implements Serializable {
         this.telFijo = telFijo;
     }
 
-    public List<Persona> getPersona() {
-        return persona;
+    public List<Persona> getPersonas() {
+        return personas;
     }
 
-    public void setPersona(List<Persona> persona) {
-        this.persona = persona;
+    public void setPersonas(List<Persona> personas) {
+        this.personas = personas;
     }
 
     public Persona getAsociado() {
@@ -233,14 +225,6 @@ public class Persona implements Serializable {
 
     public void setSolicitud(List<Solicitud> solicitud) {
         this.solicitud = solicitud;
-    }
-
-    public List<Parcela> getParcelas() {
-        return parcelas;
-    }
-
-    public void setParcelas(List<Parcela> parcelas) {
-        this.parcelas = parcelas;
     }
 
     public String getSituacionLaboral() {
@@ -302,7 +286,7 @@ public class Persona implements Serializable {
 
     @Override
     public String toString() {
-        return "Persona{" + "id=" + id + ", tipoPersona=" + tipoPersona + ", ci=" + ci + ", nombre=" + nombre + ", primerApellido=" + primerApellido + ", segundoApellido=" + segundoApellido + ", sexo=" + sexo + ", dirParticular=" + dirParticular + ", fechaNacimiento=" + fechaNacimiento + ", movil=" + movil + ", telFijo=" + telFijo + ", persona=" + persona + ", asociado=" + asociado + ", solicitudes=" + solicitud + '}';
+        return "Persona{" + "id=" + id + ", tipoPersona=" + tipoPersona + ", ci=" + ci + ", nombre=" + nombre + ", primerApellido=" + primerApellido + ", segundoApellido=" + segundoApellido + ", sexo=" + sexo + ", dirParticular=" + dirParticular + ", fechaNacimiento=" + edad + ", movil=" + movil + ", telFijo=" + telFijo + ", persona=" + personas + ", asociado=" + asociado + ", solicitudes=" + solicitud + '}';
     }
 
 

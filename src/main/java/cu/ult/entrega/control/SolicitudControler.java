@@ -7,11 +7,13 @@ package cu.ult.entrega.control;
 
 import cu.ult.entrega.clases.LineaDeProduccion;
 import cu.ult.entrega.clases.Parcela;
+import cu.ult.entrega.clases.Persona;
 import cu.ult.entrega.clases.Solicitud;
 import cu.ult.entrega.excepcion.MunicipioException;
 import cu.ult.entrega.excepcion.SolicitudException;
 import cu.ult.entrega.repositorio.LineaDeProduccionRepositorio;
 import cu.ult.entrega.repositorio.ParcelaRepositorio;
+import cu.ult.entrega.repositorio.PersonaRepositorio;
 import cu.ult.entrega.repositorio.SolicitudRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,10 +30,7 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static cu.ult.entrega.control.AppResponse.failure;
@@ -52,6 +51,9 @@ public class SolicitudControler {
 
     @Autowired
     LineaDeProduccionRepositorio lineaDeProduccionRepositorio;
+
+    @Autowired
+    PersonaRepositorio personaRepositorio;
 
     @RequestMapping(value = "/solicitud")
     public ResponseEntity<AppResponse<Solicitud>> listarSolicitud(Pageable p) {
@@ -85,11 +87,17 @@ public class SolicitudControler {
     @RequestMapping(value = "/solicitud/ultima")
     public ResponseEntity<AppResponse<Solicitud>> obtenerLaUltimaSolicitud() {
         Solicitud solicitud = solicitudRepositorio.findTopByOrderByNumExpedienteDesc();
-        return ResponseEntity.ok(success(solicitud).build());
+        if (solicitud != null){
+            return ResponseEntity.ok(success(solicitud).total(1).build());
+        }else{
+            return ResponseEntity.ok(success(solicitud).build());
+        }
+
     }
 
     @PostMapping(value = "/solicitud")
     public ResponseEntity<AppResponse<Solicitud>> insertarSolicitud(@RequestBody Solicitud solicitud) {
+        System.out.println(solicitud.getPersona().getPersonas());
         Set<Parcela> parcelas = solicitud.getParcelas();
         Set<Parcela> parcelasGuardadas = new HashSet<>();
         List<LineaDeProduccion> lineasDeProduccion = solicitud.getLineasDeProduccion();
@@ -113,7 +121,7 @@ public class SolicitudControler {
     public ResponseEntity<Solicitud> updateUser(@PathVariable("id") long id, @RequestBody Solicitud solicitud) {
         System.out.println("Updating User " + id);
 
-        Solicitud currentSolicitud = solicitudRepositorio.findById(id).orElseThrow(() -> new EntityNotFoundException("Municipio no encontrado"));
+        Solicitud currentSolicitud = solicitudRepositorio.findById(id).orElseThrow(() -> new EntityNotFoundException("Solicitud no encontrada"));
 
         if (currentSolicitud == null) {
             System.out.println("User with id " + id + " not found");

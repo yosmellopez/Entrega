@@ -63,13 +63,14 @@ export class Persona {
     segundoApellido: string;
     sexo: string;
     dirParticular: string;
-    fechaNacimiento: Date;
+    edad: number;
     movil: string;
     telFijo: string;
     situacionLaboral: string;
     parentesco:string;
     integracion:string;
     asociado: Persona;
+    personas: Persona[];
 
     constructor(value?: any) {
         if (value) {
