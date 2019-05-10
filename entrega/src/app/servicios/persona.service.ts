@@ -48,6 +48,7 @@ export class PersonaService {
     }
 
     insertarlistPersona(personas: Persona[]): Observable<Respuesta<Persona>> {
+        console.log(personas);
         return this.http.post<AppResponse<Persona>>(this.personaUrl+'/insrtList', personas, {
             observe: "response",
             headers: {"Authorization": this.token}
