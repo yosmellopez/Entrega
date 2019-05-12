@@ -63,13 +63,13 @@ public class Persona implements Serializable {
     private String segundoApellido;
 
     @Column(name = "sexo")
-    private char sexo;
+    private Character sexo;
 
     @Column(name = "dirParticular")
     private String dirParticular;
 
     @Column(name = "edad")
-    private int edad;
+    private Integer edad;
 
     @Column(name = "movil")
     private String movil;
@@ -102,6 +102,9 @@ public class Persona implements Serializable {
     @JsonIgnoreProperties(value = {"persona"})
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<PersonaParcela> personaParcelas;
+
+    public Persona() {
+    }
 
     public Long getId() {
         return id;
@@ -159,11 +162,11 @@ public class Persona implements Serializable {
         this.segundoApellido = segundoApellido;
     }
 
-    public char getSexo() {
+    public Character getSexo() {
         return sexo;
     }
 
-    public void setSexo(char sexo) {
+    public void setSexo(Character sexo) {
         this.sexo = sexo;
     }
 
@@ -175,10 +178,11 @@ public class Persona implements Serializable {
         this.dirParticular = dirParticular;
     }
 
-    public int getEdad() {return edad;
+    public Integer getEdad() {
+        return edad;
     }
 
-    public void setEdad(int edad) {
+    public void setEdad(Integer edad) {
         this.edad = edad;
     }
 
@@ -196,34 +200,6 @@ public class Persona implements Serializable {
 
     public void setTelFijo(String telFijo) {
         this.telFijo = telFijo;
-    }
-
-    public List<Persona> getPersonas() {
-        return personas;
-    }
-
-    public void setPersonas(List<Persona> personas) {
-        this.personas = personas;
-    }
-
-    public Persona getAsociado() {
-        return asociado;
-    }
-
-    public void setAsociado(Persona asociado) {
-        this.asociado = asociado;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public List<Solicitud> getSolicitud() {
-        return solicitud;
-    }
-
-    public void setSolicitud(List<Solicitud> solicitud) {
-        this.solicitud = solicitud;
     }
 
     public String getSituacionLaboral() {
@@ -250,6 +226,30 @@ public class Persona implements Serializable {
         this.integracion = integracion;
     }
 
+    public List<Persona> getPersonas() {
+        return personas;
+    }
+
+    public void setPersonas(List<Persona> personas) {
+        this.personas = personas;
+    }
+
+    public Persona getAsociado() {
+        return asociado;
+    }
+
+    public void setAsociado(Persona asociado) {
+        this.asociado = asociado;
+    }
+
+    public List<Solicitud> getSolicitud() {
+        return solicitud;
+    }
+
+    public void setSolicitud(List<Solicitud> solicitud) {
+        this.solicitud = solicitud;
+    }
+
     public Set<PersonaParcela> getPersonaParcelas() {
         return personaParcelas;
     }
@@ -259,28 +259,16 @@ public class Persona implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 67 * hash + Objects.hashCode(this.id);
-        return hash;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Persona persona = (Persona) o;
+        return Objects.equals(id, persona.id);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Persona other = (Persona) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override
