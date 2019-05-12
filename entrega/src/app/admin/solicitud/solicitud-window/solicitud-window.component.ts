@@ -377,7 +377,6 @@ export class SolicitudWindowComponent implements OnInit {
         const anio: number = parseInt(str.charAt(0)+''+str.charAt(1));
         const mes: number = parseInt(str.charAt(2)+''+str.charAt(3));
         const dia: number = parseInt(str.charAt(4)+''+str.charAt(5));
-
         var anioA: number = new Date().getFullYear()-2000;
         var mesA: number = new Date().getMonth()+1;
         var diaA: number = new Date().getDate();

@@ -86,7 +86,7 @@ public class Persona implements Serializable {
     @Column(name = "integracion")
     private String integracion;
 
-    @JsonIgnore
+    @JsonIgnoreProperties({"personas"})
     @OneToMany(mappedBy = "asociado")
     private List<Persona> personas;
 
@@ -98,7 +98,6 @@ public class Persona implements Serializable {
     @OneToMany(mappedBy = "persona")
     private List<Solicitud> solicitud;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "persona")
     @JsonIgnoreProperties(value = {"persona"})
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
