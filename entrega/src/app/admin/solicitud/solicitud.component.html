@@ -44,11 +44,8 @@
                     <ng-container matColumnDef="acciones" stickyEnd>
                         <th mat-header-cell *matHeaderCellDef style="text-align: center;">Acciones</th>
                         <td mat-cell *matCellDef="let element" align="center">
-                            <button mat-mini-fab color="accent" (click)="editarTipoDeSuperficie($event,element)" [matTooltip]="'Editar Solicitud - ' + element.numExpediente">
+                            <button mat-mini-fab color="accent" (click)="editarSolicitud($event,element)" [matTooltip]="'Editar Solicitud - ' + element.numExpediente">
                                 <mat-icon>mode_edit</mat-icon>
-                            </button>
-                            <button mat-mini-fab color="warn" (click)="eliminarTipoDeSuperficie($event,element)" [matTooltip]="'Eliminar Solicitud - ' + element.numExpediente">
-                                <mat-icon>delete</mat-icon>
                             </button>
                             <button mat-mini-fab color="accent" (click)="abrirVentanaDetalles($event,element)" [matTooltip]="'Detalle de la Solicitud - ' + element.numExpediente">
                                 <mat-icon>info</mat-icon>

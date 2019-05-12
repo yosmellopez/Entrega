@@ -71,7 +71,7 @@ export class SolicitudWindowComponent implements OnInit {
     solicitud: Solicitud;
     consejoPopulares: ConsejoPopular[]=[];
     tipoDeUso: TipoDeUso;
-    startDate = new Date(1988, 0, 1);
+    persona: Persona;
     personas: Persona[]=[];
     tipoPersona: string;
     listPersonaAyuda: Persona[]=[];
@@ -80,7 +80,7 @@ export class SolicitudWindowComponent implements OnInit {
     //datePipe: DatePipe = new DatePipe(undefined);
     ci:string;
 
-    organizaciones = [{name:'PCC',activo:true},
+    organizaciones =[{name:'PCC',activo:false},
                     {name:'CTC',activo:false},
                     {name:'ANAP',activo:false},
                     {name:'MTT',activo:false},
@@ -97,15 +97,20 @@ export class SolicitudWindowComponent implements OnInit {
     public personasFiltradas: ReplaySubject<Persona[]> = new ReplaySubject<Persona[]>(1);
     public consejoPopularFiltrados: ReplaySubject<ConsejoPopular[]> = new ReplaySubject<ConsejoPopular[]>(1);
 
-    constructor(public dialogRef: MatDialogRef<SolicitudWindowComponent>,
-                @Inject(MAT_DIALOG_DATA){id, municipio, tipoDecreto = '300', tipoSolicitud = 'Nueva', fechaSolicitud = new Date(), numExpediente, persona, parcelas, lineasDeProduccion, areaSolicitada, estado = 'Por Tramitar',detallesMT}: Solicitud,
-                @Inject(MAT_DIALOG_DATA){tipoPersona = 'Natural',consejoPopular, ci, nombre, primerApellido, segundoApellido, sexo = 'M', dirParticular, edad, movil, telFijo, situacionLaboral, asociado, parentesco, integracion}: Persona,
-                private service: SolicitudService, private consejoPopularService: ConsejoPopularService, private tipodeUsoService: TipoDeUsoService, private personaService: PersonaService,private municipioService:MunicipioService, private dialog: MatDialog) {
+    constructor( public dialogRef: MatDialogRef<SolicitudWindowComponent>, @Inject(MAT_DIALOG_DATA){id, municipio, tipoDecreto = '300', tipoSolicitud = 'Nueva', fechaSolicitud = new Date(), numExpediente, persona, parcelas, lineasDeProduccion, areaSolicitada, estado = 'Por Tramitar',detallesmt}: Solicitud, private service: SolicitudService, private consejoPopularService: ConsejoPopularService, private tipodeUsoService: TipoDeUsoService, private personaService: PersonaService,private municipioService:MunicipioService, private dialog: MatDialog) {
         this.insertar = id == null;
         this.municipio = municipio;
         this.idSolicitud = id;
-        this.tipoPersona = tipoPersona;
+        this.parcelas = parcelas;
+        this.lineasProduccion = lineasDeProduccion;
+        if (this.insertar){
+            this.persona = new Persona();
+            this.persona.tipoPersona = 'Natural';
+        }else{
+            this.persona = persona;
+        }
 
+        //this.tipoPersona = this.persona.tipoPersona;
         //this.checked = false;
 
         this.formSolicitud = new FormGroup({
@@ -115,25 +120,25 @@ export class SolicitudWindowComponent implements OnInit {
             fechaSolicitud: new FormControl(fechaSolicitud),
             numExpediente: new FormControl(numExpediente, [Validators.required]),
             areaSolicitada: new FormControl(areaSolicitada, [Validators.required]),
-            detallesMT: new FormControl(detallesMT,[Validators.required]),
+            detallesMT: new FormControl(detallesmt,[Validators.required]),
             estado: new FormControl(estado),
         });
 
         this.formPersona = new FormGroup({
-            tipoPersona: new FormControl(tipoPersona, [Validators.required]),
-            consejoPopular: new FormControl(consejoPopular, [Validators.required]),
-            ci: new FormControl(ci, [Validators.required, Validators.maxLength(11), Validators.minLength(11)]),
-            nombre: new FormControl(nombre, [Validators.required]),
-            primerApellido: new FormControl(primerApellido, [Validators.required]),
-            segundoApellido: new FormControl(segundoApellido, [Validators.required]),
-            sexo: new FormControl(sexo, [Validators.required]),
-            dirParticular: new FormControl(dirParticular, [Validators.required]),
-            edad: new FormControl(edad, [Validators.required]),
-            movil: new FormControl(movil, [Validators.required, Validators.maxLength(8)]),
-            telFijo: new FormControl(telFijo, [Validators.required, Validators.maxLength(8)]),
-            situacionLaboral: new FormControl(situacionLaboral, [Validators.required]),
-            integracion: new FormControl(integracion),
-            asociado: new FormControl(asociado, [Validators.required]),
+            tipoPersona: new FormControl(this.persona.tipoPersona, [Validators.required]),
+            consejoPopular: new FormControl(this.persona.consejoPopular, [Validators.required]),
+            ci: new FormControl(this.persona.ci, [Validators.required, Validators.maxLength(11), Validators.minLength(11)]),
+            nombre: new FormControl(this.persona.nombre, [Validators.required]),
+            primerApellido: new FormControl(this.persona.primerApellido, [Validators.required]),
+            segundoApellido: new FormControl(this.persona.segundoApellido, [Validators.required]),
+            sexo: new FormControl(this.persona.sexo, [Validators.required]),
+            dirParticular: new FormControl(this.persona.dirParticular, [Validators.required]),
+            edad: new FormControl(this.persona.edad, [Validators.required]),
+            movil: new FormControl(this.persona.movil, [Validators.required, Validators.maxLength(8)]),
+            telFijo: new FormControl(this.persona.telFijo, [Validators.required, Validators.maxLength(8)]),
+            situacionLaboral: new FormControl(this.persona.situacionLaboral, [Validators.required]),
+            integracion: new FormControl(this.persona.integracion),
+            asociado: new FormControl(this.persona.asociado, [Validators.required]),
             parentesco: new FormControl('Vinculacion', [Validators.required]),
         });
 
@@ -221,6 +226,7 @@ export class SolicitudWindowComponent implements OnInit {
     ngOnInit() {
 
         if (this.insertar) {
+            console.log(this.insertar);
 
             this.consejoPopularService.listarConsejoPopularNoDefinido('No Definido').subscribe(resp => {
                 if (resp.body.success) {
@@ -241,14 +247,25 @@ export class SolicitudWindowComponent implements OnInit {
                }
             });
 
-            this.listarTipoPersonaJuridica();
-
             this.service.obtenerUltimSolicitud().subscribe(resp => {
                 if (resp.body.success && resp.body.total!=0) {
                     this.formSolicitud.get('numExpediente').setValue((resp.body.elemento.numExpediente) + 1);
                 }
             });
+
+            console.log(this.formSolicitud.value);
+        }else{
+            const arrOrganizacion = this.persona.integracion.split(',');
+            console.log(arrOrganizacion);
+            for (let organizacion of this.organizaciones ){
+
+            }
+
+            this.dataSourceParcela= new MatTableDataSource<Parcela>(this.parcelas);
+            this.dataSourceLinea = new MatTableDataSource<LineaDeProduccion>(this.lineasProduccion);
         }
+
+        this.listarTipoPersonaJuridica();
 
         this.consejoPopularService.listarTodasConsejoPopular().subscribe(resp =>{
             if (resp.body.success){
@@ -256,8 +273,6 @@ export class SolicitudWindowComponent implements OnInit {
                 this.consejoPopularFiltrados.next(this.consejoPopulares);
             }
         });
-
-        console.log(this.formSolicitud.value);
 
     }
 

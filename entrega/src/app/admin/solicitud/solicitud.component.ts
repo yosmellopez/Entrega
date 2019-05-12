@@ -113,24 +113,24 @@ export class SolicitudComponent implements OnInit {
         });
     }
 
-    /*editarTipoDeSuperficie(event: Event, tipoDeSuperficie: TipoDeSuperficie): void {
+    editarSolicitud(event: Event, solicitud: Solicitud): void {
         event.stopPropagation();
-        let editDialogRef = this.dialog.open(TipoDeSuperficieWindowComponent, {
-            width: '400px', data: tipoDeSuperficie, disableClose: true
+        let editDialogRef = this.dialog.open(SolicitudWindowComponent, {
+            width: '900px', data: solicitud, disableClose: true
         });
 
         editDialogRef.afterClosed().subscribe(result => {
             if (result != false && result.success) {
                 this.dialog.open(Information, {
                     width: '400px',
-                    data: {mensaje: 'Se ha modificado el tipo de superficie.'}
+                    data: {mensaje: 'Se ha modificado la superficie.'}
                 });
                 this.paginator.page.emit();
             }
         });
     }
 
-    eliminarTipoDeSuperficie(event: Event, tipoDeSuperficie: TipoDeSuperficie): void {
+   /* eliminarTipoDeSuperficie(event: Event, tipoDeSuperficie: TipoDeSuperficie): void {
         event.stopPropagation();
         let dialogRef = this.dialog.open(Confirm, {
             width: '400px',

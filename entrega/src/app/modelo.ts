@@ -95,7 +95,7 @@ export class Solicitud {
     tramite: Tramite;
     estado: string;
     fechaAproDes: Date;
-    detallesMT:string;
+    detallesmt:string;
     detallesAproDesa:string;
 }
 
