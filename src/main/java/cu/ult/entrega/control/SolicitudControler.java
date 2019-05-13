@@ -118,21 +118,26 @@ public class SolicitudControler {
     }
 
     @RequestMapping(value = "/solicitud/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Solicitud> updateUser(@PathVariable("id") long id, @RequestBody Solicitud solicitud) {
+    public ResponseEntity<Solicitud> actualizarSolicitud(@PathVariable("id") long id, @RequestBody Solicitud solicitud) {
+        //Persona
+        Set<Parcela> parcelas = solicitud.getParcelas();
+        Set<Parcela> parcelasGuardadas = new HashSet<>();
         System.out.println("Updating User " + id);
 
         Solicitud currentSolicitud = solicitudRepositorio.findById(id).orElseThrow(() -> new EntityNotFoundException("Solicitud no encontrada"));
+
+        currentSolicitud.setTipoSolicitud(solicitud.getTipoSolicitud());
+        currentSolicitud.setAreaSolicitada(solicitud.getAreaSolicitada());
+        currentSolicitud.setEstado(solicitud.getEstado());
+        //currentSolicitud.setFechaAproDes(solicitud.getFechaAproDes());
+
 
         if (currentSolicitud == null) {
             System.out.println("User with id " + id + " not found");
             return new ResponseEntity<Solicitud>(HttpStatus.NOT_FOUND);
         }
 
-        currentSolicitud.setFechaSolicitud(solicitud.getFechaSolicitud());
-        currentSolicitud.setTipoSolicitud(solicitud.getTipoSolicitud());
-        currentSolicitud.setAreaSolicitada(solicitud.getAreaSolicitada());
-        currentSolicitud.setEstado(solicitud.getEstado());
-        currentSolicitud.setFechaAproDes(solicitud.getFechaAproDes());
+
 
         solicitudRepositorio.saveAndFlush(currentSolicitud);
         return new ResponseEntity<Solicitud>(currentSolicitud, HttpStatus.OK);

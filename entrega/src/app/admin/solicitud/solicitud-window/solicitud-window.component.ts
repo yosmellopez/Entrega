@@ -143,7 +143,7 @@ export class SolicitudWindowComponent implements OnInit {
         });
 
         this.formPersonaAyuda = new FormGroup({
-            tipoPersona: new FormControl('Natural', [Validators.required]),
+            tipoPersona: new FormControl('Natural'),
             contador: new FormControl(0, []),
             ci: new FormControl('', [Validators.required, Validators.maxLength(11), Validators.minLength(11)]),
             nombre: new FormControl('', [Validators.required]),
@@ -255,11 +255,17 @@ export class SolicitudWindowComponent implements OnInit {
 
             console.log(this.formSolicitud.value);
         }else{
-            const arrOrganizacion = this.persona.integracion.split(',');
-            console.log(arrOrganizacion);
-            for (let organizacion of this.organizaciones ){
+            const arrOrganizaciones = this.persona.integracion.split(',');
+            console.log(arrOrganizaciones);
 
+            for (let cont in arrOrganizaciones){
+                for (let organizacion of this.organizaciones ){
+                    if (arrOrganizaciones[cont]==organizacion.name){
+                        organizacion.activo = true;
+                    }
+                }
             }
+
 
             this.dataSourceParcela= new MatTableDataSource<Parcela>(this.parcelas);
             this.dataSourceLinea = new MatTableDataSource<LineaDeProduccion>(this.lineasProduccion);

@@ -65,9 +65,11 @@ public class Solicitud implements Serializable {
     @Column(name = "estado")
     private String estado;
 
-    @Column(name = "fechaAproDes")
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fechaAproDes;
+    @Column(name = "aprobadoCAgraria")
+    private String aprobadoCAgraria;
+
+    @Column(name = "aprobadoPCC")
+    private String aprobadoPCC;
 
     @Column(name = "detallesAproDesa")
     private String detallesAproDesa;
@@ -104,14 +106,6 @@ public class Solicitud implements Serializable {
         this.estado = estado;
     }
 
-    public Date getFechaAproDes() {
-        return fechaAproDes;
-    }
-
-    public void setFechaAproDes(Date fechaAproDes) {
-        this.fechaAproDes = fechaAproDes;
-    }
-
     public Persona getPersona() {
         return persona;
     }
@@ -140,9 +134,7 @@ public class Solicitud implements Serializable {
         return lineasDeProduccion;
     }
 
-    public void setLineasDeProduccion(List<LineaDeProduccion> lineasDeProduccion) {
-        this.lineasDeProduccion = lineasDeProduccion;
-    }
+    public void setLineasDeProduccion(List<LineaDeProduccion> lineasDeProduccion) {this.lineasDeProduccion = lineasDeProduccion;}
 
     public Double getAreaSolicitada() {
         return areaSolicitada;
@@ -178,6 +170,46 @@ public class Solicitud implements Serializable {
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
+    }
+
+    public String getAprobadoCAgraria() {
+        return aprobadoCAgraria;
+    }
+
+    public void setAprobadoCAgraria(String aprobadoCAgraria) {
+        this.aprobadoCAgraria = aprobadoCAgraria;
+    }
+
+    public String getAprobadoPCC() {
+        return aprobadoPCC;
+    }
+
+    public void setAprobadoPCC(String aprobadoPCC) {
+        this.aprobadoPCC = aprobadoPCC;
+    }
+
+    public String getDetallesAproDesa() {
+        return detallesAproDesa;
+    }
+
+    public void setDetallesAproDesa(String detallesAproDesa) {
+        this.detallesAproDesa = detallesAproDesa;
+    }
+
+    public Municipio getMunicipio() {
+        return municipio;
+    }
+
+    public void setMunicipio(Municipio municipio) {
+        this.municipio = municipio;
+    }
+
+    public String getDetallesMT() {
+        return detallesMT;
+    }
+
+    public void setDetallesMT(String detallesMT) {
+        this.detallesMT = detallesMT;
     }
 
     @Override

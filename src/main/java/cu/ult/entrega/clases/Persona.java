@@ -80,11 +80,17 @@ public class Persona implements Serializable {
     @Column(name = "situacionLaboral")
     private String situacionLaboral;
 
-    @Column(name = "parentesco")
-    private String parentesco;
-
     @Column(name = "integracion")
     private String integracion;
+
+    @Column(name = "estadoCivil")
+    private String estadoCivil;
+
+    @Column(name = "integracion")
+    private int experienciaAgricola;
+
+    @OneToMany(mappedBy = "asociado")
+    private List<PersonaAyuda> personasAyuda;
 
     @JsonIgnore
     @OneToMany(mappedBy = "asociado")
@@ -176,8 +182,7 @@ public class Persona implements Serializable {
         this.dirParticular = dirParticular;
     }
 
-    public int getEdad() {return edad;
-    }
+    public int getEdad() {return edad;}
 
     public void setEdad(int edad) {
         this.edad = edad;
@@ -235,20 +240,36 @@ public class Persona implements Serializable {
         this.situacionLaboral = situacionLaboral;
     }
 
-    public String getParentesco() {
-        return parentesco;
-    }
-
-    public void setParentesco(String parentesco) {
-        this.parentesco = parentesco;
-    }
-
     public String getIntegracion() {
         return integracion;
     }
 
     public void setIntegracion(String integracion) {
         this.integracion = integracion;
+    }
+
+    public String getEstadoCivil() {
+        return estadoCivil;
+    }
+
+    public void setEstadoCivil(String estadoCivil) {
+        this.estadoCivil = estadoCivil;
+    }
+
+    public int getExperienciaAgricola() {
+        return experienciaAgricola;
+    }
+
+    public void setExperienciaAgricola(int experienciaAgricola) {
+        this.experienciaAgricola = experienciaAgricola;
+    }
+
+    public List<PersonaAyuda> getPersonasAyuda() {
+        return personasAyuda;
+    }
+
+    public void setPersonasAyuda(List<PersonaAyuda> personasAyuda) {
+        this.personasAyuda = personasAyuda;
     }
 
     public Set<PersonaParcela> getPersonaParcelas() {

@@ -7,15 +7,7 @@ package cu.ult.entrega.clases;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  *
@@ -31,28 +23,44 @@ public class Tramite implements Serializable {
     private Long id;
     
     @Column (name = "fechaConcilONHG")
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaConcilONHG;
     
     @Column (name = "fechaEntreMedicion")
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaEntreMedicion;
     
     @Column (name = "fechaConcInstSuelo")
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaConcInstSuelo;
     
     @Column (name = "fechaEntregaEstudioSuelo")
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaEntregaEstudioSuelo;
     
     @Column (name = "fechaConcPlanFis")
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaConcPlanFis;
     
     @Column (name = "fechaEntrega_regulaciones")
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaEntregaRegulaciones;
     
     @Column (name = "fechaConcEmpAgric")
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaConcEmpAgric;
     
     @Column (name = "fechaEntregValoBienchurías")
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaEntregValoBienchurías;
+
+    @Column (name = "fechaAprobadoCAgraria")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date fechaAprobadoCAgraria;
+
+    @Column (name = "fechaAprobadoPCC")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date fechaAprobadoPCC;
     
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "solicitud_id")
@@ -130,6 +138,22 @@ public class Tramite implements Serializable {
         this.fechaEntregValoBienchurías = fechaEntregValoBienchurías;
     }
 
+    public Date getFechaAprobadoCAgraria() {
+        return fechaAprobadoCAgraria;
+    }
+
+    public void setFechaAprobadoCAgraria(Date fechaAprobadoCAgraria) {
+        this.fechaAprobadoCAgraria = fechaAprobadoCAgraria;
+    }
+
+    public Date getFechaAprobadoPCC() {
+        return fechaAprobadoPCC;
+    }
+
+    public void setFechaAprobadoPCC(Date fechaAprobadoPCC) {
+        this.fechaAprobadoPCC = fechaAprobadoPCC;
+    }
+
     public Solicitud getSolicitud() {
         return solicitud;
     }
@@ -137,7 +161,11 @@ public class Tramite implements Serializable {
     public void setSolicitud(Solicitud solicitud) {
         this.solicitud = solicitud;
     }
-    
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
