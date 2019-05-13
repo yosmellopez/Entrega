@@ -53,6 +53,15 @@ export class ConsejoPopular {
     municipio: Municipio;
 }
 
+export class PersonaAyuda {
+    id:number;
+    ci: string;
+    nombre: string;
+    primerApellido: string;
+    segundoApellido: string;
+    parentesco:string;
+}
+
 export class Persona {
     id: number;
     consejoPopular: ConsejoPopular;
@@ -67,10 +76,10 @@ export class Persona {
     movil: string;
     telFijo: string;
     situacionLaboral: string;
-    parentesco:string;
     integracion:string;
+    estadoCivil:string;
+    personasAyuda:PersonaAyuda[];
     asociado: Persona;
-    personas: Persona[];
 
     constructor(value?: any) {
         if (value) {

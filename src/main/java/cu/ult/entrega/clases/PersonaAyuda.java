@@ -30,7 +30,7 @@ public class PersonaAyuda implements Serializable {
     private String parentesco;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_persona_asociado"))
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_personaAyuda_asociado"))
     private Persona asociado;
 
     public static long getSerialVersionUID() {
