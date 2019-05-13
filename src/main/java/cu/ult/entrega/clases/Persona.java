@@ -86,7 +86,7 @@ public class Persona implements Serializable {
     @Column(name = "estadoCivil")
     private String estadoCivil;
 
-    @Column(name = "integracion")
+    @Column(name = "experienciaAgricola")
     private int experienciaAgricola;
 
     @OneToMany(mappedBy = "asociado")

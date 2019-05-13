@@ -261,31 +261,33 @@ export class SolicitudWindowComponent implements OnInit {
             });
 
             console.log(this.formSolicitud.value);
-<<<<<<< HEAD
-        }else{
+
+        }else {
             const arrOrganizaciones = this.persona.integracion.split(',');
-            console.log(arrOrganizaciones);
-=======
-        } else {
+            console.log(arrOrganizaciones);        }
+
             const arrOrganizacion = this.persona.integracion.split(',');
             console.log(arrOrganizacion);
             for (let organizacion of this.organizaciones) {
->>>>>>> origin/master
 
-            for (let cont in arrOrganizaciones){
-                for (let organizacion of this.organizaciones ){
-                    if (arrOrganizaciones[cont]==organizacion.name){
-                        organizacion.activo = true;
+
+                for (let cont in arrOrganizaciones) {
+                    for (let organizacion of this.organizaciones) {
+                        if (arrOrganizaciones[cont] == organizacion.name) {
+                            organizacion.activo = true;
+                        }
                     }
                 }
             }
 
-<<<<<<< HEAD
+
+
+
 
             this.dataSourceParcela= new MatTableDataSource<Parcela>(this.parcelas);
-=======
+
             this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
->>>>>>> origin/master
+
             this.dataSourceLinea = new MatTableDataSource<LineaDeProduccion>(this.lineasProduccion);
         }
 
