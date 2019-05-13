@@ -86,7 +86,6 @@ small {
 
 sub,
 sup {
-    font-size: 75%;
     line-height: 0;
     position: relative;
     vertical-align: baseline;
@@ -1398,7 +1397,7 @@ html {
 
 body {
     font-family: roboto;
-    font-size: 13px;
+    font-size: 15px;
     line-height: 1.42857143;
     color: #5e5e5e;
     background-color: #edecec;
@@ -15019,7 +15018,7 @@ a.thumbnail.active {
     border-radius: 2px;
     width: 500px;
     display: inline-block;
-    margin-top: 42px;
+    margin-top: 7.7em;
     vertical-align: middle;
     position: relative;
 }
