@@ -79,7 +79,7 @@
                         <div class="row" *ngIf="formPersona.value.tipoPersona == 'Natural'">
                             <div class="col-xs-12">
                                 <div class="fg-line form-group">
-                                    <p class="c-black f-500">Seleccione la organización a la que pertenece:</p>
+                                    <p class="c-black f-500">Seleccione las organizaciones a la que pertenece:</p>
                                     <section>
                                         <mat-checkbox *ngFor="let organizacion of organizaciones" [checked]="organizacion.activo" (change)="$event.checked ? agregarIntgra(organizacion.name) : quitarIntgra(organizacion.name)"  class="checkbox-inline">{{organizacion.name}} </mat-checkbox>
                                     </section>

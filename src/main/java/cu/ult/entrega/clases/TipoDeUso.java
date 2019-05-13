@@ -25,7 +25,7 @@ import javax.persistence.UniqueConstraint;
  * @author Pablo Caram Local
  */
 @Entity
-@Table(name = "tipoDeUso")
+@Table(name = "tipo_uso")
 public class TipoDeUso implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,7 +44,7 @@ public class TipoDeUso implements Serializable {
     private List<Parcela> parcelas;
     
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_tipoDeUso_tipoDeSuperficie"))
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_tipo_uso_tipo_superficie"))
     private TipoDeSuperficie tipoDeSuperficie;
     
     public Long getId() {

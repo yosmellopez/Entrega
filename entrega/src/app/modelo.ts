@@ -1,5 +1,5 @@
-import {HttpHeaders, HttpResponseBase} from "@angular/common/http";
-import {NativeDateAdapter} from "@angular/material";
+import { HttpHeaders, HttpResponseBase } from '@angular/common/http';
+import { NativeDateAdapter } from '@angular/material';
 
 export class Provincia {
     id: number = null;
@@ -8,8 +8,8 @@ export class Provincia {
 
     constructor(value?: any) {
         if (value) {
-            this.codigo = value.codigo ? value.codigo : "";
-            this.nombre = value.nombre ? value.nombre : "";
+            this.codigo = value.codigo ? value.codigo : '';
+            this.nombre = value.nombre ? value.nombre : '';
         }
     }
 }
@@ -23,20 +23,20 @@ export class Municipio {
 
 export class Usuario {
     id: number;
-    email:string;
+    email: string;
     name: string;
     lastname: string;
     username: string;
-    password:string;
+    password: string;
     rol: Rol;
 
     constructor(value?: any) {
         if (value) {
-            this.name = value.name ? value.name : "";
-            this.lastname = value.lastname ? value.lastname : "";
-            this.username = value.username ? value.username : "";
-            this.password = value.password ? value.password : "";
-            this.rol = value.rol ? value.rol : ""
+            this.name = value.name ? value.name : '';
+            this.lastname = value.lastname ? value.lastname : '';
+            this.username = value.username ? value.username : '';
+            this.password = value.password ? value.password : '';
+            this.rol = value.rol ? value.rol : ''
         }
     }
 }
@@ -54,12 +54,12 @@ export class ConsejoPopular {
 }
 
 export class PersonaAyuda {
-    id:number;
+    id: number;
     ci: string;
     nombre: string;
     primerApellido: string;
     segundoApellido: string;
-    parentesco:string;
+    parentesco: string;
 }
 
 export class Persona {
@@ -76,15 +76,15 @@ export class Persona {
     movil: string;
     telFijo: string;
     situacionLaboral: string;
-    integracion:string;
-    estadoCivil:string;
-    personasAyuda:PersonaAyuda[];
+    integracion: string;
+    estadoCivil: string;
+    personasAyuda: PersonaAyuda[];
     asociado: Persona;
 
     constructor(value?: any) {
         if (value) {
-            this.ci = value? value : ""
-            this.tipoPersona = value? value : "";
+            this.ci = value ? value : ''
+            this.tipoPersona = value ? value : '';
             //this.nombre = value.nombre ? value.nombre : "";
         }
     }
@@ -104,14 +104,14 @@ export class Solicitud {
     tramite: Tramite;
     estado: string;
     fechaAproDes: Date;
-    detallesmt:string;
-    detallesAproDesa:string;
+    detallesmt: string;
+    detallesAproDesa: string;
 }
 
 export class Parcela {
     id: number;
     consejoPopular: ConsejoPopular;
-    direccion:string;
+    direccion: string;
     persona: Persona;
     zonaCatastral: number;
     parcela: number;

@@ -1,11 +1,11 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
     FloatLabelType,
     MAT_DATE_FORMATS,
     MAT_DIALOG_DATA, MatCheckbox,
     MatDialog,
     MatDialogRef,
-    MatHorizontalStepper, MatStepper, matStepperAnimations,
+    MatStepper,
     MatTableDataSource
 } from '@angular/material';
 import {
@@ -14,14 +14,10 @@ import {
     Municipio,
     Parcela,
     Persona,
-    Provincia,
     Solicitud,
-    TipoDeUso, Usuario
+    TipoDeUso
 } from '../../../modelo';
 import {
-    CheckboxControlValueAccessor,
-    FormArray,
-    FormBuilder,
     FormControl,
     FormGroup,
     Validators
@@ -33,17 +29,9 @@ import { SolicitudService } from '../../../servicios/solicitud.service';
 import { PersonaService } from '../../../servicios/persona.service';
 import { Observable, ReplaySubject } from 'rxjs/index';
 import { PersonaWindowsComponent } from '../../solicitante/persona-windows/persona-windows.component';
-import { SelectionModel } from '@angular/cdk/collections';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { MunicipioService } from '../../../servicios/municipio.service';
-import { map, startWith } from 'rxjs/internal/operators';
-import { PersonaPipe } from '../../../pipes/persona.pipe';
-import { and, forEach } from '@angular/router/src/utils/collection';
-import { Error } from 'tslint/lib/error';
-import { isLineBreak } from 'codelyzer/angular/sourceMappingVisitor';
-import { DatePipe, formatDate } from '@angular/common';
-import { Data } from '@angular/router';
-import { parseIntAutoRadix } from '@angular/common/src/i18n/format_number';
+
 
 export const MY_FORMATS = {
     parse: {
@@ -262,34 +250,28 @@ export class SolicitudWindowComponent implements OnInit {
 
             console.log(this.formSolicitud.value);
 
-        }else {
+        } else {
             const arrOrganizaciones = this.persona.integracion.split(',');
-            console.log(arrOrganizaciones);        }
+            console.log(arrOrganizaciones);
+        }
 
-            const arrOrganizacion = this.persona.integracion.split(',');
-            console.log(arrOrganizacion);
-            for (let organizacion of this.organizaciones) {
-
-
-                for (let cont in arrOrganizaciones) {
-                    for (let organizacion of this.organizaciones) {
-                        if (arrOrganizaciones[cont] == organizacion.name) {
-                            organizacion.activo = true;
-                        }
+        const arrOrganizaciones = this.persona.integracion.split(',');
+        for (let organizacion of this.organizaciones) {
+            for (let cont in arrOrganizaciones) {
+                for (let organizacion of this.organizaciones) {
+                    if (arrOrganizaciones[cont] == organizacion.name) {
+                        organizacion.activo = true;
                     }
                 }
             }
-
-
-
-
-
-            this.dataSourceParcela= new MatTableDataSource<Parcela>(this.parcelas);
-
-            this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
-
-            this.dataSourceLinea = new MatTableDataSource<LineaDeProduccion>(this.lineasProduccion);
         }
+
+
+        this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
+
+        this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
+
+        this.dataSourceLinea = new MatTableDataSource<LineaDeProduccion>(this.lineasProduccion);
 
         this.listarTipoPersonaJuridica();
 
@@ -299,9 +281,7 @@ export class SolicitudWindowComponent implements OnInit {
                 this.consejoPopularFiltrados.next(this.consejoPopulares);
             }
         });
-
     }
-
 
     abrirVentana() {
         let dialogRef = this.dialog.open(PersonaWindowsComponent, {
@@ -397,7 +377,7 @@ export class SolicitudWindowComponent implements OnInit {
         });
     }
 
-    public selectionChange($event?: StepperSelectionEvent): void {
+    public selectionChange($event ?: StepperSelectionEvent): void {
         this.indexStepper = $event.selectedIndex;
     }
 
@@ -445,7 +425,6 @@ export class SolicitudWindowComponent implements OnInit {
     obtenerSexo(): string {
         var str = new String(this.ci);
         const sexoCI: number = parseInt(str.charAt(9));
-
         if (sexoCI % 2 === 0) {
             return 'M';
         } else {
@@ -494,7 +473,6 @@ export class SolicitudWindowComponent implements OnInit {
             if (this.insertar) {
                 this.service.insertarSolicitud(this.solicitud).subscribe(resp => {
                     let appResp = resp.body;
-                    console.log(resp);
                     if (appResp.success) {
                         for (let personaAyuda of this.listPersonaAyuda) {
                             personaAyuda.asociado = appResp.elemento.persona;
@@ -521,7 +499,8 @@ export class SolicitudWindowComponent implements OnInit {
                     this.isLoadingResults = false;
                 });
             }
-        } else {
+        }
+        else {
             const solicitud = this.formSolicitud.value;
             solicitud.persona = {...this.formPersona.value};
             solicitud.persona.perosnas = [...this.listPersonaAyuda];
