@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import {
     FloatLabelType,
     MAT_DATE_FORMATS,
@@ -18,25 +18,32 @@ import {
     Solicitud,
     TipoDeUso, Usuario
 } from '../../../modelo';
-import {CheckboxControlValueAccessor, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Information, MensajeError} from '../../../mensaje/window.mensaje';
-import {ConsejoPopularService} from '../../../servicios/consejo-popular.service';
-import {TipoDeUsoService} from '../../../servicios/tipo-de-uso.service';
-import {SolicitudService} from '../../../servicios/solicitud.service';
-import {PersonaService} from '../../../servicios/persona.service';
-import {Observable, ReplaySubject} from 'rxjs/index';
-import {PersonaWindowsComponent} from '../../solicitante/persona-windows/persona-windows.component';
-import {SelectionModel} from '@angular/cdk/collections';
-import {StepperSelectionEvent} from "@angular/cdk/stepper";
-import {MunicipioService} from "../../../servicios/municipio.service";
-import {map, startWith} from "rxjs/internal/operators";
-import {PersonaPipe} from "../../../pipes/persona.pipe";
-import {and, forEach} from "@angular/router/src/utils/collection";
-import {Error} from "tslint/lib/error";
-import {isLineBreak} from "codelyzer/angular/sourceMappingVisitor";
-import {DatePipe, formatDate} from "@angular/common";
-import {Data} from "@angular/router";
-import {parseIntAutoRadix} from "@angular/common/src/i18n/format_number";
+import {
+    CheckboxControlValueAccessor,
+    FormArray,
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    Validators
+} from '@angular/forms';
+import { Information, MensajeError } from '../../../mensaje/window.mensaje';
+import { ConsejoPopularService } from '../../../servicios/consejo-popular.service';
+import { TipoDeUsoService } from '../../../servicios/tipo-de-uso.service';
+import { SolicitudService } from '../../../servicios/solicitud.service';
+import { PersonaService } from '../../../servicios/persona.service';
+import { Observable, ReplaySubject } from 'rxjs/index';
+import { PersonaWindowsComponent } from '../../solicitante/persona-windows/persona-windows.component';
+import { SelectionModel } from '@angular/cdk/collections';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { MunicipioService } from '../../../servicios/municipio.service';
+import { map, startWith } from 'rxjs/internal/operators';
+import { PersonaPipe } from '../../../pipes/persona.pipe';
+import { and, forEach } from '@angular/router/src/utils/collection';
+import { Error } from 'tslint/lib/error';
+import { isLineBreak } from 'codelyzer/angular/sourceMappingVisitor';
+import { DatePipe, formatDate } from '@angular/common';
+import { Data } from '@angular/router';
+import { parseIntAutoRadix } from '@angular/common/src/i18n/format_number';
 
 export const MY_FORMATS = {
     parse: {
@@ -63,50 +70,50 @@ export class SolicitudWindowComponent implements OnInit {
     formSolicitud: FormGroup;
     formParcela: FormGroup;
     formPersona: FormGroup;
-    formPersonaAyuda:FormGroup;
+    formPersonaAyuda: FormGroup;
     formLineaProduccion: FormGroup;
     parcelas: Parcela[] = [];
     lineasProduccion: LineaDeProduccion[] = [];
     insertar = false;
     solicitud: Solicitud;
-    consejoPopulares: ConsejoPopular[]=[];
+    consejoPopulares: ConsejoPopular[] = [];
     tipoDeUso: TipoDeUso;
     persona: Persona;
-    personas: Persona[]=[];
+    personas: Persona[] = [];
     tipoPersona: string;
-    listPersonaAyuda: Persona[]=[];
-    indexStepper: number =0;
-    municipio:Municipio;
+    listPersonaAyuda: Persona[] = [];
+    indexStepper: number = 0;
+    municipio: Municipio;
     //datePipe: DatePipe = new DatePipe(undefined);
-    ci:string;
+    ci: string;
 
-    organizaciones =[{name:'PCC',activo:false},
-                    {name:'CTC',activo:false},
-                    {name:'ANAP',activo:false},
-                    {name:'MTT',activo:false},
-                    {name:'CDR',activo:false},
-                    {name:'ACRC',activo:false},
-                    {name:'FMC',activo:false}];
+    organizaciones = [{name: 'PCC', activo: false},
+        {name: 'CTC', activo: false},
+        {name: 'ANAP', activo: false},
+        {name: 'MTT', activo: false},
+        {name: 'CDR', activo: false},
+        {name: 'ACRC', activo: false},
+        {name: 'FMC', activo: false}];
 
-    displayedColumnsParcela: string[] = ['contador', 'zonaCatastral', 'parcela', 'divicion','direccion','area', 'acciones'];
-    displayedColumnsLinea: string[] = ['contador','lineaDeProduccion', 'areaDedicada', 'acciones'];
-    displayedColumnsPersonaAyuda: string[] = ['contador','ci', 'nombre','primerApellido','segundoApellido','parentesco','acciones'];
+    displayedColumnsParcela: string[] = ['contador', 'zonaCatastral', 'parcela', 'divicion', 'direccion', 'area', 'acciones'];
+    displayedColumnsLinea: string[] = ['contador', 'lineaDeProduccion', 'areaDedicada', 'acciones'];
+    displayedColumnsPersonaAyuda: string[] = ['contador', 'ci', 'nombre', 'primerApellido', 'segundoApellido', 'parentesco', 'acciones'];
     dataSourceParcela = new MatTableDataSource<Parcela>();
     dataSourceLinea = new MatTableDataSource<LineaDeProduccion>();
     dataSourcePersonaAyuda = new MatTableDataSource<Persona>();
     public personasFiltradas: ReplaySubject<Persona[]> = new ReplaySubject<Persona[]>(1);
     public consejoPopularFiltrados: ReplaySubject<ConsejoPopular[]> = new ReplaySubject<ConsejoPopular[]>(1);
 
-    constructor( public dialogRef: MatDialogRef<SolicitudWindowComponent>, @Inject(MAT_DIALOG_DATA){id, municipio, tipoDecreto = '300', tipoSolicitud = 'Nueva', fechaSolicitud = new Date(), numExpediente, persona, parcelas, lineasDeProduccion, areaSolicitada, estado = 'Por Tramitar',detallesmt}: Solicitud, private service: SolicitudService, private consejoPopularService: ConsejoPopularService, private tipodeUsoService: TipoDeUsoService, private personaService: PersonaService,private municipioService:MunicipioService, private dialog: MatDialog) {
+    constructor(public dialogRef: MatDialogRef<SolicitudWindowComponent>, @Inject(MAT_DIALOG_DATA){id, municipio, tipoDecreto = '300', tipoSolicitud = 'Nueva', fechaSolicitud = new Date(), numExpediente, persona, parcelas, lineasDeProduccion, areaSolicitada, estado = 'Por Tramitar', detallesmt}: Solicitud, private service: SolicitudService, private consejoPopularService: ConsejoPopularService, private tipodeUsoService: TipoDeUsoService, private personaService: PersonaService, private municipioService: MunicipioService, private dialog: MatDialog) {
         this.insertar = id == null;
         this.municipio = municipio;
         this.idSolicitud = id;
         this.parcelas = parcelas;
         this.lineasProduccion = lineasDeProduccion;
-        if (this.insertar){
+        if (this.insertar) {
             this.persona = new Persona();
             this.persona.tipoPersona = 'Natural';
-        }else{
+        } else {
             this.persona = persona;
         }
 
@@ -120,7 +127,7 @@ export class SolicitudWindowComponent implements OnInit {
             fechaSolicitud: new FormControl(fechaSolicitud),
             numExpediente: new FormControl(numExpediente, [Validators.required]),
             areaSolicitada: new FormControl(areaSolicitada, [Validators.required]),
-            detallesMT: new FormControl(detallesmt,[Validators.required]),
+            detallesMT: new FormControl(detallesmt, [Validators.required]),
             estado: new FormControl(estado),
         });
 
@@ -150,9 +157,9 @@ export class SolicitudWindowComponent implements OnInit {
             primerApellido: new FormControl('', [Validators.required]),
             segundoApellido: new FormControl('', [Validators.required]),
             parentesco: new FormControl('', [Validators.required]),
-            consejoPopular: new FormControl('', [Validators.required]),
-            edad: new FormControl('', [Validators.required]),
-            sexo: new FormControl('', [Validators.required]),
+            consejoPopular: new FormControl('', []),
+            edad: new FormControl('', []),
+            sexo: new FormControl('', []),
             movil: new FormControl('-'),
             telFijo: new FormControl('-'),
             situacionLaboral: new FormControl('-'),
@@ -183,30 +190,30 @@ export class SolicitudWindowComponent implements OnInit {
 
 
         this.formPersona.get('ci').valueChanges.subscribe(value => {
-            if (this.formPersona.get('ci').valid){
-                if (this.ci != value){
+            if (this.formPersona.get('ci').valid) {
+                if (this.ci != value) {
                     this.ci = value;
                     console.log(value);
 
-                    this.personaService.obtenerPorCI(value).subscribe(resp=>{
-                        if (resp.body.success && resp.body.elemento){
+                    this.personaService.obtenerPorCI(value).subscribe(resp => {
+                        if (resp.body.success && resp.body.elemento) {
                             this.formPersona.patchValue(resp.body.elemento);
-                        }else {
-                            if (this.formPersona.get('tipoPersona').value == 'Natural'){
+                        } else {
+                            if (this.formPersona.get('tipoPersona').value == 'Natural') {
                                 this.formPersona.get('edad').setValue(this.obtenerEdad());
                                 this.formPersona.get('sexo').setValue(this.obtenerSexo());
                             }
                         }
                     });
                 }
-            }else {
+            } else {
                 this.resetForm('Persona');
             }
         });
 
         this.formPersonaAyuda.get('ci').valueChanges.subscribe(value => {
 
-            if (this.formPersonaAyuda.get('ci').valid){
+            if (this.formPersonaAyuda.get('ci').valid) {
                 if (this.ci != value) {
 
                     this.ci = value;
@@ -241,34 +248,34 @@ export class SolicitudWindowComponent implements OnInit {
                 }
             });
 
-            this.municipioService.obtenerMunicipioPorCodigo('02').subscribe(resp=>{
-               if (resp.body.success){
-                   this.formSolicitud.get('municipio').setValue(resp.body.elemento);
-               }
+            this.municipioService.obtenerMunicipioPorCodigo('02').subscribe(resp => {
+                if (resp.body.success) {
+                    this.formSolicitud.get('municipio').setValue(resp.body.elemento);
+                }
             });
 
             this.service.obtenerUltimSolicitud().subscribe(resp => {
-                if (resp.body.success && resp.body.total!=0) {
+                if (resp.body.success && resp.body.total != 0) {
                     this.formSolicitud.get('numExpediente').setValue((resp.body.elemento.numExpediente) + 1);
                 }
             });
 
             console.log(this.formSolicitud.value);
-        }else{
+        } else {
             const arrOrganizacion = this.persona.integracion.split(',');
             console.log(arrOrganizacion);
-            for (let organizacion of this.organizaciones ){
+            for (let organizacion of this.organizaciones) {
 
             }
 
-            this.dataSourceParcela= new MatTableDataSource<Parcela>(this.parcelas);
+            this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
             this.dataSourceLinea = new MatTableDataSource<LineaDeProduccion>(this.lineasProduccion);
         }
 
         this.listarTipoPersonaJuridica();
 
-        this.consejoPopularService.listarTodasConsejoPopular().subscribe(resp =>{
-            if (resp.body.success){
+        this.consejoPopularService.listarTodasConsejoPopular().subscribe(resp => {
+            if (resp.body.success) {
                 this.consejoPopulares = resp.body.elementos;
                 this.consejoPopularFiltrados.next(this.consejoPopulares);
             }
@@ -298,18 +305,18 @@ export class SolicitudWindowComponent implements OnInit {
     addParcela() {
         let esta = false;
         if (this.formParcela.valid) {
-            for (var cont in this.parcelas){
+            for (var cont in this.parcelas) {
                 if (this.parcelas[cont].zonaCatastral == this.formParcela.get('zonaCatastral').value && this.parcelas[cont].parcela == this.formParcela.get('parcela').value && this.parcelas[cont].divicion == this.formParcela.get('divicion').value) {
                     esta = true;
                     break;
                 }
             }
 
-            if (esta != true){
+            if (esta != true) {
                 this.formParcela.get('contador').setValue(this.formParcela.get('contador').value + 1);
                 this.parcelas.push(this.formParcela.value);
                 this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
-            }else {
+            } else {
                 this.dialog.open(MensajeError, {
                     width: '400px',
                     data: {mensaje: 'La parcela ya se encuentra en la lista:'}
@@ -321,18 +328,18 @@ export class SolicitudWindowComponent implements OnInit {
     addLineasProduccion() {
         let esta = false;
         if (this.formLineaProduccion.valid) {
-            for (let lineaDeProduccion of this.lineasProduccion){
+            for (let lineaDeProduccion of this.lineasProduccion) {
                 if (lineaDeProduccion.lineaDeProduccion == this.formLineaProduccion.get('lineaDeProduccion').value) {
                     esta = true;
                     break;
                 }
             }
 
-            if (esta != true){
+            if (esta != true) {
                 this.formLineaProduccion.get('contador').setValue(this.formLineaProduccion.get('contador').value + 1);
                 this.lineasProduccion.push(this.formLineaProduccion.value);
                 this.dataSourceLinea = new MatTableDataSource<LineaDeProduccion>(this.lineasProduccion);
-            }else {
+            } else {
                 this.dialog.open(MensajeError, {
                     width: '400px',
                     data: {mensaje: 'La linea de producción ya se encuentra en la lista:'}
@@ -342,20 +349,16 @@ export class SolicitudWindowComponent implements OnInit {
     }
 
     addPersonaAyuda() {
-        let esta = false;
         if (this.formPersonaAyuda.valid) {
-            for (let personaAyuda of this.listPersonaAyuda){
-                if (personaAyuda.ci == this.formPersonaAyuda.get('ci').value) {
-                    esta = true;
-                    break;
-                }
-            }
-
-            if (esta != true){
+            const value = this.formPersonaAyuda.get('ci').value;
+            const esta = this.listPersonaAyuda.some(personaAyuda => personaAyuda.ci == value);
+            console.log(esta);
+            if (!esta) {
                 this.formPersonaAyuda.get('contador').setValue(this.formPersonaAyuda.get('contador').value + 1);
-                this.listPersonaAyuda.push(this.formPersonaAyuda.value);
+                const tempPersona = this.formPersonaAyuda.value as Persona;
+                this.listPersonaAyuda.push(tempPersona);
                 this.dataSourcePersonaAyuda = new MatTableDataSource<Persona>(this.listPersonaAyuda);
-            }else {
+            } else {
                 this.dialog.open(MensajeError, {
                     width: '400px',
                     data: {mensaje: 'La persona ya se encuentra en la lista:'}
@@ -368,7 +371,7 @@ export class SolicitudWindowComponent implements OnInit {
         this.personaService.listarPorTipoPersona('Juridica').subscribe(resp => {
             if (resp.body.success) {
                 this.personas = resp.body.elementos;
-                console.log(this.personas );
+                console.log(this.personas);
                 this.personasFiltradas.next(this.personas);
                 console.log(this.personasFiltradas);
             }
@@ -379,76 +382,76 @@ export class SolicitudWindowComponent implements OnInit {
         this.indexStepper = $event.selectedIndex;
     }
 
-    controlStepper (stepper:MatStepper, next:boolean):void{
-        if (next){
+    controlStepper(stepper: MatStepper, next: boolean): void {
+        if (next) {
             stepper.next();
-        }else {
+        } else {
             stepper.previous();
         }
     }
 
-    obtenerEdad():number{
+    obtenerEdad(): number {
         var str = new String(this.ci);
-        const anio: number = parseInt(str.charAt(0)+''+str.charAt(1));
-        const mes: number = parseInt(str.charAt(2)+''+str.charAt(3));
-        const dia: number = parseInt(str.charAt(4)+''+str.charAt(5));
-        var anioA: number = new Date().getFullYear()-2000;
-        var mesA: number = new Date().getMonth()+1;
+        const anio: number = parseInt(str.charAt(0) + '' + str.charAt(1));
+        const mes: number = parseInt(str.charAt(2) + '' + str.charAt(3));
+        const dia: number = parseInt(str.charAt(4) + '' + str.charAt(5));
+        var anioA: number = new Date().getFullYear() - 2000;
+        var mesA: number = new Date().getMonth() + 1;
         var diaA: number = new Date().getDate();
 
 
-        var edad:number;
+        var edad: number;
 
-        if (mes == mesA){
-            if (diaA>dia || diaA==dia ){
-                edad = 100-anio+anioA;
-            }else {
-                edad = 100-anio+anioA-1;
+        if (mes == mesA) {
+            if (diaA > dia || diaA == dia) {
+                edad = 100 - anio + anioA;
+            } else {
+                edad = 100 - anio + anioA - 1;
             }
-        } else if (mesA > mes ){
-            edad = 100-anio+anioA;
+        } else if (mesA > mes) {
+            edad = 100 - anio + anioA;
         } else {
-            edad = 100-anio+anioA-1;
+            edad = 100 - anio + anioA - 1;
         }
 
-       str = new String (edad);
+        str = new String(edad);
 
-        if(str.length == 3){
+        if (str.length == 3) {
             edad = parseInt(str.slice(1));
         }
 
         return edad;
     }
 
-    obtenerSexo():string{
+    obtenerSexo(): string {
         var str = new String(this.ci);
         const sexoCI: number = parseInt(str.charAt(9));
 
-        if (sexoCI % 2 === 0){
+        if (sexoCI % 2 === 0) {
             return 'M';
-        }else{
+        } else {
             return 'F';
         }
     }
 
-    agregarIntgra(valor:string){
-        if (!this.formPersona.get('integracion').value){
+    agregarIntgra(valor: string) {
+        if (!this.formPersona.get('integracion').value) {
             this.formPersona.get('integracion').setValue(valor);
         } else {
-            this.formPersona.get('integracion').setValue(this.formPersona.get('integracion').value+","+valor);
+            this.formPersona.get('integracion').setValue(this.formPersona.get('integracion').value + ',' + valor);
         }
         console.log(this.formPersona.get('integracion').value);
     }
 
-    quitarIntgra(valor:string){
+    quitarIntgra(valor: string) {
         var str = this.formPersona.get('integracion').value;
-        var arregIntegra = str.split(",");
+        var arregIntegra = str.split(',');
         console.log(arregIntegra);
 
-        for (var cont in arregIntegra){
+        for (var cont in arregIntegra) {
             console.log(cont);
-            if (arregIntegra[cont] == valor){
-                arregIntegra.splice(cont,1);
+            if (arregIntegra[cont] == valor) {
+                arregIntegra.splice(cont, 1);
                 break;
             }
             console.log(arregIntegra[cont]);
@@ -474,11 +477,11 @@ export class SolicitudWindowComponent implements OnInit {
                     let appResp = resp.body;
                     console.log(resp);
                     if (appResp.success) {
-                        for (let personaAyuda of this.listPersonaAyuda){
+                        for (let personaAyuda of this.listPersonaAyuda) {
                             personaAyuda.asociado = appResp.elemento.persona;
                         }
-                        this.personaService.insertarlistPersona(this.listPersonaAyuda).subscribe(resp=>{
-                            if (resp.body.success ){
+                        this.personaService.insertarlistPersona(this.listPersonaAyuda).subscribe(resp => {
+                            if (resp.body.success) {
                                 console.log(resp.body.elementos);
                             }
                         });
@@ -499,7 +502,7 @@ export class SolicitudWindowComponent implements OnInit {
                     this.isLoadingResults = false;
                 });
             }
-        }else{
+        } else {
             const solicitud = this.formSolicitud.value;
             solicitud.persona = {...this.formPersona.value};
             solicitud.persona.perosnas = [...this.listPersonaAyuda];
@@ -507,7 +510,7 @@ export class SolicitudWindowComponent implements OnInit {
             solicitud.lineasDeProduccion = [...this.lineasProduccion];
             this.solicitud = solicitud;
             console.log(this.solicitud);
-            for (let personaAyuda of this.listPersonaAyuda){
+            for (let personaAyuda of this.listPersonaAyuda) {
                 personaAyuda.asociado = this.formPersona.value;
                 console.log(personaAyuda);
             }
@@ -527,8 +530,8 @@ export class SolicitudWindowComponent implements OnInit {
         this.dialogRef.close(false);
     }
 
-    resetForm(form:string){
-        if (form == 'Persona'){
+    resetForm(form: string) {
+        if (form == 'Persona') {
             this.formPersona.get('nombre').reset();
             this.formPersona.get('primerApellido').reset();
             this.formPersona.get('segundoApellido').reset();
