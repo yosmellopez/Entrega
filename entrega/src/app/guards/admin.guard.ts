@@ -10,18 +10,17 @@ export class AdminGuard implements CanActivate {
     }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Promise<boolean> {
-        //if (this.accountService.isAuthenticated()) {
+        if (this.accountService.isAuthenticated()) {
             const authorities = route.data['roles'];
             console.log(authorities);
             // We need to call the checkLogin / and so the accountService.identity() function, to ensure,
             // that the client has a principal too, if they already logged in by the server.
             // This could happen on a page refresh.
             return this.checkLogin(authorities);
-        //}else {
-            //this.router.navigate(["/login"]);
-          //  return false;
-
-       // }
+        }else {
+            this.router.navigate(["/login"]);
+            return false;
+       }
     }
 
     checkLogin(authorities: string[]): Promise<boolean> {

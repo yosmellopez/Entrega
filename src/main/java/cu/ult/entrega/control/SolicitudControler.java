@@ -5,16 +5,10 @@
  */
 package cu.ult.entrega.control;
 
-import cu.ult.entrega.clases.LineaDeProduccion;
-import cu.ult.entrega.clases.Parcela;
-import cu.ult.entrega.clases.Persona;
-import cu.ult.entrega.clases.Solicitud;
+import cu.ult.entrega.clases.*;
 import cu.ult.entrega.excepcion.MunicipioException;
 import cu.ult.entrega.excepcion.SolicitudException;
-import cu.ult.entrega.repositorio.LineaDeProduccionRepositorio;
-import cu.ult.entrega.repositorio.ParcelaRepositorio;
-import cu.ult.entrega.repositorio.PersonaRepositorio;
-import cu.ult.entrega.repositorio.SolicitudRepositorio;
+import cu.ult.entrega.repositorio.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -54,6 +48,9 @@ public class SolicitudControler {
 
     @Autowired
     PersonaRepositorio personaRepositorio;
+
+    @Autowired
+    PersonaAyudaRepositorio personaAyudaRepositorio;
 
     @RequestMapping(value = "/solicitud")
     public ResponseEntity<AppResponse<Solicitud>> listarSolicitud(Pageable p) {
@@ -97,7 +94,10 @@ public class SolicitudControler {
 
     @PostMapping(value = "/solicitud")
     public ResponseEntity<AppResponse<Solicitud>> insertarSolicitud(@RequestBody Solicitud solicitud) {
-        System.out.println(solicitud.getPersona().getPersonas());
+        //System.out.println(solicitud.getPersona().getPersonas());
+        List<PersonaAyuda> personaAyudaList = solicitud.getPersona().getPersonasAyuda();
+        List<PersonaAyuda> personaAyudaGuard = null;
+        Persona persona = solicitud.getPersona();
         Set<Parcela> parcelas = solicitud.getParcelas();
         Set<Parcela> parcelasGuardadas = new HashSet<>();
         List<LineaDeProduccion> lineasDeProduccion = solicitud.getLineasDeProduccion();
@@ -106,6 +106,17 @@ public class SolicitudControler {
             parcelasGuardadas.add(parcelaRepositorio.saveAndFlush(parcela));
         }
         solicitud.setParcelas(parcelasGuardadas);
+
+        for (PersonaAyuda personaAyuda : personaAyudaList) {
+           // personaAyuda.setAsociado(persona);
+            personaAyudaGuard.add(personaAyudaRepositorio.saveAndFlush(personaAyuda));
+        }
+
+        persona.setPersonasAyuda(personaAyudaGuard);
+
+        personaRepositorio.saveAndFlush(persona);
+
+        solicitud.setPersona(persona);
 
         solicitudRepositorio.saveAndFlush(solicitud);
 

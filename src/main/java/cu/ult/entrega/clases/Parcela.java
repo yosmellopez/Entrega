@@ -148,6 +148,26 @@ public class Parcela implements Serializable {
         this.area = area;
     }
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getCondicActual() {
+        return condicActual;
+    }
+
+    public void setCondicActual(String condicActual) {
+        this.condicActual = condicActual;
+    }
+
     public String getLimiteN() {
         return limiteN;
     }

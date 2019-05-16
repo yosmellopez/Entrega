@@ -13,7 +13,7 @@ import {
     LineaDeProduccion,
     Municipio,
     Parcela,
-    Persona,
+    Persona, PersonaAyuda,
     Provincia,
     Solicitud,
     TipoDeUso, Usuario
@@ -81,7 +81,7 @@ export class SolicitudWindowComponent implements OnInit {
     persona: Persona;
     personas: Persona[] = [];
     tipoPersona: string;
-    listPersonaAyuda: Persona[] = [];
+    listPersonaAyuda: PersonaAyuda[] = [];
     indexStepper: number = 0;
     municipio: Municipio;
     //datePipe: DatePipe = new DatePipe(undefined);
@@ -95,12 +95,12 @@ export class SolicitudWindowComponent implements OnInit {
         {name: 'ACRC', activo: false},
         {name: 'FMC', activo: false}];
 
-    displayedColumnsParcela: string[] = ['contador', 'zonaCatastral', 'parcela', 'divicion', 'direccion', 'area', 'acciones'];
+    displayedColumnsParcela: string[] = ['contador', 'zonaCatastral', 'parcela', 'divicion','area', 'acciones'];
     displayedColumnsLinea: string[] = ['contador', 'lineaDeProduccion', 'areaDedicada', 'acciones'];
     displayedColumnsPersonaAyuda: string[] = ['contador', 'ci', 'nombre', 'primerApellido', 'segundoApellido', 'parentesco', 'acciones'];
     dataSourceParcela = new MatTableDataSource<Parcela>();
     dataSourceLinea = new MatTableDataSource<LineaDeProduccion>();
-    dataSourcePersonaAyuda = new MatTableDataSource<Persona>();
+    dataSourcePersonaAyuda = new MatTableDataSource<PersonaAyuda>();
     public personasFiltradas: ReplaySubject<Persona[]> = new ReplaySubject<Persona[]>(1);
     public consejoPopularFiltrados: ReplaySubject<ConsejoPopular[]> = new ReplaySubject<ConsejoPopular[]>(1);
 
@@ -108,13 +108,15 @@ export class SolicitudWindowComponent implements OnInit {
         this.insertar = id == null;
         this.municipio = municipio;
         this.idSolicitud = id;
-        this.parcelas = parcelas;
-        this.lineasProduccion = lineasDeProduccion;
+
         if (this.insertar) {
             this.persona = new Persona();
             this.persona.tipoPersona = 'Natural';
         } else {
             this.persona = persona;
+            this.parcelas = parcelas;
+            this.lineasProduccion = lineasDeProduccion;
+            this.listPersonaAyuda = persona.personasAyuda;
         }
 
         //this.tipoPersona = this.persona.tipoPersona;
@@ -150,20 +152,12 @@ export class SolicitudWindowComponent implements OnInit {
         });
 
         this.formPersonaAyuda = new FormGroup({
-            tipoPersona: new FormControl('Natural'),
             contador: new FormControl(0, []),
             ci: new FormControl('', [Validators.required, Validators.maxLength(11), Validators.minLength(11)]),
             nombre: new FormControl('', [Validators.required]),
             primerApellido: new FormControl('', [Validators.required]),
             segundoApellido: new FormControl('', [Validators.required]),
             parentesco: new FormControl('', [Validators.required]),
-            consejoPopular: new FormControl('', []),
-            edad: new FormControl('', []),
-            sexo: new FormControl('', []),
-            movil: new FormControl('-'),
-            telFijo: new FormControl('-'),
-            situacionLaboral: new FormControl('-'),
-            dirParticular: new FormControl('-'),
         });
 
         this.formParcela = new FormGroup({
@@ -211,23 +205,7 @@ export class SolicitudWindowComponent implements OnInit {
             }
         });
 
-        this.formPersonaAyuda.get('ci').valueChanges.subscribe(value => {
 
-            if (this.formPersonaAyuda.get('ci').valid) {
-                if (this.ci != value) {
-
-                    this.ci = value;
-                    console.log(value);
-                    this.formPersonaAyuda.get('edad').setValue(this.obtenerEdad());
-                    this.formPersonaAyuda.get('sexo').setValue(this.obtenerSexo());
-                }
-            }
-        });
-
-        this.formParcela.valueChanges.subscribe(value => {
-            if (this.formParcela.get('zonaCatastral').value && this.formParcela.get('parcela').value && this.formParcela.get('divicion').value) {
-            }
-        });
     }
 
     ngOnInit() {
@@ -238,14 +216,15 @@ export class SolicitudWindowComponent implements OnInit {
             this.consejoPopularService.listarConsejoPopularNoDefinido('No Definido').subscribe(resp => {
                 if (resp.body.success) {
                     this.formParcela.get('consejoPopular').setValue(resp.body.elemento);
-                    this.formPersonaAyuda.get('consejoPopular').setValue(resp.body.elemento);
                 }
             });
 
             this.tipodeUsoService.listarTipoDeUsoNoDefinido('No Definido').subscribe(resp => {
                 if (resp.body.success) {
+                    console.log(resp.body.elemento);
                     this.formParcela.get('tipoDeUso').setValue(resp.body.elemento);
                 }
+                console.log(this.formParcela.value);
             });
 
             this.municipioService.obtenerMunicipioPorCodigo('02').subscribe(resp => {
@@ -264,29 +243,24 @@ export class SolicitudWindowComponent implements OnInit {
 
         }else {
             const arrOrganizaciones = this.persona.integracion.split(',');
-            console.log(arrOrganizaciones);        }
+            console.log(arrOrganizaciones);
 
             const arrOrganizacion = this.persona.integracion.split(',');
             console.log(arrOrganizacion);
             for (let organizacion of this.organizaciones) {
 
-
-                for (let cont in arrOrganizaciones) {
+                for (let cont in arrOrganizacion) {
                     for (let organizacion of this.organizaciones) {
-                        if (arrOrganizaciones[cont] == organizacion.name) {
+                        if (arrOrganizacion[cont] == organizacion.name) {
                             organizacion.activo = true;
                         }
                     }
                 }
             }
 
-
-
-
-
             this.dataSourceParcela= new MatTableDataSource<Parcela>(this.parcelas);
 
-            this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
+            this.dataSourcePersonaAyuda = new MatTableDataSource<PersonaAyuda>(this.persona.personasAyuda);
 
             this.dataSourceLinea = new MatTableDataSource<LineaDeProduccion>(this.lineasProduccion);
         }
@@ -372,11 +346,11 @@ export class SolicitudWindowComponent implements OnInit {
             const value = this.formPersonaAyuda.get('ci').value;
             const esta = this.listPersonaAyuda.some(personaAyuda => personaAyuda.ci == value);
             console.log(esta);
+
             if (!esta) {
                 this.formPersonaAyuda.get('contador').setValue(this.formPersonaAyuda.get('contador').value + 1);
-                const tempPersona = this.formPersonaAyuda.value as Persona;
-                this.listPersonaAyuda.push(tempPersona);
-                this.dataSourcePersonaAyuda = new MatTableDataSource<Persona>(this.listPersonaAyuda);
+                this.listPersonaAyuda.push(this.formPersonaAyuda.value);
+                this.dataSourcePersonaAyuda = new MatTableDataSource<PersonaAyuda>(this.listPersonaAyuda);
             } else {
                 this.dialog.open(MensajeError, {
                     width: '400px',
@@ -487,6 +461,7 @@ export class SolicitudWindowComponent implements OnInit {
         if (this.formSolicitud.valid && this.formPersona.valid && this.formPersonaAyuda.valid && this.formParcela.valid && this.formLineaProduccion.valid) {
             const solicitud = this.formSolicitud.value;
             solicitud.persona = {...this.formPersona.value};
+            solicitud.persona.personasAyuda = {...this.listPersonaAyuda}
             solicitud.parcelas = [...this.parcelas];
             solicitud.lineasDeProduccion = [...this.lineasProduccion];
             this.solicitud = solicitud;
@@ -496,14 +471,6 @@ export class SolicitudWindowComponent implements OnInit {
                     let appResp = resp.body;
                     console.log(resp);
                     if (appResp.success) {
-                        for (let personaAyuda of this.listPersonaAyuda) {
-                            personaAyuda.asociado = appResp.elemento.persona;
-                        }
-                        this.personaService.insertarlistPersona(this.listPersonaAyuda).subscribe(resp => {
-                            if (resp.body.success) {
-                                console.log(resp.body.elementos);
-                            }
-                        });
                         this.dialogRef.close(appResp);
                     } else {
                         this.dialog.open(MensajeError, {width: '400px', data: {mensaje: appResp.msg}});
@@ -529,10 +496,6 @@ export class SolicitudWindowComponent implements OnInit {
             solicitud.lineasDeProduccion = [...this.lineasProduccion];
             this.solicitud = solicitud;
             console.log(this.solicitud);
-            for (let personaAyuda of this.listPersonaAyuda) {
-                personaAyuda.asociado = this.formPersona.value;
-                console.log(personaAyuda);
-            }
             console.log(this.listPersonaAyuda);
         }
     }

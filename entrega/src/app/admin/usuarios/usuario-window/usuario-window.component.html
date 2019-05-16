@@ -31,13 +31,15 @@
             </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width" *ngIf="insertar">
-            <input matInput placeholder="Contraseña" formControlName="password">
+            <input matInput placeholder="Contraseña" formControlName="password" [type]="hide ? 'password' : 'text'">
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             <mat-error *ngIf="form.controls['password'].errors?.required">
                 Debe insertar una contraseña.
             </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width" *ngIf="insertar">
-            <input matInput placeholder="Confirme Contraseña" formControlName="confirmPassword" [errorStateMatcher]="matcher">
+            <input matInput placeholder="Confirme Contraseña" formControlName="confirmPassword" [errorStateMatcher]="matcher" [type]="hide ? 'password' : 'text'">
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             <mat-error *ngIf="form.controls['confirmPassword'].errors?.required">
                 Debe confirmar la contraseña.
             </mat-error>

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {AccountService} from "../../guards/account.service";
+import {Usuario} from "../../modelo";
 
 @Component({
   selector: 'app-inicio',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InicioComponent implements OnInit {
 
-  constructor() { }
+   usurio:string;
+   nameRol:string
+
+  constructor(private accountService: AccountService) { }
 
   ngOnInit() {
+      this.accountService.identity().then(account => {
+          this.usurio = account.username;
+          this.nameRol= account.rol.name;
+      });
   }
 
 }

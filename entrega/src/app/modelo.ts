@@ -60,6 +60,7 @@ export class PersonaAyuda {
     primerApellido: string;
     segundoApellido: string;
     parentesco:string;
+    asociado: Persona;
 }
 
 export class Persona {

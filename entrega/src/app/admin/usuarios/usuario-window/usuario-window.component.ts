@@ -42,6 +42,7 @@ export class UsuarioWindowComponent implements OnInit {
     usuario: Usuario;
     roles: Rol[] = [];
     //igual:boolean;
+    hide = true;
     public rolesFiltrados: ReplaySubject<Rol[]> = new ReplaySubject<Rol[]>(1);
 
     matcher = new MyErrorStateMatcher();

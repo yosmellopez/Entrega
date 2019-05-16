@@ -42,7 +42,7 @@ public class Solicitud implements Serializable {
     @Column(name = "numExpediente")
     private Integer numExpediente;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_solicitud_persona"))
     private Persona persona;
 
@@ -74,8 +74,7 @@ public class Solicitud implements Serializable {
     @Column(name = "detallesAproDesa")
     private String detallesAproDesa;
 
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey (name = "fk_solicitud_municipio"))
     private Municipio municipio;
 

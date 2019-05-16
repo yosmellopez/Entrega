@@ -90,6 +90,7 @@ public class Persona implements Serializable {
     private int experienciaAgricola;
 
     @OneToMany(mappedBy = "asociado")
+    @JsonManagedReference
     private List<PersonaAyuda> personasAyuda;
 
     @JsonIgnore
