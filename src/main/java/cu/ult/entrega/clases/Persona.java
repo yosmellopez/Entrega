@@ -72,8 +72,7 @@ public class Persona implements Serializable {
     @Column(name = "experiencia_agricola")
     private Integer experienciaAgricola;
 
-    @OneToMany(mappedBy = "asociado")
-    @JsonManagedReference
+    @OneToMany(mappedBy = "asociado", cascade = CascadeType.PERSIST)
     private List<PersonaAyuda> personasAyuda;
 
     @JsonIgnore

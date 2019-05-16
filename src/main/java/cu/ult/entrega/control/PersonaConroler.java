@@ -53,6 +53,12 @@ public class PersonaConroler {
         return ResponseEntity.ok(success(personas).total(page.getTotalElements()).build());
     }
 
+    @RequestMapping(value = "/persona/todas")
+    public ResponseEntity<AppResponse<Persona>> listarTodasPersonas() {
+        List<Persona> personas = personaRepositorio.findAll();
+        return ResponseEntity.ok(success(personas).total(personas.size()).build());
+    }
+
     @RequestMapping(value = "/integracion")
     public ResponseEntity<AppResponse<Integracion>> listarIntegracion() {
         List<Integracion> integracions = integracionRepository.findAll();

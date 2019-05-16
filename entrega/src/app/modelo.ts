@@ -76,7 +76,7 @@ export class Persona {
     nombre: string;
     primerApellido: string;
     segundoApellido: string;
-    sexo: boolean;
+    sexo: boolean = true;
     dirParticular: string;
     edad: number;
     movil: string;
@@ -84,7 +84,7 @@ export class Persona {
     situacionLaboral: string;
     integraciones: Integracion[] = [];
     estadoCivil: string;
-    personasAyuda: PersonaAyuda[];
+    personasAyuda: PersonaAyuda[] = [];
     asociado: Persona;
 
     constructor(value?: any) {

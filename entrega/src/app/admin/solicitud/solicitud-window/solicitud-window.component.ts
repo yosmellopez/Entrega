@@ -126,12 +126,12 @@ export class SolicitudWindowComponent implements OnInit {
             segundoApellido: new FormControl(this.persona.segundoApellido, [Validators.required]),
             sexo: new FormControl(this.persona.sexo, [Validators.required]),
             dirParticular: new FormControl(this.persona.dirParticular, [Validators.required]),
-            edad: new FormControl(this.persona.edad, [Validators.required]),
+            edad: new FormControl(this.persona.edad, []),
             movil: new FormControl(this.persona.movil, [Validators.required, Validators.maxLength(8)]),
             telFijo: new FormControl(this.persona.telFijo, [Validators.required, Validators.maxLength(8)]),
             situacionLaboral: new FormControl(this.persona.situacionLaboral, [Validators.required]),
             integraciones: new FormArray([]),
-            // asociado: new FormControl(this.persona.asociado, [Validators.required]),
+            asociado: new FormControl(this.persona.asociado, [Validators.required]),
             parentesco: new FormControl('Vinculacion', [Validators.required]),
         });
 
@@ -177,7 +177,6 @@ export class SolicitudWindowComponent implements OnInit {
                         } else {
                             if (this.formPersona.get('tipoPersona').value == 'Natural') {
                                 this.formPersona.get('edad').setValue(this.obtenerEdad());
-                                this.formPersona.get('sexo').setValue(this.obtenerSexo());
                             }
                         }
                     });
@@ -225,6 +224,9 @@ export class SolicitudWindowComponent implements OnInit {
                 this.consejoPopularFiltrados.next(this.consejoPopulares);
             }
         });
+        this.personaService.listarTodasPersona().subscribe(resp => {
+            this.personas = resp.body.elementos;
+        });
         this.listarTipoPersonaJuridica();
         this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
         this.dataSourcePersonaAyuda = new MatTableDataSource<PersonaAyuda>(this.persona.personasAyuda);
@@ -246,7 +248,6 @@ export class SolicitudWindowComponent implements OnInit {
 
 
     addParcela() {
-        console.log(this.formParcela.value);
         if (this.formParcela.valid) {
             if (this.dataSourceParcela.data.length === 0) {
                 const parcela = this.formParcela.value as Parcela;
@@ -365,22 +366,11 @@ export class SolicitudWindowComponent implements OnInit {
         return edad;
     }
 
-    obtenerSexo(): string {
-        var str = new String(this.ci);
-        const sexoCI: number = parseInt(str.charAt(9));
-        if (sexoCI % 2 === 0) {
-            return 'M';
-        } else {
-            return 'F';
-        }
-    }
-
     insertarSolicitud(): void {
-        console.log(this.formPersona.value);
         if (this.formSolicitud.valid && this.formPersona.valid && this.formPersonaAyuda.valid && this.formParcela.valid && this.formLineaProduccion.valid) {
             const solicitud = this.formSolicitud.value as Solicitud;
             solicitud.persona = {...this.formPersona.value};
-            solicitud.persona.personasAyuda = {...this.listPersonaAyuda}
+            solicitud.persona.personasAyuda = [...this.listPersonaAyuda];
             solicitud.parcelas = [...this.parcelas];
             solicitud.lineasDeProduccion = [...this.lineasProduccion];
             this.solicitud = solicitud;

@@ -84,9 +84,9 @@ public class SolicitudControler {
     @RequestMapping(value = "/solicitud/ultima")
     public ResponseEntity<AppResponse<Solicitud>> obtenerLaUltimaSolicitud() {
         Solicitud solicitud = solicitudRepositorio.findTopByOrderByNumExpedienteDesc();
-        if (solicitud != null){
+        if (solicitud != null) {
             return ResponseEntity.ok(success(solicitud).total(1).build());
-        }else{
+        } else {
             return ResponseEntity.ok(success(solicitud).build());
         }
 
@@ -95,7 +95,6 @@ public class SolicitudControler {
     @PostMapping(value = "/solicitud")
     public ResponseEntity<AppResponse<Solicitud>> insertarSolicitud(@RequestBody Solicitud solicitud) {
         //System.out.println(solicitud.getPersona().getPersonas());
-        List<PersonaAyuda> personaAyudaList = solicitud.getPersona().getPersonasAyuda();
         List<PersonaAyuda> personaAyudaGuard = null;
         Persona persona = solicitud.getPersona();
         Set<Parcela> parcelas = solicitud.getParcelas();
@@ -106,16 +105,7 @@ public class SolicitudControler {
             parcelasGuardadas.add(parcelaRepositorio.saveAndFlush(parcela));
         }
         solicitud.setParcelas(parcelasGuardadas);
-
-        for (PersonaAyuda personaAyuda : personaAyudaList) {
-           // personaAyuda.setAsociado(persona);
-            personaAyudaGuard.add(personaAyudaRepositorio.saveAndFlush(personaAyuda));
-        }
-
-        persona.setPersonasAyuda(personaAyudaGuard);
-
         personaRepositorio.saveAndFlush(persona);
-
         solicitud.setPersona(persona);
 
         solicitudRepositorio.saveAndFlush(solicitud);
@@ -147,7 +137,6 @@ public class SolicitudControler {
 //            System.out.println("User with id " + id + " not found");
             return new ResponseEntity<Solicitud>(HttpStatus.NOT_FOUND);
         }
-
 
 
         solicitudRepositorio.saveAndFlush(currentSolicitud);

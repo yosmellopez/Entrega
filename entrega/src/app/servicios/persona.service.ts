@@ -27,6 +27,14 @@ export class PersonaService {
         });
     }
 
+    listarTodasPersona(): Observable<Respuesta<Persona>> {
+        let constUrl = `${this.personaUrl}/todas`;
+        return this.http.get<AppResponse<Persona>>(constUrl, {
+            observe: 'response',
+            headers: {'Authorization': this.token}
+        });
+    }
+
     listarPorTipoPersona(tipoPersona: string): Observable<Respuesta<Persona>> {
         let constUrl = `${this.personaUrl + '/'}${tipoPersona}`;
         return this.http.get<AppResponse<Persona>>(constUrl, {

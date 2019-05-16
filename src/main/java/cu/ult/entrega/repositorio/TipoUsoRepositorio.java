@@ -9,6 +9,7 @@ import cu.ult.entrega.clases.TipoSuperficie;
 import cu.ult.entrega.clases.TipoUso;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -17,7 +18,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface TipoUsoRepositorio extends JpaRepository<TipoUso, Long> {
 
-    TipoUso findByNombre(String nombre);
+    Optional<TipoUso> findByNombre(String nombre);
 
     List<TipoUso> findByTipoSuperficie(TipoSuperficie tipoDeSuperficie);
 }
