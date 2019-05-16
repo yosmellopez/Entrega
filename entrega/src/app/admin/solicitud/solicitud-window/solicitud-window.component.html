@@ -520,10 +520,12 @@
     <div mat-dialog-actions class="boton-theme">
         <span class="spacer"></span>
         <button type="button" mat-raised-button *ngIf="indexStepper!=0" (click)="controlStepper(stepper, false)">
-            Back
+            <mat-icon>navigate_before</mat-icon>
+            Anterior
         </button>
         <button type="button" mat-raised-button *ngIf="indexStepper!=3" (click)="controlStepper(stepper, true)">
-            Next
+            Siguiente
+            <mat-icon>navigate_next</mat-icon>
         </button>
 
         <button *ngIf="indexStepper==3" type="submit" mat-raised-button cdkFocusInitial color="primary">

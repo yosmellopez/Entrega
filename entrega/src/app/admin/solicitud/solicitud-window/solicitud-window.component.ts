@@ -1,8 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
-    FloatLabelType,
     MAT_DATE_FORMATS,
-    MAT_DIALOG_DATA, MatCheckbox,
+    MAT_DIALOG_DATA,
     MatDialog,
     MatDialogRef,
     MatStepper,
@@ -13,12 +12,7 @@ import {
     LineaDeProduccion,
     Municipio,
     Parcela,
-<<<<<<< HEAD
     Persona, PersonaAyuda,
-    Provincia,
-=======
-    Persona,
->>>>>>> origin/master
     Solicitud,
     TipoDeUso
 } from '../../../modelo';
@@ -36,7 +30,6 @@ import { Observable, ReplaySubject } from 'rxjs/index';
 import { PersonaWindowsComponent } from '../../solicitante/persona-windows/persona-windows.component';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { MunicipioService } from '../../../servicios/municipio.service';
-
 
 export const MY_FORMATS = {
     parse: {
@@ -88,7 +81,7 @@ export class SolicitudWindowComponent implements OnInit {
         {name: 'ACRC', activo: false},
         {name: 'FMC', activo: false}];
 
-    displayedColumnsParcela: string[] = ['contador', 'zonaCatastral', 'parcela', 'divicion','area', 'acciones'];
+    displayedColumnsParcela: string[] = ['contador', 'zonaCatastral', 'parcela', 'divicion', 'area', 'acciones'];
     displayedColumnsLinea: string[] = ['contador', 'lineaDeProduccion', 'areaDedicada', 'acciones'];
     displayedColumnsPersonaAyuda: string[] = ['contador', 'ci', 'nombre', 'primerApellido', 'segundoApellido', 'parentesco', 'acciones'];
     dataSourceParcela = new MatTableDataSource<Parcela>();
@@ -101,7 +94,6 @@ export class SolicitudWindowComponent implements OnInit {
         this.insertar = id == null;
         this.municipio = municipio;
         this.idSolicitud = id;
-
         if (this.insertar) {
             this.persona = new Persona();
             this.persona.tipoPersona = 'Natural';
@@ -180,8 +172,6 @@ export class SolicitudWindowComponent implements OnInit {
             if (this.formPersona.get('ci').valid) {
                 if (this.ci != value) {
                     this.ci = value;
-                    console.log(value);
-
                     this.personaService.obtenerPorCI(value).subscribe(resp => {
                         if (resp.body.success && resp.body.elemento) {
                             this.formPersona.patchValue(resp.body.elemento);
@@ -202,91 +192,45 @@ export class SolicitudWindowComponent implements OnInit {
     }
 
     ngOnInit() {
-
         if (this.insertar) {
-            console.log(this.insertar);
-
             this.consejoPopularService.listarConsejoPopularNoDefinido('No Definido').subscribe(resp => {
                 if (resp.body.success) {
                     this.formParcela.get('consejoPopular').setValue(resp.body.elemento);
                 }
             });
-
             this.tipodeUsoService.listarTipoDeUsoNoDefinido('No Definido').subscribe(resp => {
                 if (resp.body.success) {
-                    console.log(resp.body.elemento);
                     this.formParcela.get('tipoDeUso').setValue(resp.body.elemento);
                 }
-                console.log(this.formParcela.value);
             });
-
             this.municipioService.obtenerMunicipioPorCodigo('02').subscribe(resp => {
                 if (resp.body.success) {
                     this.formSolicitud.get('municipio').setValue(resp.body.elemento);
                 }
             });
-
             this.service.obtenerUltimSolicitud().subscribe(resp => {
                 if (resp.body.success && resp.body.total != 0) {
                     this.formSolicitud.get('numExpediente').setValue((resp.body.elemento.numExpediente) + 1);
                 }
             });
-
-            console.log(this.formSolicitud.value);
-
-        } else {
-            const arrOrganizaciones = this.persona.integracion.split(',');
-            console.log(arrOrganizaciones);
-<<<<<<< HEAD
-
-            const arrOrganizacion = this.persona.integracion.split(',');
-            console.log(arrOrganizacion);
-            for (let organizacion of this.organizaciones) {
-
-                for (let cont in arrOrganizacion) {
-                    for (let organizacion of this.organizaciones) {
-                        if (arrOrganizacion[cont] == organizacion.name) {
-                            organizacion.activo = true;
-                        }
-=======
-        }
-
-        const arrOrganizaciones = this.persona.integracion.split(',');
-        for (let organizacion of this.organizaciones) {
-            for (let cont in arrOrganizaciones) {
-                for (let organizacion of this.organizaciones) {
-                    if (arrOrganizaciones[cont] == organizacion.name) {
-                        organizacion.activo = true;
->>>>>>> origin/master
-                    }
+            this.consejoPopularService.listarTodasConsejoPopular().subscribe(resp => {
+                if (resp.body.success) {
+                    this.consejoPopulares = resp.body.elementos;
+                    this.consejoPopularFiltrados.next(this.consejoPopulares);
                 }
-            }
-        }
+            });
+        } else {
+            const arrOrganizacion = this.persona.integracion.split(',') as Array<string>;
+            this.organizaciones.forEach(organizacion => {
+                arrOrganizacion.forEach(cont => {
 
-<<<<<<< HEAD
-            this.dataSourceParcela= new MatTableDataSource<Parcela>(this.parcelas);
-
+                });
+            });
+            this.listarTipoPersonaJuridica();
+            this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
             this.dataSourcePersonaAyuda = new MatTableDataSource<PersonaAyuda>(this.persona.personasAyuda);
-
             this.dataSourceLinea = new MatTableDataSource<LineaDeProduccion>(this.lineasProduccion);
         }
-=======
-
-        this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
-
-        this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
-
-        this.dataSourceLinea = new MatTableDataSource<LineaDeProduccion>(this.lineasProduccion);
->>>>>>> origin/master
-
-        this.listarTipoPersonaJuridica();
-
-        this.consejoPopularService.listarTodasConsejoPopular().subscribe(resp => {
-            if (resp.body.success) {
-                this.consejoPopulares = resp.body.elementos;
-                this.consejoPopularFiltrados.next(this.consejoPopulares);
-            }
-        });
     }
 
     abrirVentana() {
@@ -296,11 +240,7 @@ export class SolicitudWindowComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result != false) {
-                console.log(result);
-                this.dialog.open(Information, {
-                    width: '400px',
-                    data: {mensaje: 'Se ha insertado la persona juridica:' + result.elemento.nombre}
-                });
+                this.dialog.open(Information, {width: '400px', data: {mensaje: 'Se ha insertado la persona juridica:' + result.elemento.nombre}});
                 this.listarTipoPersonaJuridica();
             }
         });
@@ -376,9 +316,7 @@ export class SolicitudWindowComponent implements OnInit {
         this.personaService.listarPorTipoPersona('Juridica').subscribe(resp => {
             if (resp.body.success) {
                 this.personas = resp.body.elementos;
-                console.log(this.personas);
                 this.personasFiltradas.next(this.personas);
-                console.log(this.personasFiltradas);
             }
         });
     }
@@ -396,16 +334,14 @@ export class SolicitudWindowComponent implements OnInit {
     }
 
     obtenerEdad(): number {
-        var str = new String(this.ci);
+        let str = new String(this.ci);
         const anio: number = parseInt(str.charAt(0) + '' + str.charAt(1));
         const mes: number = parseInt(str.charAt(2) + '' + str.charAt(3));
         const dia: number = parseInt(str.charAt(4) + '' + str.charAt(5));
-        var anioA: number = new Date().getFullYear() - 2000;
-        var mesA: number = new Date().getMonth() + 1;
-        var diaA: number = new Date().getDate();
-
-
-        var edad: number;
+        let anioA: number = new Date().getFullYear() - 2000;
+        let mesA: number = new Date().getMonth() + 1;
+        let diaA: number = new Date().getDate();
+        let edad: number;
 
         if (mes == mesA) {
             if (diaA > dia || diaA == dia) {
@@ -420,11 +356,9 @@ export class SolicitudWindowComponent implements OnInit {
         }
 
         str = new String(edad);
-
         if (str.length == 3) {
             edad = parseInt(str.slice(1));
         }
-
         return edad;
     }
 
@@ -444,28 +378,20 @@ export class SolicitudWindowComponent implements OnInit {
         } else {
             this.formPersona.get('integracion').setValue(this.formPersona.get('integracion').value + ',' + valor);
         }
-        console.log(this.formPersona.get('integracion').value);
     }
 
     quitarIntgra(valor: string) {
         var str = this.formPersona.get('integracion').value;
         var arregIntegra = str.split(',');
-        console.log(arregIntegra);
-
         for (var cont in arregIntegra) {
-            console.log(cont);
             if (arregIntegra[cont] == valor) {
                 arregIntegra.splice(cont, 1);
                 break;
             }
-            console.log(arregIntegra[cont]);
         }
 
         this.formPersona.get('integracion').setValue(arregIntegra.toString());
-
         //arrayIntegracion.split(,);
-        console.log(arregIntegra);
-        console.log(this.formPersona.get('integracion').value);
     }
 
     insertarSolicitud(): void {
@@ -506,8 +432,6 @@ export class SolicitudWindowComponent implements OnInit {
             solicitud.parcelas = [...this.parcelas];
             solicitud.lineasDeProduccion = [...this.lineasProduccion];
             this.solicitud = solicitud;
-            console.log(this.solicitud);
-            console.log(this.listPersonaAyuda);
         }
     }
 
