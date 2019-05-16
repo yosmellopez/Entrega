@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "personaAyuda", uniqueConstraints = @UniqueConstraint(name = "persona_unica", columnNames = {"ci"}))
+@Table(name = "persona_ayuda", uniqueConstraints = @UniqueConstraint(name = "persona_unica", columnNames = {"ci"}))
 public class PersonaAyuda implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,7 +31,6 @@ public class PersonaAyuda implements Serializable {
     @Column(name = "parentesco")
     private String parentesco;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_personaAyuda_asociado"))
     @JsonBackReference
@@ -100,21 +99,14 @@ public class PersonaAyuda implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PersonaAyuda)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         PersonaAyuda that = (PersonaAyuda) o;
-        return Objects.equals(getId(), that.getId()) &&
-                Objects.equals(getCi(), that.getCi()) &&
-                Objects.equals(getNombre(), that.getNombre()) &&
-                Objects.equals(getPrimerApellido(), that.getPrimerApellido()) &&
-                Objects.equals(getSegundoApellido(), that.getSegundoApellido()) &&
-                Objects.equals(getParentesco(), that.getParentesco()) &&
-                Objects.equals(getAsociado(), that.getAsociado());
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(getId(), getCi(), getNombre(), getPrimerApellido(), getSegundoApellido(), getParentesco(), getAsociado());
+        return Objects.hash(id);
     }
 
     @Override

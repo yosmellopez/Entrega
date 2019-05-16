@@ -86,8 +86,8 @@ public class Persona implements Serializable {
     @Column(name = "estadoCivil")
     private String estadoCivil;
 
-    @Column(name = "experienciaAgricola")
-    private int experienciaAgricola;
+    @Column(name = "experiencia_agricola")
+    private Integer experienciaAgricola;
 
     @OneToMany(mappedBy = "asociado")
     @JsonManagedReference
@@ -112,10 +112,6 @@ public class Persona implements Serializable {
     private Set<PersonaParcela> personaParcelas;
 
     public Persona() {
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public Long getId() {
@@ -238,11 +234,11 @@ public class Persona implements Serializable {
         this.estadoCivil = estadoCivil;
     }
 
-    public int getExperienciaAgricola() {
+    public Integer getExperienciaAgricola() {
         return experienciaAgricola;
     }
 
-    public void setExperienciaAgricola(int experienciaAgricola) {
+    public void setExperienciaAgricola(Integer experienciaAgricola) {
         this.experienciaAgricola = experienciaAgricola;
     }
 
@@ -284,66 +280,5 @@ public class Persona implements Serializable {
 
     public void setPersonaParcelas(Set<PersonaParcela> personaParcelas) {
         this.personaParcelas = personaParcelas;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Persona)) return false;
-        Persona persona = (Persona) o;
-        return getExperienciaAgricola() == persona.getExperienciaAgricola() &&
-                Objects.equals(getId(), persona.getId()) &&
-                Objects.equals(getConsejoPopular(), persona.getConsejoPopular()) &&
-                Objects.equals(getTipoPersona(), persona.getTipoPersona()) &&
-                Objects.equals(getCi(), persona.getCi()) &&
-                Objects.equals(getNombre(), persona.getNombre()) &&
-                Objects.equals(getPrimerApellido(), persona.getPrimerApellido()) &&
-                Objects.equals(getSegundoApellido(), persona.getSegundoApellido()) &&
-                Objects.equals(getSexo(), persona.getSexo()) &&
-                Objects.equals(getDirParticular(), persona.getDirParticular()) &&
-                Objects.equals(getEdad(), persona.getEdad()) &&
-                Objects.equals(getMovil(), persona.getMovil()) &&
-                Objects.equals(getTelFijo(), persona.getTelFijo()) &&
-                Objects.equals(getSituacionLaboral(), persona.getSituacionLaboral()) &&
-                Objects.equals(getIntegracion(), persona.getIntegracion()) &&
-                Objects.equals(getEstadoCivil(), persona.getEstadoCivil()) &&
-                Objects.equals(getPersonasAyuda(), persona.getPersonasAyuda()) &&
-                Objects.equals(getPersonas(), persona.getPersonas()) &&
-                Objects.equals(getAsociado(), persona.getAsociado()) &&
-                Objects.equals(getSolicitud(), persona.getSolicitud()) &&
-                Objects.equals(getPersonaParcelas(), persona.getPersonaParcelas());
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(getId(), getConsejoPopular(), getTipoPersona(), getCi(), getNombre(), getPrimerApellido(), getSegundoApellido(), getSexo(), getDirParticular(), getEdad(), getMovil(), getTelFijo(), getSituacionLaboral(), getIntegracion(), getEstadoCivil(), getExperienciaAgricola(), getPersonasAyuda(), getPersonas(), getAsociado(), getSolicitud(), getPersonaParcelas());
-    }
-
-    @Override
-    public String toString() {
-        return "Persona{" +
-                "id=" + id +
-                ", consejoPopular=" + consejoPopular +
-                ", tipoPersona='" + tipoPersona + '\'' +
-                ", ci='" + ci + '\'' +
-                ", nombre='" + nombre + '\'' +
-                ", primerApellido='" + primerApellido + '\'' +
-                ", segundoApellido='" + segundoApellido + '\'' +
-                ", sexo=" + sexo +
-                ", dirParticular='" + dirParticular + '\'' +
-                ", edad=" + edad +
-                ", movil='" + movil + '\'' +
-                ", telFijo='" + telFijo + '\'' +
-                ", situacionLaboral='" + situacionLaboral + '\'' +
-                ", integracion='" + integracion + '\'' +
-                ", estadoCivil='" + estadoCivil + '\'' +
-                ", experienciaAgricola=" + experienciaAgricola +
-                ", personasAyuda=" + personasAyuda +
-                ", personas=" + personas +
-                ", asociado=" + asociado +
-                ", solicitud=" + solicitud +
-                ", personaParcelas=" + personaParcelas +
-                '}';
     }
 }

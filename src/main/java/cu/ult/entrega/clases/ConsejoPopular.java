@@ -25,7 +25,7 @@ import javax.persistence.UniqueConstraint;
  * @author Pablo Caram Local
  */
 @Entity
-@Table(name = "consejoPopular", uniqueConstraints = @UniqueConstraint(name = "consejoPopular_unico", columnNames = {"codigo"}))
+@Table(name = "consejo_popular", uniqueConstraints = @UniqueConstraint(name = "consejoPopular_unico", columnNames = {"codigo"}))
 public class ConsejoPopular implements Serializable {
 
     private static final long serialVersionUID = 1L;
