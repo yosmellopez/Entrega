@@ -53,8 +53,8 @@ public class Parcela implements Serializable {
     private Integer divicion;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_parcela_tipoDeUso"))
-    private TipoDeUso tipoDeUso;
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_parcela_tipo_uso"))
+    private TipoUso tipoUso;
 
     @Column(name = "area")
     private Double area;
@@ -92,12 +92,12 @@ public class Parcela implements Serializable {
     @ManyToMany(mappedBy = "parcelas")
     private List<Solicitud> solicitudes;
 
-    public TipoDeUso getTipoDeUso() {
-        return tipoDeUso;
+    public TipoUso getTipoUso() {
+        return tipoUso;
     }
 
-    public void setTipoDeUso(TipoDeUso tipoDeUso) {
-        this.tipoDeUso = tipoDeUso;
+    public void setTipoUso(TipoUso tipoUso) {
+        this.tipoUso = tipoUso;
     }
 
     public Long getId() {
@@ -249,7 +249,7 @@ public class Parcela implements Serializable {
                 ", zonaCatastral=" + zonaCatastral +
                 ", parcela=" + parcela +
                 ", divicion=" + divicion +
-                ", tipoDeUso=" + tipoDeUso +
+                ", tipoUso=" + tipoUso +
                 ", area=" + area +
                 ", limiteN='" + limiteN + '\'' +
                 ", limiteS='" + limiteS + '\'' +

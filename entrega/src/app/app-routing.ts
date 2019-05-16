@@ -98,7 +98,7 @@ export const APP_RUTAS: RouteInfo[] = [{
             icon: 'supervisor_account',
             class: 'waves-effect waves-cyan',
         }, {
-            path: '/admin/tipoDeUso',
+            path: '/admin/tipoUso',
             title: 'Tipo de Uso',
             icon: 'supervisor_account',
             class: 'waves-effect waves-cyan',

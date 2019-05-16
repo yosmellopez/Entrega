@@ -133,7 +133,7 @@ public class SolicitudControler {
         //Persona
         Set<Parcela> parcelas = solicitud.getParcelas();
         Set<Parcela> parcelasGuardadas = new HashSet<>();
-        System.out.println("Updating User " + id);
+//        System.out.println("Updating User " + id);
 
         Solicitud currentSolicitud = solicitudRepositorio.findById(id).orElseThrow(() -> new EntityNotFoundException("Solicitud no encontrada"));
 
@@ -144,7 +144,7 @@ public class SolicitudControler {
 
 
         if (currentSolicitud == null) {
-            System.out.println("User with id " + id + " not found");
+//            System.out.println("User with id " + id + " not found");
             return new ResponseEntity<Solicitud>(HttpStatus.NOT_FOUND);
         }
 

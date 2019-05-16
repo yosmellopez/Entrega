@@ -5,13 +5,13 @@
  */
 package cu.ult.entrega.repositorio;
 
-import cu.ult.entrega.clases.TipoDeSuperficie;
+import cu.ult.entrega.clases.TipoSuperficie;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
  * @author Pablo Caram Local
  */
-public interface TipoDeSuperficieRepositorio extends JpaRepository<TipoDeSuperficie, Long>{
+public interface TipoSuperficieRepositorio extends JpaRepository<TipoSuperficie, Long>{
     
 }

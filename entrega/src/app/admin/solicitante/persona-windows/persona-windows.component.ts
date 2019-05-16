@@ -23,7 +23,7 @@ export class PersonaWindowsComponent implements OnInit {
    public PersonasFiltradas: ReplaySubject<Persona[]> = new ReplaySubject<Persona[]>(1);
 
   constructor(public dialogRef:MatDialogRef<PersonaWindowsComponent>,
-              @Inject(MAT_DIALOG_DATA){id, tipoPersona, ci, nombre, primerApellido, segundoApellido, sexo = 'M', dirParticular, edad, movil, telFijo, situacionLaboral, asociado}:Persona,
+              @Inject(MAT_DIALOG_DATA){id, tipoPersona, ci, nombre, primerApellido, segundoApellido, sexo = true, dirParticular, edad, movil, telFijo, situacionLaboral, asociado}:Persona,
               private formBuilder: FormBuilder, private service:PersonaService, private dialog:MatDialog) {
       this.insertar = id == null;
       this.idPersona = id;

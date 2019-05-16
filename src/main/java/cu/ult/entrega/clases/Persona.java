@@ -14,21 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 
 /**
  * @author Pablo Caram Local
@@ -63,7 +49,7 @@ public class Persona implements Serializable {
     private String segundoApellido;
 
     @Column(name = "sexo")
-    private Character sexo;
+    private Boolean sexo;
 
     @Column(name = "dirParticular")
     private String dirParticular;
@@ -79,9 +65,6 @@ public class Persona implements Serializable {
 
     @Column(name = "situacionLaboral")
     private String situacionLaboral;
-
-    @Column(name = "integracion")
-    private String integracion;
 
     @Column(name = "estadoCivil")
     private String estadoCivil;
@@ -110,6 +93,11 @@ public class Persona implements Serializable {
     @JsonIgnoreProperties(value = {"persona"})
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<PersonaParcela> personaParcelas;
+
+    @ManyToMany
+    @JoinTable(name = "persona_integracion", joinColumns = @JoinColumn(name = "persona_id", foreignKey = @ForeignKey(name = "fk_persona_integracion")),
+            inverseJoinColumns = @JoinColumn(name = "integracion_id", foreignKey = @ForeignKey(name = "fk_integracion_persona")))
+    private Set<Integracion> integraciones;
 
     public Persona() {
     }
@@ -170,11 +158,11 @@ public class Persona implements Serializable {
         this.segundoApellido = segundoApellido;
     }
 
-    public Character getSexo() {
+    public Boolean getSexo() {
         return sexo;
     }
 
-    public void setSexo(Character sexo) {
+    public void setSexo(Boolean sexo) {
         this.sexo = sexo;
     }
 
@@ -216,14 +204,6 @@ public class Persona implements Serializable {
 
     public void setSituacionLaboral(String situacionLaboral) {
         this.situacionLaboral = situacionLaboral;
-    }
-
-    public String getIntegracion() {
-        return integracion;
-    }
-
-    public void setIntegracion(String integracion) {
-        this.integracion = integracion;
     }
 
     public String getEstadoCivil() {
@@ -280,5 +260,26 @@ public class Persona implements Serializable {
 
     public void setPersonaParcelas(Set<PersonaParcela> personaParcelas) {
         this.personaParcelas = personaParcelas;
+    }
+
+    public Set<Integracion> getIntegraciones() {
+        return integraciones;
+    }
+
+    public void setIntegraciones(Set<Integracion> integraciones) {
+        this.integraciones = integraciones;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Persona persona = (Persona) o;
+        return Objects.equals(id, persona.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

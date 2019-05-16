@@ -6,10 +6,10 @@
 package cu.ult.entrega.control;
 import cu.ult.entrega.clases.ConsejoPopular;
 import cu.ult.entrega.clases.Provincia;
-import cu.ult.entrega.clases.TipoDeUso;
+import cu.ult.entrega.clases.TipoUso;
 import cu.ult.entrega.excepcion.MunicipioException;
 import cu.ult.entrega.excepcion.ProvinciaException;
-import cu.ult.entrega.repositorio.TipoDeUsoRepositorio;
+import cu.ult.entrega.repositorio.TipoUsoRepositorio;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -33,46 +33,46 @@ import static cu.ult.entrega.control.AppResponse.success;
 
 @Controller
 @RequestMapping("/api")
-public class TipoDeUsoControler {
+public class TipoUsoControler {
 
     @Autowired
-    TipoDeUsoRepositorio tipoDeUsoRepositorio;
+    TipoUsoRepositorio tipoUsoRepositorio;
 
-    @RequestMapping(value = "/tipoDeUso")
-    public ResponseEntity<AppResponse<TipoDeUso>> listarTipoDeUso(Pageable p) {
-        Page<TipoDeUso> page = tipoDeUsoRepositorio.findAll(p);
-        List<TipoDeUso> tipoDeUsos = page.getContent();
-        return ResponseEntity.ok(success(tipoDeUsos).total(page.getTotalElements()).build());
+    @RequestMapping(value = "/tipoUso")
+    public ResponseEntity<AppResponse<TipoUso>> listarTipoUso(Pageable p) {
+        Page<TipoUso> page = tipoUsoRepositorio.findAll(p);
+        List<TipoUso> tipoUsos = page.getContent();
+        return ResponseEntity.ok(success(tipoUsos).total(page.getTotalElements()).build());
     }
 
-    @RequestMapping(value = "/tipoDeUso/porNombre/{nombre}")
-    public ResponseEntity<AppResponse<TipoDeUso>> obtenerTipoDeUsoPorNombre(@PathVariable("nombre") String nombre) {
-        System.out.println(nombre);
-        TipoDeUso tipoDeUso = tipoDeUsoRepositorio.findByNombre(nombre);
-        System.out.println(tipoDeUso);
-        return ResponseEntity.ok(success(tipoDeUso).total(1).build());
+    @RequestMapping(value = "/tipoUso/porNombre/{nombre}")
+    public ResponseEntity<AppResponse<TipoUso>> obtenerTipoUsoPorNombre(@PathVariable("nombre") String nombre) {
+//        System.out.println(nombre);
+        TipoUso tipoUso = tipoUsoRepositorio.findByNombre(nombre);
+//        System.out.println(tipoUso);
+        return ResponseEntity.ok(success(tipoUso).total(1).build());
     }
 
-    @PostMapping(value = "/tipoDeUso/nuevo")
-    public ResponseEntity<AppResponse<TipoDeUso>> insertarTipoDeUso(@Valid @RequestBody TipoDeUso tipoDeUso) {
-        tipoDeUsoRepositorio.saveAndFlush(tipoDeUso);
-        return ResponseEntity.ok(success(tipoDeUso).build());
+    @PostMapping(value = "/tipoUso/nuevo")
+    public ResponseEntity<AppResponse<TipoUso>> insertarTipoUso(@Valid @RequestBody TipoUso tipoUso) {
+        tipoUsoRepositorio.saveAndFlush(tipoUso);
+        return ResponseEntity.ok(success(tipoUso).build());
     }
 
-    @PutMapping(value = "/tipoDeUso/mod/{id}")
-    public ResponseEntity<AppResponse<TipoDeUso>> actualizarTipoDeUso(@PathVariable("id") Optional<TipoDeUso> optional, @Valid @RequestBody TipoDeUso tipoDeUso) {
-        TipoDeUso currentTipoDeUso = optional.orElseThrow(() -> new EntityNotFoundException("Tipo de Uso no encontrado"));
-        currentTipoDeUso.setCodigo(tipoDeUso.getCodigo());
-        currentTipoDeUso.setNombre(tipoDeUso.getNombre());
-        currentTipoDeUso.setTipoDeSuperficie(tipoDeUso.getTipoDeSuperficie());
-        tipoDeUsoRepositorio.saveAndFlush(currentTipoDeUso);
-        return ResponseEntity.ok(success(currentTipoDeUso).build());
+    @PutMapping(value = "/tipoUso/mod/{id}")
+    public ResponseEntity<AppResponse<TipoUso>> actualizarTipoUso(@PathVariable("id") Optional<TipoUso> optional, @Valid @RequestBody TipoUso tipoUso) {
+        TipoUso currentTipoUso = optional.orElseThrow(() -> new EntityNotFoundException("Tipo de Uso no encontrado"));
+        currentTipoUso.setCodigo(tipoUso.getCodigo());
+        currentTipoUso.setNombre(tipoUso.getNombre());
+        currentTipoUso.setTipoSuperficie(tipoUso.getTipoSuperficie());
+        tipoUsoRepositorio.saveAndFlush(currentTipoUso);
+        return ResponseEntity.ok(success(currentTipoUso).build());
     }
 
-    @DeleteMapping(value = "/tipoDeUso/{id}")
-    public ResponseEntity<AppResponse> deleteTipoDeUso(@PathVariable("id") Optional<TipoDeUso> optional) {
-        TipoDeUso tipoDeUso = optional.orElseThrow(() -> new EntityNotFoundException("Tipo de Uso no encontrado."));
-        tipoDeUsoRepositorio.delete(tipoDeUso);
+    @DeleteMapping(value = "/tipoUso/{id}")
+    public ResponseEntity<AppResponse> deleteTipoUso(@PathVariable("id") Optional<TipoUso> optional) {
+        TipoUso tipoUso = optional.orElseThrow(() -> new EntityNotFoundException("Tipo de Uso no encontrado."));
+        tipoUsoRepositorio.delete(tipoUso);
         return ResponseEntity.ok(AppResponse.success("Tipo de Uso eliminado exitosamente.").build());
     }
 

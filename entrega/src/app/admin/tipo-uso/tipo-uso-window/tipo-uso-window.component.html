@@ -1,0 +1,42 @@
+<form class="form" [formGroup]="form" (submit)="insertarTipoUso()">
+    <h1 mat-dialog-title style="margin: 0 0">{{insertar?'Nuevo Tipo de Uso':'Modificar Tipo de Uso'}}
+        <button type="button" mat-icon-button class="close-button" (click)="onNoClick()">
+            <mat-icon style="font-size: 25px">close</mat-icon>
+        </button>
+        <hr>
+    </h1>
+    <div mat-dialog-content style="min-height: 7em;">
+        <mat-form-field class="full-width" hintLabel="Maximo 2 caracteres">
+            <input matInput #input maxlength="2" placeholder="Codigo del tipo de uso" formControlName="codigo">
+            <mat-error *ngIf="form.controls['codigo'].errors?.required">
+                Debe insertar el codigo del tipo de uso
+            </mat-error>
+            <mat-hint align="end">{{input.value?.length || 0}}/2</mat-hint>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+            <input matInput placeholder="Nombre del tipo de uso" formControlName="nombre">
+            <mat-error *ngIf="form.controls['nombre'].errors?.required">
+                Debe insertar el nombre del municipio
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+            <mat-select matInput placeholder="Seleccione el tipo de superficie" formControlName="tipoDeSuperficie" [compareWith]="compararTipoSuperficies">
+                <mat-option *ngFor="let tipoDeSuperficie of tipoDeSuperficies" [value]="tipoDeSuperficie">
+                    {{tipoDeSuperficie|tipoDeSuperficie}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.controls['tipoDeSuperficie'].errors?.required">Debe seleccionar el tipoDeSuperficie.</mat-error>
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="boton-theme">
+        <span class="spacer"></span>
+        <button type="submit" mat-raised-button cdkFocusInitial color="primary">
+            <mat-icon>check_circle</mat-icon>
+            {{insertar?'Guardar':'Modificar'}}
+        </button>
+        <button type="button" mat-raised-button (click)="onNoClick()" color="warn">
+            <mat-icon>cancel</mat-icon>
+            Cancelar
+        </button>
+    </div>
+</form>

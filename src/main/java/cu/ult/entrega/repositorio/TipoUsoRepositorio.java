@@ -5,9 +5,8 @@
  */
 package cu.ult.entrega.repositorio;
 
-import cu.ult.entrega.clases.ConsejoPopular;
-import cu.ult.entrega.clases.TipoDeSuperficie;
-import cu.ult.entrega.clases.TipoDeUso;
+import cu.ult.entrega.clases.TipoSuperficie;
+import cu.ult.entrega.clases.TipoUso;
 
 import java.util.List;
 
@@ -16,9 +15,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * @author Pablo Caram Local
  */
-public interface TipoDeUsoRepositorio extends JpaRepository<TipoDeUso, Long> {
+public interface TipoUsoRepositorio extends JpaRepository<TipoUso, Long> {
 
-    public TipoDeUso findByNombre(String nombre);
+    TipoUso findByNombre(String nombre);
 
-    public List<TipoDeUso> findByTipoDeSuperficie(TipoDeSuperficie tipoDeSuperficie);
+    List<TipoUso> findByTipoSuperficie(TipoSuperficie tipoDeSuperficie);
 }

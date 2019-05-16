@@ -81,7 +81,6 @@ export class UsuariosComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result != false) {
-                console.log(result);
                 this.dialog.open(Information, {
                     width: '400px',
                     data: {mensaje: 'Se ha insertardo el Usuario: ' + result.elemento.nombre}
@@ -93,7 +92,6 @@ export class UsuariosComponent implements OnInit {
 
     editarUsuario(event: Event, usuario: Usuario): void {
         event.stopPropagation();
-        console.log(usuario);
         let editDialogRef = this.dialog.open(UsuarioWindowComponent, {
             width: '400px', data: usuario, disableClose: true
         });

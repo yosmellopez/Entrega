@@ -29,15 +29,11 @@ export class CentroComponent implements OnInit {
     }
 
     cargaRutasDeUsuario() {
-        let cont: number = 0;
-        for (let index in this.rutas) {
-            for (let index2 in this.rutas[index].authority) {
-                if (this.rutas[index].authority[index2] === this.nameRol) {
-                    this.rutasUsuario[cont] = this.rutas[index];
-                    cont = cont + 1;
-                }
-            }
-        }
+        this.rutas.forEach(ruta => {
+            ruta.authority.forEach(authority => {
+                if (authority === this.nameRol)
+                    this.rutasUsuario.push(ruta);
+            });
+        });
     }
-
 }

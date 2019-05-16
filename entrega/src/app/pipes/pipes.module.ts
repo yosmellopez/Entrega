@@ -1,12 +1,12 @@
 import {NgModule} from "@angular/core";
 import {ProvinciaPipe} from "./provincia.pipe";
-import {TipoDeSuperficiePipe} from "./tipoDeSuperficie.pipe";
+import {TipoSuperficiePipe} from "./tipoDeSuperficie.pipe";
 import {MunicipioPipe} from "./municipio.pipe";
 import {PersonaPipe} from "./persona.pipe";
 
 @NgModule({
-    declarations: [ProvinciaPipe,MunicipioPipe,TipoDeSuperficiePipe,PersonaPipe],
-    exports: [ProvinciaPipe,MunicipioPipe,TipoDeSuperficiePipe,PersonaPipe]
+    declarations: [ProvinciaPipe,MunicipioPipe,TipoSuperficiePipe,PersonaPipe],
+    exports: [ProvinciaPipe,MunicipioPipe,TipoSuperficiePipe,PersonaPipe]
 })
 export class PipesModule {
 

@@ -1,18 +1,18 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatPaginator, MatSort, MatTable, MatTableDataSource} from "@angular/material";
 import {SelectionModel} from "@angular/cdk/collections";
-import {TipoDeSuperficieService} from "../../servicios/tipo-de-superficie.service";
+import {TipoSuperficieService} from "../../servicios/tipo-superficie.service";
 import {catchError, map, startWith, switchMap} from "rxjs/internal/operators";
 import {merge} from "rxjs/index";
 import {Confirm, Information} from "../../mensaje/window.mensaje";
-import {TipoDeSuperficieWindowComponent} from "./tipo-de-superficie-window/tipo-de-superficie-window.component";
+import {TipoSuperficieWindowComponent} from "./tipo-de-superficie-window/tipo-superficie-window.component";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {TipoDeSuperficie} from "../../modelo";
+import {TipoSuperficie} from "../../modelo";
 
 @Component({
     selector: 'app-tipo-de-superficie',
-    templateUrl: './tipo-de-superficie.component.html',
-    styleUrls: ['./tipo-de-superficie.component.css'],
+    templateUrl: './tipo-superficie.component.html',
+    styleUrls: ['./tipo-superficie.component.css'],
     animations: [
         trigger('detailExpand', [
             state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
@@ -21,23 +21,23 @@ import {TipoDeSuperficie} from "../../modelo";
         ]),
     ],
 })
-export class TipoDeSuperficieComponent implements OnInit {
-    dataSource: MatTableDataSource<TipoDeSuperficie> = new MatTableDataSource<TipoDeSuperficie>();
+export class TipoSuperficieComponent implements OnInit {
+    dataSource: MatTableDataSource<TipoSuperficie> = new MatTableDataSource<TipoSuperficie>();
     total: number = 0;
     pageSize: number = 10;
     displayedColumns = ['index', 'codigo', 'nombre', 'acciones'];
-    selection = new SelectionModel<TipoDeSuperficie>(true, []);
+    selection = new SelectionModel<TipoSuperficie>(true, []);
     url: string = '';
     nombre: string = '';
     resultsLength = 0;
     isLoadingResults = true;
     isRateLimitReached = false;
-    expandedElement: TipoDeSuperficie;
+    expandedElement: TipoSuperficie;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
-    @ViewChild(MatTable) table: MatTable<TipoDeSuperficie>;
+    @ViewChild(MatTable) table: MatTable<TipoSuperficie>;
 
-    constructor(private servicio: TipoDeSuperficieService, private dialog: MatDialog) {
+    constructor(private servicio: TipoSuperficieService, private dialog: MatDialog) {
     }
 
     ngOnInit() {
@@ -53,7 +53,7 @@ export class TipoDeSuperficieComponent implements OnInit {
                 startWith({}),
                 switchMap(() => {
                     this.isLoadingResults = true;
-                    return this.servicio.listarTipoDeSuperficie(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+                    return this.servicio.listarTipoSuperficie(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
                 }),
                 map(data => {
                     this.total = data.body.total;
@@ -73,8 +73,8 @@ export class TipoDeSuperficieComponent implements OnInit {
     }
 
     abrirVentana() {
-        let dialogRef = this.dialog.open(TipoDeSuperficieWindowComponent, {
-            width: '400px', disableClose: true, data: new TipoDeSuperficie(),
+        let dialogRef = this.dialog.open(TipoSuperficieWindowComponent, {
+            width: '400px', disableClose: true, data: new TipoSuperficie(),
         });
 
         dialogRef.afterClosed().subscribe(result => {
@@ -89,9 +89,9 @@ export class TipoDeSuperficieComponent implements OnInit {
         });
     }
 
-    editarTipoDeSuperficie(event: Event, tipoDeSuperficie: TipoDeSuperficie): void {
+    editarTipoSuperficie(event: Event, tipoDeSuperficie: TipoSuperficie): void {
         event.stopPropagation();
-        let editDialogRef = this.dialog.open(TipoDeSuperficieWindowComponent, {
+        let editDialogRef = this.dialog.open(TipoSuperficieWindowComponent, {
             width: '400px', data: tipoDeSuperficie, disableClose: true
         });
 
@@ -106,7 +106,7 @@ export class TipoDeSuperficieComponent implements OnInit {
         });
     }
 
-    eliminarTipoDeSuperficie(event: Event, tipoDeSuperficie: TipoDeSuperficie): void {
+    eliminarTipoSuperficie(event: Event, tipoDeSuperficie: TipoSuperficie): void {
         event.stopPropagation();
         let dialogRef = this.dialog.open(Confirm, {
             width: '400px',
@@ -114,7 +114,7 @@ export class TipoDeSuperficieComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                this.servicio.eliminarTipoDeSuperficie(tipoDeSuperficie.id).subscribe(resp => {
+                this.servicio.eliminarTipoSuperficie(tipoDeSuperficie.id).subscribe(resp => {
                     if (resp.body.success) {
                         this.dialog.open(Information, {
                             width: '400px',

@@ -23,7 +23,7 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name = "tipo_superficie", uniqueConstraints = @UniqueConstraint(name = "tipo_superficie_unico", columnNames = {"codigo"}))
-public class TipoDeSuperficie implements Serializable {
+public class TipoSuperficie implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,8 +38,8 @@ public class TipoDeSuperficie implements Serializable {
     private String nombre;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "tipoDeSuperficie")
-    private List<TipoDeUso> tipoDeUso;
+    @OneToMany(mappedBy = "tipoSuperficie")
+    private List<TipoUso> tipoUso;
 
     public Long getId() {
         return id;
@@ -65,12 +65,12 @@ public class TipoDeSuperficie implements Serializable {
         this.nombre = nombre;
     }
 
-    public List<TipoDeUso> getTipoDeUso() {
-        return tipoDeUso;
+    public List<TipoUso> getTipoUso() {
+        return tipoUso;
     }
 
-    public void setTipoDeUso(List<TipoDeUso> tipoDeUso) {
-        this.tipoDeUso = tipoDeUso;
+    public void setTipoUso(List<TipoUso> tipoUso) {
+        this.tipoUso = tipoUso;
     }
 
     @Override
@@ -83,10 +83,10 @@ public class TipoDeSuperficie implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TipoDeSuperficie)) {
+        if (!(object instanceof TipoSuperficie)) {
             return false;
         }
-        TipoDeSuperficie other = (TipoDeSuperficie) object;
+        TipoSuperficie other = (TipoSuperficie) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -95,7 +95,7 @@ public class TipoDeSuperficie implements Serializable {
 
     @Override
     public String toString() {
-        return "entrega.clases.TipoDeSuperficie[ id=" + id + " ]";
+        return "entrega.clases.TipoSuperficie[ id=" + id + " ]";
     }
 
 }

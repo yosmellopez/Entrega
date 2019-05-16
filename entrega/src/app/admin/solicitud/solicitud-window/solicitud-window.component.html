@@ -6,7 +6,7 @@
 </h2>
 
 <form [formGroup]="formSolicitud" (submit)="insertarSolicitud()">
-    <mat-horizontal-stepper [linear]="true" #stepper [selectedIndex]="indexStepper" (selectionChange)="selectionChange($event)">
+    <mat-horizontal-stepper [linear]="false" #stepper [selectedIndex]="indexStepper" (selectionChange)="selectionChange($event)">
         <mat-step [stepControl]="formSolicitud">
             <ng-template matStepLabel>Datos de la solicitud</ng-template>
             <form [formGroup]="formSolicitud">
@@ -80,8 +80,10 @@
                             <div class="col-xs-12">
                                 <div class="fg-line form-group">
                                     <p class="c-black f-500">Seleccione las organizaciones a la que pertenece:</p>
-                                    <section>
-                                        <mat-checkbox *ngFor="let organizacion of organizaciones" [checked]="organizacion.activo" (change)="$event.checked ? agregarIntgra(organizacion.name) : quitarIntgra(organizacion.name)"  class="checkbox-inline">{{organizacion.name}} </mat-checkbox>
+                                    <section formArrayName="integraciones">
+                                        <mat-checkbox class="checkbox-inline" *ngFor="let organizacion of organizaciones" (change)="onChange($event)"
+                                                      [value]="organizacion" [checked]="tieneIntegracion(organizacion)">{{organizacion.integracion}}
+                                        </mat-checkbox>
                                     </section>
                                 </div>
                             </div>
@@ -89,7 +91,7 @@
                         <div class="row">
                             <div class="col-xs-3">
                                 <mat-form-field>
-                                    <input  #inputCIP matInput maxlength="11" placeholder="CI" formControlName="ci">
+                                    <input #inputCIP matInput maxlength="11" placeholder="CI" formControlName="ci">
                                     <mat-error *ngIf="formPersona.controls['ci'].errors?.required">
                                         Debe insertar el NIT de la persona.
                                     </mat-error>
@@ -175,21 +177,21 @@
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <mat-form-field class="full-width">
-                                    <mat-select matInput placeholder="Seleccione la entiodad a vincular" formControlName="asociado" [compareWith]="compararPersonas">
-                                        <mat-option *ngFor="let persona of personas" [value]="persona">
-                                            {{persona|persona}}
-                                        </mat-option>
-                                    </mat-select>
-                                    <mat-error *ngIf="formPersona.controls['dirParticular'].errors?.required">Debe seleccionar un organismo a para vincular.</mat-error>
-                                </mat-form-field>
-                                <button *ngIf="formPersona.controls['tipoPersona'].value =='Natural'" mat-mini-fab color="primary" (click)="abrirVentana()" matTooltip="Nueva Persona Juridica">
-                                    <mat-icon style="font-size: 25px">add</mat-icon>
-                                </button>
-                            </div>
-                        </div>
+                        <!--<div class="row">-->
+                        <!--<div class="col-xs-12">-->
+                        <!--<mat-form-field class="full-width">-->
+                        <!--<mat-select matInput placeholder="Seleccione la entidad a vincular" formControlName="asociado" [compareWith]="compararPersonas">-->
+                        <!--<mat-option *ngFor="let persona of personas" [value]="persona">-->
+                        <!--{{persona|persona}}-->
+                        <!--</mat-option>-->
+                        <!--</mat-select>-->
+                        <!--<mat-error *ngIf="formPersona.controls['dirParticular'].errors?.required">Debe seleccionar un organismo a para vincular.</mat-error>-->
+                        <!--</mat-form-field>-->
+                        <!--<button *ngIf="formPersona.controls['tipoPersona'].value =='Natural'" mat-mini-fab color="primary" (click)="abrirVentana()" matTooltip="Nueva Persona Juridica">-->
+                        <!--<mat-icon style="font-size: 25px">add</mat-icon>-->
+                        <!--</button>-->
+                        <!--</div>-->
+                        <!--</div>-->
                     </form>
                 </mat-tab>
                 <mat-tab label="Ayuda Familiar">
@@ -197,7 +199,7 @@
                         <div class="row">
                             <div class="col-xs-3">
                                 <mat-form-field>
-                                    <input  #input matInput maxlength="11" placeholder="CI" formControlName="ci">
+                                    <input #input matInput maxlength="11" placeholder="CI" formControlName="ci">
                                     <mat-error *ngIf="formPersonaAyuda.controls['ci'].errors?.required">
                                         Debe insertar el NIT de la persona.
                                     </mat-error>
@@ -376,7 +378,7 @@
                         </mat-form-field>
                     </div>
                     <div class="col-xs-3">
-                        <mat-form-field  class="full-width">
+                        <mat-form-field class="full-width">
                             <input type="text" matInput placeholder="Limite Este" formControlName="limiteE">
                         </mat-form-field>
                     </div>
@@ -456,7 +458,7 @@
                             <mat-select matInput placeholder="Linea de producción" formControlName="lineaDeProduccion">
                                 <mat-option value="Cultivos Varios">Cultivos Varios</mat-option>
                                 <mat-option value="Ganado Mayor">Ganado Mayor</mat-option>
-                                <mat-option value="Ganado Menor">Ganado  Menor</mat-option>
+                                <mat-option value="Ganado Menor">Ganado Menor</mat-option>
                                 <mat-option value="Caña">Caña</mat-option>
                                 <mat-option value="Frutales">Frutales</mat-option>
                                 <mat-option value="Arroz">Arroz</mat-option>

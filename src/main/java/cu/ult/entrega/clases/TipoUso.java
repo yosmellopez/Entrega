@@ -6,6 +6,7 @@
 package cu.ult.entrega.clases;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
@@ -21,32 +22,32 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 /**
- *
  * @author Pablo Caram Local
  */
 @Entity
 @Table(name = "tipo_uso")
-public class TipoDeUso implements Serializable {
+public class TipoUso implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(name = "codigo")
     private String codigo;
-    
+
     @Column(name = "nombre")
     private String nombre;
-    
+
     @JsonIgnore
-    @OneToMany(mappedBy = "tipoDeUso")
+    @OneToMany(mappedBy = "tipoUso")
     private List<Parcela> parcelas;
-    
+
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_tipo_uso_tipo_superficie"))
-    private TipoDeSuperficie tipoDeSuperficie;
-    
+    private TipoSuperficie tipoSuperficie;
+
     public Long getId() {
         return id;
     }
@@ -79,14 +80,14 @@ public class TipoDeUso implements Serializable {
         this.parcelas = parcelas;
     }
 
-    public TipoDeSuperficie getTipoDeSuperficie() {
-        return tipoDeSuperficie;
+    public TipoSuperficie getTipoSuperficie() {
+        return tipoSuperficie;
     }
 
-    public void setTipoDeSuperficie(TipoDeSuperficie tipoDeSuperficie) {
-        this.tipoDeSuperficie = tipoDeSuperficie;
+    public void setTipoSuperficie(TipoSuperficie tipoSuperficie) {
+        this.tipoSuperficie = tipoSuperficie;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -97,10 +98,10 @@ public class TipoDeUso implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TipoDeUso)) {
+        if (!(object instanceof TipoUso)) {
             return false;
         }
-        TipoDeUso other = (TipoDeUso) object;
+        TipoUso other = (TipoUso) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -109,7 +110,7 @@ public class TipoDeUso implements Serializable {
 
     @Override
     public String toString() {
-        return "entrega.clases.TipoDeUso[ id=" + id + " ]";
+        return "entrega.clases.TipoUso[ id=" + id + " ]";
     }
-    
+
 }

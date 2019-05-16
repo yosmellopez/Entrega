@@ -1,5 +1,5 @@
-import {HttpHeaders, HttpResponseBase} from "@angular/common/http";
-import {NativeDateAdapter} from "@angular/material";
+import { HttpHeaders, HttpResponseBase } from '@angular/common/http';
+import { NativeDateAdapter } from '@angular/material';
 
 export class Provincia {
     id: number = null;
@@ -8,8 +8,8 @@ export class Provincia {
 
     constructor(value?: any) {
         if (value) {
-            this.codigo = value.codigo ? value.codigo : "";
-            this.nombre = value.nombre ? value.nombre : "";
+            this.codigo = value.codigo ? value.codigo : '';
+            this.nombre = value.nombre ? value.nombre : '';
         }
     }
 }
@@ -23,20 +23,20 @@ export class Municipio {
 
 export class Usuario {
     id: number;
-    email:string;
+    email: string;
     name: string;
     lastname: string;
     username: string;
-    password:string;
+    password: string;
     rol: Rol;
 
     constructor(value?: any) {
         if (value) {
-            this.name = value.name ? value.name : "";
-            this.lastname = value.lastname ? value.lastname : "";
-            this.username = value.username ? value.username : "";
-            this.password = value.password ? value.password : "";
-            this.rol = value.rol ? value.rol : ""
+            this.name = value.name ? value.name : '';
+            this.lastname = value.lastname ? value.lastname : '';
+            this.username = value.username ? value.username : '';
+            this.password = value.password ? value.password : '';
+            this.rol = value.rol ? value.rol : ''
         }
     }
 }
@@ -44,6 +44,11 @@ export class Usuario {
 export class Rol {
     id: number;
     name: string;
+}
+
+export class Integracion {
+    id: number;
+    integracion: string;
 }
 
 export class ConsejoPopular {
@@ -54,12 +59,12 @@ export class ConsejoPopular {
 }
 
 export class PersonaAyuda {
-    id:number;
+    id: number;
     ci: string;
     nombre: string;
     primerApellido: string;
     segundoApellido: string;
-    parentesco:string;
+    parentesco: string;
     asociado: Persona;
 }
 
@@ -71,21 +76,21 @@ export class Persona {
     nombre: string;
     primerApellido: string;
     segundoApellido: string;
-    sexo: string;
+    sexo: boolean;
     dirParticular: string;
     edad: number;
     movil: string;
     telFijo: string;
     situacionLaboral: string;
-    integracion:string;
-    estadoCivil:string;
-    personasAyuda:PersonaAyuda[];
+    integraciones: Integracion[] = [];
+    estadoCivil: string;
+    personasAyuda: PersonaAyuda[];
     asociado: Persona;
 
     constructor(value?: any) {
         if (value) {
-            this.ci = value? value : ""
-            this.tipoPersona = value? value : "";
+            this.ci = value ? value : ''
+            this.tipoPersona = value ? value : '';
             //this.nombre = value.nombre ? value.nombre : "";
         }
     }
@@ -105,19 +110,19 @@ export class Solicitud {
     tramite: Tramite;
     estado: string;
     fechaAproDes: Date;
-    detallesmt:string;
-    detallesAproDesa:string;
+    detallesMT: string;
+    detallesAproDesa: string;
 }
 
 export class Parcela {
     id: number;
     consejoPopular: ConsejoPopular;
-    direccion:string;
+    direccion: string;
     persona: Persona;
     zonaCatastral: number;
     parcela: number;
     divicion: number;
-    tipoDeUso: TipoDeUso;
+    tipoUso: TipoUso;
     area: number;
     limiteN: string;
     limiteS: string;
@@ -147,17 +152,17 @@ export class Tramite {
     solicitud: Solicitud;
 }
 
-export class TipoDeSuperficie {
+export class TipoSuperficie {
     id: number;
     codigo: number;
     nombre: string;
 }
 
-export class TipoDeUso {
+export class TipoUso {
     id: number;
     codigo: number;
     nombre: string;
-    tipoDeSuperficie: TipoDeSuperficie;
+    tipoDeSuperficie: TipoSuperficie;
 
 }
 
