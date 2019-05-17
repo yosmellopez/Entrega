@@ -3,7 +3,6 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { AccountService } from '../../guards/account.service';
 import { SolicitudComponent } from '../../admin/solicitud/solicitud.component';
 
-
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',

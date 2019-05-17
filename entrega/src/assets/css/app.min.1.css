@@ -10283,7 +10283,7 @@ body #content {
 }
 
 .profile-menu > a .profile-pic {
-    padding: 12px;
+    padding: 7px;
 }
 
 .profile-menu > a .profile-pic > img {
@@ -10298,7 +10298,7 @@ body #content {
     background: rgba(0, 0, 0, 0.37);
     padding: 7px 14px;
     color: #fff;
-    margin-top: 20px;
+    margin-top: 5px;
     position: relative;
 }
 
@@ -10307,7 +10307,7 @@ body #content {
     line-height: 100%;
     position: absolute;
     right: 15px;
-    top: 7px;
+    top: 18px;
     -webkit-transition: all;
     -o-transition: all;
     transition: all;

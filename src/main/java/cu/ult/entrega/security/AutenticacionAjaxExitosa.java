@@ -20,6 +20,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Component
@@ -38,6 +39,8 @@ public class AutenticacionAjaxExitosa implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_OK);
         Usuario usuario = (Usuario) authentication.getPrincipal();
+        usuario.setLastLogin(LocalDateTime.now());
+        usuarioRepository.saveAndFlush(usuario);
         if (request.getRequestURI().contains(AppConstants.AUTHENTICATION_URL)) {
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             JwtToken accessToken = tokenFactory.createAccessJwtToken(usuario);

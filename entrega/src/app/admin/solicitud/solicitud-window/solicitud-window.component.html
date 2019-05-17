@@ -6,7 +6,7 @@
 </h2>
 
 <form [formGroup]="formSolicitud" (submit)="insertarSolicitud()">
-    <mat-horizontal-stepper [linear]="false" #stepper [selectedIndex]="indexStepper" (selectionChange)="selectionChange($event)">
+    <mat-horizontal-stepper [linear]="true" #stepper [selectedIndex]="indexStepper" (selectionChange)="selectionChange($event)">
         <mat-step [stepControl]="formSolicitud">
             <ng-template matStepLabel>Datos de la solicitud</ng-template>
             <form [formGroup]="formSolicitud">

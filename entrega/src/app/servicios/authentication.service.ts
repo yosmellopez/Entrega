@@ -27,7 +27,6 @@ export class AuthenticationService {
     }
 
     iniciarSesion(values: any): Observable<Respuesta<Usuario>> {
-        console.log(values);
         return this.http.post<AppResponse<Usuario>>(SERVER_URL + 'api/auth/login', values, {observe: 'response'});
     }
 

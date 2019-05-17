@@ -1,0 +1,35 @@
+
+.frente {
+    height: 615px;
+    width: 500px;
+    min-height: 300px;
+    min-width: 300px;
+    z-index: 1000000;
+    opacity: 0.5;
+    top: 0;
+    left: 0;
+    position: absolute;
+    background-color: #0e0e0e;
+}
+
+.progreso {
+    position: absolute;
+    width: 100%;
+    left: 0px;
+    top: 0;
+    height: 5px;
+    float: left;
+    clear: right;
+}
+
+.btn-block {
+    position: absolute;
+    border-radius: 100%;
+    left: 95%;
+    top: 46%;
+    height: 50px;
+    width: 50px;
+    background-color: #0e0e0e;
+    z-index: 1000000;
+    opacity: 0.5;
+}

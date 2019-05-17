@@ -28,6 +28,7 @@ export class Usuario {
     lastname: string;
     username: string;
     password: string;
+    lastLogin: Date;
     rol: Rol;
 
     constructor(value?: any) {
