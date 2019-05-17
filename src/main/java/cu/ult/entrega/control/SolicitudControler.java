@@ -95,8 +95,7 @@ public class SolicitudControler {
     @PostMapping(value = "/solicitud")
     public ResponseEntity<AppResponse<Solicitud>> insertarSolicitud(@RequestBody Solicitud solicitud) {
         //System.out.println(solicitud.getPersona().getPersonas());
-        List<PersonaAyuda> personaAyudaList = solicitud.getPersona().getPersonasAyuda();
-        List<PersonaAyuda> personaAyudaGuard = null;
+        List<PersonaAyuda> personasAyuda = solicitud.getPersona().getPersonasAyuda();
         Persona persona = solicitud.getPersona();
         Set<Parcela> parcelas = solicitud.getParcelas();
         Set<Parcela> parcelasGuardadas = new HashSet<>();
@@ -107,18 +106,14 @@ public class SolicitudControler {
         }
         solicitud.setParcelas(parcelasGuardadas);
 
-        for (PersonaAyuda personaAyuda : personaAyudaList) {
-           // personaAyuda.setAsociado(persona);
-            personaAyudaGuard.add(personaAyudaRepositorio.saveAndFlush(personaAyuda));
-        }
-
-        persona.setPersonasAyuda(personaAyudaGuard);
-
-        personaRepositorio.saveAndFlush(persona);
-
-        solicitud.setPersona(persona);
+        solicitud.setPersona(personaRepositorio.saveAndFlush(persona));
 
         solicitudRepositorio.saveAndFlush(solicitud);
+
+        for (PersonaAyuda personaAyuda : personasAyuda) {
+            personaAyuda.setPersona(solicitud.getPersona());
+            personaAyudaRepositorio.saveAndFlush(personaAyuda);
+        }
 
         for (LineaDeProduccion lineaDeProduccion : lineasDeProduccion) {
             lineaDeProduccion.setSolicitud(solicitud);

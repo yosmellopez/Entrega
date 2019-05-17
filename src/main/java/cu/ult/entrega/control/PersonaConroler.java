@@ -6,8 +6,10 @@
 package cu.ult.entrega.control;
 
 import cu.ult.entrega.clases.Persona;
+import cu.ult.entrega.clases.PersonaAyuda;
 import cu.ult.entrega.clases.Solicitud;
 import cu.ult.entrega.excepcion.ProvinciaException;
+import cu.ult.entrega.repositorio.PersonaAyudaRepositorio;
 import cu.ult.entrega.repositorio.PersonaRepositorio;
 import cu.ult.entrega.repositorio.SolicitudRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,9 @@ public class PersonaConroler {
 
     @Autowired
     SolicitudRepositorio solicitudRepositorio;
+
+    @Autowired
+    PersonaAyudaRepositorio personaAyudaRepositorio;
 
     @RequestMapping(value = "/persona")
     public ResponseEntity<AppResponse<Persona>> listarPersonas(Pageable p) {

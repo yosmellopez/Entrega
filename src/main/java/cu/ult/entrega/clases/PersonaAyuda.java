@@ -32,13 +32,9 @@ public class PersonaAyuda implements Serializable {
     private String parentesco;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_personaAyuda_asociado"))
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_persona_ayuda_persona"))
     @JsonBackReference
-    private Persona asociado;
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
+    private Persona persona;
 
     public Long getId() {
         return id;
@@ -88,12 +84,16 @@ public class PersonaAyuda implements Serializable {
         this.parentesco = parentesco;
     }
 
-    public Persona getAsociado() {
-        return asociado;
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
-    public void setAsociado(Persona asociado) {
-        this.asociado = asociado;
+    public Persona getPersona() {
+        return persona;
+    }
+
+    public void setPersona(Persona persona) {
+        this.persona = persona;
     }
 
     @Override
@@ -109,16 +109,5 @@ public class PersonaAyuda implements Serializable {
         return Objects.hash(id);
     }
 
-    @Override
-    public String toString() {
-        return "PersonaAyuda{" +
-                "id=" + id +
-                ", ci='" + ci + '\'' +
-                ", nombre='" + nombre + '\'' +
-                ", primerApellido='" + primerApellido + '\'' +
-                ", segundoApellido='" + segundoApellido + '\'' +
-                ", parentesco='" + parentesco + '\'' +
-                ", asociado=" + asociado +
-                '}';
-    }
+
 }

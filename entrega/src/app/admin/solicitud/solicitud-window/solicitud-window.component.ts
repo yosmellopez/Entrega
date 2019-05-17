@@ -1,32 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import {
-    FloatLabelType,
-    MAT_DATE_FORMATS,
-    MAT_DIALOG_DATA, MatCheckbox,
-    MatDialog,
-    MatDialogRef,
-    MatStepper,
-    MatTableDataSource
-} from '@angular/material';
-import {
-    ConsejoPopular,
-    LineaDeProduccion,
-    Municipio,
-    Parcela,
-<<<<<<< HEAD
-    Persona, PersonaAyuda,
-    Provincia,
-=======
-    Persona,
->>>>>>> origin/master
-    Solicitud,
-    TipoDeUso
-} from '../../../modelo';
-import {
-    FormControl,
-    FormGroup,
-    Validators
-} from '@angular/forms';
+import { FloatLabelType,  MAT_DATE_FORMATS, MAT_DIALOG_DATA, MatCheckbox, MatDialog,  MatDialogRef, MatStepper,  MatTableDataSource} from '@angular/material';
+import {   ConsejoPopular, LineaDeProduccion, Municipio, Parcela, Persona, PersonaAyuda,  Provincia,  Solicitud,TipoDeUso} from '../../../modelo';
+import { FormControl,  FormGroup,   Validators} from '@angular/forms';
 import { Information, MensajeError } from '../../../mensaje/window.mensaje';
 import { ConsejoPopularService } from '../../../servicios/consejo-popular.service';
 import { TipoDeUsoService } from '../../../servicios/tipo-de-uso.service';
@@ -202,7 +177,6 @@ export class SolicitudWindowComponent implements OnInit {
     }
 
     ngOnInit() {
-
         if (this.insertar) {
             console.log(this.insertar);
 
@@ -237,47 +211,21 @@ export class SolicitudWindowComponent implements OnInit {
         } else {
             const arrOrganizaciones = this.persona.integracion.split(',');
             console.log(arrOrganizaciones);
-<<<<<<< HEAD
-
-            const arrOrganizacion = this.persona.integracion.split(',');
-            console.log(arrOrganizacion);
-            for (let organizacion of this.organizaciones) {
-
-                for (let cont in arrOrganizacion) {
-                    for (let organizacion of this.organizaciones) {
-                        if (arrOrganizacion[cont] == organizacion.name) {
-                            organizacion.activo = true;
-                        }
-=======
-        }
-
-        const arrOrganizaciones = this.persona.integracion.split(',');
-        for (let organizacion of this.organizaciones) {
             for (let cont in arrOrganizaciones) {
                 for (let organizacion of this.organizaciones) {
                     if (arrOrganizaciones[cont] == organizacion.name) {
                         organizacion.activo = true;
->>>>>>> origin/master
                     }
+
                 }
             }
-        }
 
-<<<<<<< HEAD
             this.dataSourceParcela= new MatTableDataSource<Parcela>(this.parcelas);
 
             this.dataSourcePersonaAyuda = new MatTableDataSource<PersonaAyuda>(this.persona.personasAyuda);
 
             this.dataSourceLinea = new MatTableDataSource<LineaDeProduccion>(this.lineasProduccion);
         }
-=======
-
-        this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
-
-        this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
-
-        this.dataSourceLinea = new MatTableDataSource<LineaDeProduccion>(this.lineasProduccion);
->>>>>>> origin/master
 
         this.listarTipoPersonaJuridica();
 
@@ -472,7 +420,7 @@ export class SolicitudWindowComponent implements OnInit {
         if (this.formSolicitud.valid && this.formPersona.valid && this.formPersonaAyuda.valid && this.formParcela.valid && this.formLineaProduccion.valid) {
             const solicitud = this.formSolicitud.value;
             solicitud.persona = {...this.formPersona.value};
-            solicitud.persona.personasAyuda = {...this.listPersonaAyuda}
+            solicitud.persona.personasAyuda = [...this.listPersonaAyuda]
             solicitud.parcelas = [...this.parcelas];
             solicitud.lineasDeProduccion = [...this.lineasProduccion];
             this.solicitud = solicitud;

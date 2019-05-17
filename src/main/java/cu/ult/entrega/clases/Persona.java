@@ -6,6 +6,7 @@
 package cu.ult.entrega.clases;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -89,12 +90,11 @@ public class Persona implements Serializable {
     @Column(name = "experiencia_agricola")
     private Integer experienciaAgricola;
 
-    @OneToMany(mappedBy = "asociado")
+    @OneToMany(mappedBy = "persona")
     @JsonManagedReference
     private List<PersonaAyuda> personasAyuda;
 
     @JsonIgnore
-    @JsonIgnoreProperties({"personas"})
     @OneToMany(mappedBy = "asociado")
     private List<Persona> personas;
 

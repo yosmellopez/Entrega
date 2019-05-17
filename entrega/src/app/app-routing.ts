@@ -26,7 +26,7 @@ const routes: Routes = [
         children: [{path: 'admin', loadChildren: './admin/admin.module#AdminModule'}],
         canActivate: [AdminGuard],
         data: {
-            roles: ['Administrador']
+            roles: ['Registrador','Administrador']
         }
     }
 ];
