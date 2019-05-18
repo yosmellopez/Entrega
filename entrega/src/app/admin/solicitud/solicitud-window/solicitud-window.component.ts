@@ -19,7 +19,7 @@ import {
 import {
     FormArray,
     FormControl,
-    FormGroup,
+    FormGroup, ValidatorFn,
     Validators
 } from '@angular/forms';
 import { Information, MensajeError } from '../../../mensaje/window.mensaje';
@@ -31,6 +31,7 @@ import { Observable, ReplaySubject } from 'rxjs/index';
 import { PersonaWindowsComponent } from '../../solicitante/persona-windows/persona-windows.component';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { MunicipioService } from '../../../servicios/municipio.service';
+import { ParcelaWindow } from '../../parcela/parcela-window/parcela-window.component';
 
 export const MY_FORMATS = {
     parse: {
@@ -103,8 +104,6 @@ export class SolicitudWindowComponent implements OnInit {
             this.lineasProduccion = lineasDeProduccion;
             this.listPersonaAyuda = persona.personasAyuda;
         }
-        //this.tipoPersona = this.persona.tipoPersona;
-        //this.checked = false;
 
         this.formSolicitud = new FormGroup({
             municipio: new FormControl(municipio),
@@ -145,19 +144,7 @@ export class SolicitudWindowComponent implements OnInit {
         });
 
         this.formParcela = new FormGroup({
-            contador: new FormControl(0, []),
-            consejoPopular: new FormControl('', [Validators.required]),
-            tipoUso: new FormControl('', [Validators.required]),
-            zonaCatastral: new FormControl('', [Validators.required]),
-            parcela: new FormControl('', [Validators.required]),
-            divicion: new FormControl('', []),
-            direccion: new FormControl('', [Validators.required]),
-            area: new FormControl('', [Validators.required]),
-            limiteN: new FormControl('', []),
-            limiteS: new FormControl('', []),
-            limiteE: new FormControl('', []),
-            limiteW: new FormControl('', []),
-            condicActual: new FormControl('', [])
+            parcelas: new FormArray(this.createControls(), minSelectedCheckboxes(1))
         });
 
         this.formLineaProduccion = new FormGroup({
@@ -165,7 +152,6 @@ export class SolicitudWindowComponent implements OnInit {
             lineaDeProduccion: new FormControl('', [Validators.required]),
             areaDedicada: new FormControl('', [Validators.required]),
         });
-
 
         this.formPersona.get('ci').valueChanges.subscribe(value => {
             if (this.formPersona.get('ci').valid) {
@@ -185,8 +171,6 @@ export class SolicitudWindowComponent implements OnInit {
                 this.resetForm('Persona');
             }
         });
-
-
     }
 
     ngOnInit() {
@@ -196,17 +180,6 @@ export class SolicitudWindowComponent implements OnInit {
             this.persona.integraciones.forEach(integracion => {
                 formArray.push(new FormControl(integracion));
             });
-        });
-        this.consejoPopularService.listarConsejoPopularNoDefinido('No Definido').subscribe(resp => {
-            if (resp.body.success) {
-                this.consejoPopulares = resp.body.elementos;
-                this.formParcela.get('consejoPopular').setValue(resp.body.elemento);
-            }
-        });
-        this.tipodeUsoService.listarTipoUsoNoDefinido('No Definido').subscribe(resp => {
-            if (resp.body.success) {
-                this.formParcela.get('tipoUso').setValue(resp.body.elemento);
-            }
         });
         this.municipioService.obtenerMunicipioPorCodigo('02').subscribe(resp => {
             if (resp.body.success) {
@@ -246,34 +219,28 @@ export class SolicitudWindowComponent implements OnInit {
         });
     }
 
-
     addParcela() {
-        if (this.formParcela.valid) {
-            if (this.dataSourceParcela.data.length === 0) {
-                const parcela = this.formParcela.value as Parcela;
-                this.parcelas.push(parcela);
+        const dialogRef = this.dialog.open(ParcelaWindow, {width: '550px', data: new Parcela()});
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.parcelas.push(result);
+                this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
+                const formArray = <FormArray>this.formParcela.get('parcelas') as FormArray;
+                formArray.push(new FormControl(result));
+            }
+        });
+    }
+
+    editParcela($event, parcela: Parcela) {
+        const dialogRef = this.dialog.open(ParcelaWindow, {width: '550px', data: parcela});
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                const index = this.parcelas.findIndex(value => parcela.id === value.id);
+                this.parcelas.splice(index);
+                this.parcelas.push(result);
                 this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
             }
-            /*else {
-                           for (var cont in this.parcelas) {
-                               if (this.parcelas[cont].zonaCatastral == this.formParcela.get('zonaCatastral').value && this.parcelas[cont].parcela == this.formParcela.get('parcela').value && this.parcelas[cont].divicion == this.formParcela.get('divicion').value) {
-                                   esta = true;
-                                   break;
-                               }
-                           }
-
-                           if (esta != true) {
-                               this.formParcela.get('contador').setValue(this.formParcela.get('contador').value + 1);
-                               this.parcelas.push(this.formParcela.value);
-                               this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
-                           } else {
-                               this.dialog.open(MensajeError, {
-                                   width: '400px',
-                                   data: {mensaje: 'La parcela ya se encuentra en la lista:'}
-                               })
-                           }
-                       }*/
-        }
+        });
     }
 
     addLineasProduccion() {
@@ -367,7 +334,7 @@ export class SolicitudWindowComponent implements OnInit {
     }
 
     insertarSolicitud(): void {
-        if (this.formSolicitud.valid && this.formPersona.valid && this.formPersonaAyuda.valid && this.formParcela.valid && this.formLineaProduccion.valid) {
+        if (this.formSolicitud.valid && this.formPersona.valid && this.formParcela.valid) {
             const solicitud = this.formSolicitud.value as Solicitud;
             solicitud.persona = {...this.formPersona.value};
             solicitud.persona.personasAyuda = [...this.listPersonaAyuda];
@@ -445,4 +412,21 @@ export class SolicitudWindowComponent implements OnInit {
     tieneIntegracion(organizacion: Integracion): boolean {
         return this.persona.integraciones.some(value => value.id === organizacion.id);
     }
+
+    createControls(): FormControl[] {
+        const controls: FormControl[] = [];
+        this.parcelas.forEach(parcela => {
+            controls.push(new FormControl(parcela));
+        });
+        return controls;
+    }
+}
+
+function minSelectedCheckboxes(min = 1) {
+    const validator: ValidatorFn = (formArray: FormArray) => {
+        const totalSelected = formArray.controls.length;
+        // if the total is not greater than the minimum, return the error message
+        return totalSelected >= min ? null : {required: true};
+    };
+    return validator;
 }

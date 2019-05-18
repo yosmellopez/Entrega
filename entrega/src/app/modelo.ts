@@ -116,7 +116,7 @@ export class Solicitud {
 }
 
 export class Parcela {
-    id: number;
+    id: number = null;
     consejoPopular: ConsejoPopular;
     direccion: string;
     persona: Persona;
