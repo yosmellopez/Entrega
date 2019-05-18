@@ -99,7 +99,6 @@ export class SolicitudComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result != false) {
-                console.log(result);
                 this.dialog.open(Information, {
                     width: '400px',
                     data: {mensaje: 'Se ha insertardo la solicitud:' + result.elemento.numExpediente}
