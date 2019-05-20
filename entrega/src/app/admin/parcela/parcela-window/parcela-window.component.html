@@ -1,0 +1,55 @@
+<h2 mat-dialog-title style="margin: 0 0">{{insertar?'Nueva Parcela':'Modificar Parcela'}}
+    <button type="button" mat-icon-button class="close-button" (click)="onNoClick()">
+        <mat-icon style="font-size: 25px">close</mat-icon>
+    </button>
+    <hr>
+</h2>
+<form [formGroup]="formParcela" (submit)="addParcela()">
+    <mat-form-field class="middle-width">
+        <input type="number" matInput placeholder="ZC" formControlName="zonaCatastral">
+        <mat-error *ngIf="formParcela.controls['zonaCatastral'].errors?.required">Debe insertar el numero de zona catastral</mat-error>
+    </mat-form-field>
+    <mat-form-field class="middle-width">
+        <input type="number" matInput placeholder="Parcela" formControlName="parcela">
+        <mat-error *ngIf="formParcela.controls['parcela'].errors?.required">Debe insertar el numero de parcela</mat-error>
+    </mat-form-field>
+    <mat-form-field class="middle-width">
+        <input type="number" matInput placeholder="División" formControlName="divicion">
+    </mat-form-field>
+    <mat-form-field class="middle-width">
+        <input type="number" matInput placeholder="Área(Ha)" formControlName="area">
+        <mat-error *ngIf="formParcela.controls['area'].errors?.required">Debe insertar el área de la parcela</mat-error>
+    </mat-form-field>
+    <mat-form-field class="middle-width">
+        <input type="text" matInput placeholder="Direccion" formControlName="direccion">
+        <mat-error *ngIf="formParcela.controls['direccion'].errors?.required">Debe proporcionar la dirección de la parcela</mat-error>
+    </mat-form-field>
+    <mat-form-field class="middle-width">
+        <input type="text" matInput placeholder="Condición Actual" formControlName="condicActual">
+    </mat-form-field>
+
+    <mat-form-field class="middle-width">
+        <input type="text" matInput placeholder="Limite Norte" formControlName="limiteN">
+    </mat-form-field>
+
+    <mat-form-field class="middle-width">
+        <input type="text" matInput placeholder="Limite Sur" formControlName="limiteS">
+    </mat-form-field>
+    <mat-form-field class="middle-width">
+        <input type="text" matInput placeholder="Limite Este" formControlName="limiteE">
+    </mat-form-field>
+    <mat-form-field class="middle-width">
+        <input type="text" matInput placeholder="Limite Oeste" formControlName="limiteW">
+    </mat-form-field>
+    <div mat-dialog-actions class="boton-theme">
+        <span class="spacer"></span>
+        <button type="submit" mat-raised-button cdkFocusInitial color="primary">
+            <mat-icon>check_circle</mat-icon>
+            {{insertar?'Guardar':'Modificar'}}
+        </button>
+        <button type="button" mat-raised-button (click)="onNoClick()" color="warn">
+            <mat-icon>cancel</mat-icon>
+            Cancelar
+        </button>
+    </div>
+</form>

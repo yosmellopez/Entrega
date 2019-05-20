@@ -1,4 +1,6 @@
 <div class="lc-block toggled" id="l-login">
+    <div class="frente" [style.display]="isLoading ? 'block' : 'none'"></div>
+    <mat-progress-bar mode="indeterminate" class="progreso" [style.display]="isLoading ? 'block' : 'none'"></mat-progress-bar>
     <div class="title text-center">
         <h4 style="margin-bottom: 30px">Sistema de Gestión de Entrega de Tierra</h4>
         <img src="assets/images/logo_login.jpg" style="border-radius: 100%" width="200" height="200">
@@ -27,6 +29,7 @@
                 </mat-form-field>
             </div>
         </div>
+        <div class="btn-block" [style.display]="isLoading ? 'block' : 'none'"></div>
         <button class="btn btn-login btn-float waves-effect waves-circle waves-float" [ngClass]="form.valid?'btn-success':'btn-danger'" style="padding-top: 10px">
             <i class="material-icons">arrow_forward</i>
         </button>

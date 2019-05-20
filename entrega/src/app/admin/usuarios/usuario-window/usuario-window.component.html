@@ -7,15 +7,9 @@
     </h1>
     <div mat-dialog-content style="min-height: 7em;">
         <mat-form-field class="full-width">
-            <input matInput #input type="email" placeholder="Correo electronico" formControlName="email">
-            <mat-error *ngIf="form.controls['email'].errors?.required">
-                Debe insertar el correo electronico
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field class="full-width">
             <input matInput placeholder="Nombre" formControlName="name">
             <mat-error *ngIf="form.controls['name'].errors?.required">
-                Debe insertar el nombre de usuariao
+                Debe insertar el nombre de usuario
             </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
@@ -28,6 +22,15 @@
             <input matInput placeholder="Usuario" formControlName="username">
             <mat-error *ngIf="form.controls['username'].errors?.required">
                 Debe insertar un nombre de usurio.
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+            <input matInput #input type="email" placeholder="Correo electronico" formControlName="email">
+            <mat-error *ngIf="form.controls['email'].errors?.required">
+                Debe insertar el correo electrónico
+            </mat-error>
+            <mat-error *ngIf="form.controls['email'].errors?.email">
+                Debe insertar el correo electrónico válido.
             </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width" *ngIf="insertar">
@@ -44,7 +47,7 @@
                 Debe confirmar la contraseña.
             </mat-error>
             <mat-error *ngIf="form.hasError('notSame')">
-               Las contrase;as no coincides.
+               Las contraseñas no coinciden.
             </mat-error>
         </mat-form-field>
 

@@ -8,24 +8,21 @@
                     </div>
 
                     <div class="profile-info">
-                        Malinda Hollaway
-
-                        <i class="zmdi zmdi-arrow-drop-down"></i>
+                        {{username}}
+                        {{nameRol}}
+                        <i class="zmdi zmdi-chevron-down"></i>
                     </div>
                 </a>
 
                 <ul class="main-menu">
                     <li>
-                        <a href="http://byrushan.com/projects/ma/1-5-1/jquery/profile-about.html"><i class="zmdi zmdi-account"></i> View Profile</a>
-                    </li>
-                    <li>
-                        <a href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html"><i class="zmdi zmdi-input-antenna"></i> Privacy Settings</a>
+                        <a href="http://byrushan.com/projects/ma/1-5-1/jquery/profile-about.html"><i class="zmdi zmdi-account"></i> Ver Perfil</a>
                     </li>
                     <li>
                         <a href="http://byrushan.com/projects/ma/1-5-1/jquery/widget-templates.html"><i class="zmdi zmdi-settings"></i> Settings</a>
                     </li>
                     <li>
-                        <a routerLink="/login"><i class="zmdi zmdi-time-restore"></i> Logout</a>
+                        <a routerLink="/logout"><i class="zmdi zmdi-power"></i> Cerrar Sesión</a>
                     </li>
                 </ul>
             </div>
@@ -34,7 +31,7 @@
                 <li>
                     <a href="#">
                         <i class="zmdi zmdi-home"></i>
-                        Home
+                        Inicio
                     </a>
                 </li>
                 <li *ngFor="let menu of rutasUsuario" routerLinkActive="active" [class.sub-menu]="menu.hasChildren">

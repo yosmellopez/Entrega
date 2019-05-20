@@ -18,8 +18,12 @@ public class EntityUserDetailsService implements UserDetailsService {
 
     private final Logger log = LoggerFactory.getLogger(EntityUserDetailsService.class);
 
+    private final UsuarioRepository usuarioRepository;
+
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    public EntityUserDetailsService(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
 
     @Override
     @Transactional

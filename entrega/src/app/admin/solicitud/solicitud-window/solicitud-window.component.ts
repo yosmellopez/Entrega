@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit } from '@angular/core';
-
 import {
     MAT_DATE_FORMATS,
     MAT_DIALOG_DATA,
@@ -74,6 +73,13 @@ export class SolicitudWindowComponent implements OnInit {
     municipio: Municipio;
     ci: string;
     organizaciones: Integracion[] = [];
+    // organizaciones = [{name: 'PCC', activo: false},
+    //     {name: 'CTC', activo: false},
+    //     {name: 'ANAP', activo: false},
+    //     {name: 'MTT', activo: false},
+    //     {name: 'CDR', activo: false},
+    //     {name: 'ACRC', activo: false},
+    //     {name: 'FMC', activo: false}];
 
     displayedColumnsParcela: string[] = ['contador', 'zonaCatastral', 'parcela', 'divicion', 'area', 'acciones'];
     displayedColumnsLinea: string[] = ['contador', 'lineaDeProduccion', 'areaDedicada', 'acciones'];
@@ -184,67 +190,47 @@ export class SolicitudWindowComponent implements OnInit {
     }
 
     ngOnInit() {
-        if (this.insertar) {
-            console.log(this.insertar);
-
-            this.consejoPopularService.listarConsejoPopularNoDefinido('No Definido').subscribe(resp => {
-                if (resp.body.success) {
-                    this.consejoPopulares = resp.body.elementos;
-                    this.formParcela.get('consejoPopular').setValue(resp.body.elemento);
-                }
-            });
-
-            this.tipodeUsoService.listarTipoUsoPorNombre('Ociosa').subscribe(resp => {
-                if (resp.body.success) {
-                    this.formParcela.get('tipoUso').setValue(resp.body.elemento);
-                }
-                console.log(this.formParcela.value);
-            });
-
-            this.municipioService.obtenerMunicipioPorCodigo('02').subscribe(resp => {
-                if (resp.body.success) {
-                    this.formSolicitud.get('municipio').setValue(resp.body.elemento);
-                }
-            });
-
-            this.service.obtenerUltimSolicitud().subscribe(resp => {
-                if (resp.body.success && resp.body.total != 0) {
-                    this.formSolicitud.get('numExpediente').setValue((resp.body.elemento.numExpediente) + 1);
-                }
-            });
-
-            console.log(this.formSolicitud.value);
-
-        } else {
-
-            this.dataSourceParcela= new MatTableDataSource<Parcela>(this.parcelas);
-
-            this.dataSourcePersonaAyuda = new MatTableDataSource<PersonaAyuda>(this.persona.personasAyuda);
-
-            this.dataSourceLinea = new MatTableDataSource<LineaDeProduccion>(this.lineasProduccion);
-        }
-
-        this.listarTipoPersonaJuridica();
-
         this.personaService.listarIntegraciones().subscribe(integraciones => {
             this.organizaciones = integraciones;
-            console.log(integraciones);
             const formArray = <FormArray>this.formPersona.get('integraciones') as FormArray;
             this.persona.integraciones.forEach(integracion => {
                 formArray.push(new FormControl(integracion));
             });
         });
-
+        this.consejoPopularService.listarConsejoPopularNoDefinido('No Definido').subscribe(resp => {
+            if (resp.body.success) {
+                this.consejoPopulares = resp.body.elementos;
+                this.formParcela.get('consejoPopular').setValue(resp.body.elemento);
+            }
+        });
+        this.tipodeUsoService.listarTipoUsoNoDefinido('No Definido').subscribe(resp => {
+            if (resp.body.success) {
+                this.formParcela.get('tipoUso').setValue(resp.body.elemento);
+            }
+        });
+        this.municipioService.obtenerMunicipioPorCodigo('02').subscribe(resp => {
+            if (resp.body.success) {
+                this.formSolicitud.get('municipio').setValue(resp.body.elemento);
+            }
+        });
+        this.service.obtenerUltimSolicitud().subscribe(resp => {
+            if (resp.body.success && resp.body.total != 0) {
+                this.formSolicitud.get('numExpediente').setValue((resp.body.elemento.numExpediente) + 1);
+            }
+        });
         this.consejoPopularService.listarTodasConsejoPopular().subscribe(resp => {
             if (resp.body.success) {
                 this.consejoPopulares = resp.body.elementos;
                 this.consejoPopularFiltrados.next(this.consejoPopulares);
             }
         });
-
-       /* this.personaService.listarTodasPersona().subscribe(resp => {
+        this.personaService.listarTodasPersona().subscribe(resp => {
             this.personas = resp.body.elementos;
-        });*/
+        });
+        this.listarTipoPersonaJuridica();
+        this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
+        this.dataSourcePersonaAyuda = new MatTableDataSource<PersonaAyuda>(this.persona.personasAyuda);
+        this.dataSourceLinea = new MatTableDataSource<LineaDeProduccion>(this.lineasProduccion);
     }
 
     abrirVentana() {
@@ -458,6 +444,5 @@ export class SolicitudWindowComponent implements OnInit {
 
     tieneIntegracion(organizacion: Integracion): boolean {
         return this.persona.integraciones.some(value => value.id === organizacion.id);
-
     }
 }

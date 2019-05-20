@@ -38,8 +38,6 @@ export class SolicitudComponent implements OnInit {
     nombre: string = '';
     resultsLength = 0;
     isLoadingResults = true;
-    isRateLimitReached = false;
-    expandedElement: Solicitud;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     @ViewChild(MatTable) table: MatTable<Solicitud>;
@@ -101,7 +99,6 @@ export class SolicitudComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result != false) {
-                console.log(result);
                 this.dialog.open(Information, {
                     width: '400px',
                     data: {mensaje: 'Se ha insertardo la solicitud:' + result.elemento.numExpediente}
@@ -121,7 +118,7 @@ export class SolicitudComponent implements OnInit {
             if (result != false && result.success) {
                 this.dialog.open(Information, {
                     width: '400px',
-                    data: {mensaje: 'Se ha modificado la superficie.'}
+                    data: {mensaje: 'Se ha modificado la solicitud.'}
                 });
                 this.paginator.page.emit();
             }

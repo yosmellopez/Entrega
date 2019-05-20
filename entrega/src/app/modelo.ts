@@ -28,6 +28,7 @@ export class Usuario {
     lastname: string;
     username: string;
     password: string;
+    lastLogin: Date;
     rol: Rol;
 
     constructor(value?: any) {
@@ -115,7 +116,7 @@ export class Solicitud {
 }
 
 export class Parcela {
-    id: number;
+    id: number = null;
     consejoPopular: ConsejoPopular;
     direccion: string;
     persona: Persona;

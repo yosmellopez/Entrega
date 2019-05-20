@@ -123,29 +123,19 @@ public class SolicitudControler {
         return ResponseEntity.ok(AppResponse.success(solicitud).build());
     }
 
-    @RequestMapping(value = "/solicitud/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Solicitud> actualizarSolicitud(@PathVariable("id") long id, @RequestBody Solicitud solicitud) {
+    @PutMapping(value = "/solicitud/{id}")
+    public ResponseEntity<AppResponse<Solicitud>> actualizarSolicitud(@PathVariable("id") Optional<Solicitud> optional, @RequestBody Solicitud solicitud) {
         //Persona
         Set<Parcela> parcelas = solicitud.getParcelas();
         Set<Parcela> parcelasGuardadas = new HashSet<>();
-//        System.out.println("Updating User " + id);
-
-        Solicitud currentSolicitud = solicitudRepositorio.findById(id).orElseThrow(() -> new EntityNotFoundException("Solicitud no encontrada"));
+        Solicitud currentSolicitud = optional.orElseThrow(() -> new EntityNotFoundException("Solicitud no encontrada"));
 
         currentSolicitud.setTipoSolicitud(solicitud.getTipoSolicitud());
         currentSolicitud.setAreaSolicitada(solicitud.getAreaSolicitada());
         currentSolicitud.setEstado(solicitud.getEstado());
-        //currentSolicitud.setFechaAproDes(solicitud.getFechaAproDes());
-
-
-        if (currentSolicitud == null) {
-//            System.out.println("User with id " + id + " not found");
-            return new ResponseEntity<Solicitud>(HttpStatus.NOT_FOUND);
-        }
-
-
+        currentSolicitud.clonar(solicitud);
         solicitudRepositorio.saveAndFlush(currentSolicitud);
-        return new ResponseEntity<Solicitud>(currentSolicitud, HttpStatus.OK);
+        return ResponseEntity.ok(AppResponse.success(currentSolicitud).build());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

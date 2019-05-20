@@ -52,8 +52,8 @@ public class UsuarioController {
     }
 
     @GetMapping(value = "/roles/{idRol}")
-    public ResponseEntity<AppResponse<Rol>> obtenerRol(@PathVariable ("idRol")Optional<Rol> optional) {
-        Rol rol = optional.orElseThrow(()->new EntityNotFoundException("Rol no encontrado"));
+    public ResponseEntity<AppResponse<Rol>> obtenerRol(@PathVariable("idRol") Optional<Rol> optional) {
+        Rol rol = optional.orElseThrow(() -> new EntityNotFoundException("Rol no encontrado"));
         return ResponseEntity.ok(AppResponse.success(rol).build());
     }
 
@@ -88,17 +88,15 @@ public class UsuarioController {
     @PostMapping(value = "/usuario")
     public ResponseEntity<AppResponse<Usuario>> insertarUsuario(@RequestBody Usuario usuario) {
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        usuario.setActivated(false);
         usuarioRepository.saveAndFlush(usuario);
         return ResponseEntity.ok(AppResponse.success("Usuario insertado exitosamente.").elemento(usuario).build());
     }
 
     @PostMapping(value = "/usuario/registro")
     public ResponseEntity<AppResponse<Usuario>> registro(@RequestBody Usuario usuario) {
-        System.out.println(usuario.getUsername());
         usuario.setRol(rolRepository.findById(2).orElseThrow(() -> new EntityNotFoundException()));
-        System.out.println(usuario.getRol());
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-        System.out.println(usuario.getPassword());
         usuarioRepository.saveAndFlush(usuario);
         return ResponseEntity.ok(AppResponse.success(usuario)
                 .msg(String.format("Usuario %1$s registrado exitosamente", usuario.getNombreCompleto())).build());

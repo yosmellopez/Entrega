@@ -21,7 +21,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "solicitud", uniqueConstraints = @UniqueConstraint(name = "solicitud_unica", columnNames = {"numExpediente"}))
-public class Solicitud implements Serializable {
+public class Solicitud implements Serializable, EntidadClonable<Solicitud> {
 
     private static final long serialVersionUID = 1L;
 
@@ -238,4 +238,9 @@ public class Solicitud implements Serializable {
         return "entrega.clases.Solicitud[ id=" + id + " ]";
     }
 
+    @Override
+    public void clonar(Solicitud other) {
+        parcelas = other.parcelas;
+        aprobadoCAgraria = other.aprobadoCAgraria;
+    }
 }
