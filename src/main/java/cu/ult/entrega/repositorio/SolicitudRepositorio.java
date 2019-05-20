@@ -5,11 +5,13 @@
  */
 package cu.ult.entrega.repositorio;
 
+import cu.ult.entrega.clases.Persona;
 import cu.ult.entrega.clases.Solicitud;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -26,4 +28,6 @@ public interface SolicitudRepositorio extends JpaRepository<Solicitud, Long> {
     public Page<Solicitud> findByEstado(String estado, Pageable pageable);
 
     public Solicitud findTopByOrderByNumExpedienteDesc();
+
+    public List<Solicitud> findByTipoSolicitudAndTramite_FechaEntreInvestig(String tipoSolicitud, Date fechaEntreInvestig);
 }

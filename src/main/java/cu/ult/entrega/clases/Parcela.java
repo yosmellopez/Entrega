@@ -6,22 +6,12 @@
 package cu.ult.entrega.clases;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.io.Serializable;
 import java.util.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @author Pablo Caram Local
@@ -53,8 +43,8 @@ public class Parcela implements Serializable {
     private Integer divicion;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_parcela_tipoDeUso"))
-    private TipoDeUso tipoDeUso;
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_parcela_tipo_uso"))
+    private TipoUso tipoUso;
 
     @Column(name = "area")
     private Double area;
@@ -81,23 +71,21 @@ public class Parcela implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "regulacion_id")})
     Set<Regulaciones> regulaciones = new HashSet<>();
 
-    @JsonIgnore
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name = "Parcelas_Bienhechurias",
-            joinColumns = {@JoinColumn(name = "parcela_id")},
-            inverseJoinColumns = {@JoinColumn(name = "bienhechuria_id")})
-    Set<Bienhechurías> bienhechurias = new HashSet<>();
+    @OneToMany(mappedBy = "parcela")
+    @JsonIgnoreProperties(value = {"parcela"})
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<ParcelaBienhechuria> parcelaBienhechurias;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "parcelas")
     private List<Solicitud> solicitudes;
 
-    public TipoDeUso getTipoDeUso() {
-        return tipoDeUso;
+    public TipoUso getTipoUso() {
+        return tipoUso;
     }
 
-    public void setTipoDeUso(TipoDeUso tipoDeUso) {
-        this.tipoDeUso = tipoDeUso;
+    public void setTipoUso(TipoUso tipoUso) {
+        this.tipoUso = tipoUso;
     }
 
     public Long getId() {
@@ -208,12 +196,12 @@ public class Parcela implements Serializable {
         this.regulaciones = regulaciones;
     }
 
-    public Set<Bienhechurías> getBienhechurias() {
-        return bienhechurias;
+    public Set<ParcelaBienhechuria> getParcelaBienhechurias() {
+        return parcelaBienhechurias;
     }
 
-    public void setBienhechurias(Set<Bienhechurías> bienhechurias) {
-        this.bienhechurias = bienhechurias;
+    public void setParcelaBienhechurias(Set<ParcelaBienhechuria> parcelaBienhechurias) {
+        this.parcelaBienhechurias = parcelaBienhechurias;
     }
 
     public List<Solicitud> getSolicitudes() {
@@ -249,7 +237,7 @@ public class Parcela implements Serializable {
                 ", zonaCatastral=" + zonaCatastral +
                 ", parcela=" + parcela +
                 ", divicion=" + divicion +
-                ", tipoDeUso=" + tipoDeUso +
+                ", tipoUso=" + tipoUso +
                 ", area=" + area +
                 ", limiteN='" + limiteN + '\'' +
                 ", limiteS='" + limiteS + '\'' +

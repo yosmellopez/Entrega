@@ -1,9 +1,7 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {MediaMatcher} from "@angular/cdk/layout";
-import {Principal} from "../../servicios/principal.service";
-import {AuthenticationService} from "../../servicios/authentication.service";
-import {AccountService} from "../../guards/account.service";
-import {SolicitudComponent} from "../../admin/solicitud/solicitud.component";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { MediaMatcher } from '@angular/cdk/layout';
+import { AccountService } from '../../guards/account.service';
+import { SolicitudComponent } from '../../admin/solicitud/solicitud.component';
 
 
 @Component({
@@ -13,11 +11,11 @@ import {SolicitudComponent} from "../../admin/solicitud/solicitud.component";
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
-    solicitud:SolicitudComponent;
+    solicitud: SolicitudComponent;
 
     searchOpen: boolean = false;
     mobileQuery: MediaQueryList;
-    token='';
+    token = '';
 
     fillerNav = Array.from({length: 50}, (_, i) => `Nav Item ${i + 1}`);
 
@@ -30,26 +28,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     private _mobileQueryListener: () => void;
 
-    constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private acount:AccountService) {
+    constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private acount: AccountService) {
         this.mobileQuery = media.matchMedia('(max-width: 600px)');
         this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-        this.mobileQuery.addListener(this._mobileQueryListener);
+        this.mobileQuery.addEventListener('load', this._mobileQueryListener);
         this.token = localStorage.getItem('user_token');
-
-        console.log(this.token);
     }
 
     ngOnInit() {
     }
 
     ngOnDestroy(): void {
-        this.mobileQuery.removeListener(this._mobileQueryListener);
+        this.mobileQuery.removeEventListener('load', this._mobileQueryListener);
     }
 
-    logout (){
+    logout() {
         this.acount.logout();
     }
-
 
 
 }

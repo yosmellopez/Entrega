@@ -21,6 +21,14 @@ public class Tramite implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column (name = "fechaInvestig")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date fechaInvestig;
+
+    @Column (name = "fechaEntreInvestig")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date fechaEntreInvestig;
     
     @Column (name = "fechaConcilONHG")
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -72,6 +80,22 @@ public class Tramite implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Date getFechaInvestig() {
+        return fechaInvestig;
+    }
+
+    public void setFechaInvestig(Date fechaInvestig) {
+        this.fechaInvestig = fechaInvestig;
+    }
+
+    public Date getFechaEntreInvestig() {
+        return fechaEntreInvestig;
+    }
+
+    public void setFechaEntreInvestig(Date fechaEntreInvestig) {
+        this.fechaEntreInvestig = fechaEntreInvestig;
     }
 
     public Date getFechaConcilONHG() {

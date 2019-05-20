@@ -1,0 +1,25 @@
+<form class="form" [formGroup]="form" (submit)="insertarRegulacion()">
+    <h1 mat-dialog-title style="margin: 0 0">{{insertar?'Nueva Regulación':'Modificar Regulación'}}
+        <button type="button" mat-icon-button class="close-button" (click)="onNoClick()">
+            <mat-icon style="font-size: 25px">close</mat-icon>
+        </button>
+        <hr>
+    </h1>
+    <div mat-dialog-content style="min-height: 7em;">
+        <mat-form-field class="full-width">
+            <input matInput placeholder="Regulación" formControlName="regulacion">
+            <mat-error *ngIf="form.controls['regulacion'].errors?.required">Debe insertar la regulación</mat-error>
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="boton-theme">
+        <span class="spacer"></span>
+        <button type="submit" mat-raised-button cdkFocusInitial color="primary">
+            <mat-icon>check_circle</mat-icon>
+            {{insertar?'Guardar':'Modificar'}}
+        </button>
+        <button type="button" mat-raised-button (click)="onNoClick()" color="warn">
+            <mat-icon>cancel</mat-icon>
+            Cancelar
+        </button>
+    </div>
+</form>

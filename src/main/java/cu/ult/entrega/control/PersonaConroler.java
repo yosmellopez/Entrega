@@ -5,23 +5,24 @@
  */
 package cu.ult.entrega.control;
 
+import cu.ult.entrega.clases.Integracion;
 import cu.ult.entrega.clases.Persona;
+
 import cu.ult.entrega.clases.PersonaAyuda;
 import cu.ult.entrega.clases.Solicitud;
 import cu.ult.entrega.excepcion.ProvinciaException;
 import cu.ult.entrega.repositorio.PersonaAyudaRepositorio;
+import cu.ult.entrega.excepcion.ProvinciaException;
+import cu.ult.entrega.repositorio.IntegracionRepository;
 import cu.ult.entrega.repositorio.PersonaRepositorio;
-import cu.ult.entrega.repositorio.SolicitudRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
@@ -40,11 +41,15 @@ import static cu.ult.entrega.control.AppResponse.success;
 @RequestMapping("/api")
 public class PersonaConroler {
 
-    @Autowired
-    PersonaRepositorio personaRepositorio;
+    private final PersonaRepositorio personaRepositorio;
+
+    private final IntegracionRepository integracionRepository;
 
     @Autowired
-    SolicitudRepositorio solicitudRepositorio;
+    public PersonaConroler(PersonaRepositorio personaRepositorio, IntegracionRepository integracionRepository) {
+        this.personaRepositorio = personaRepositorio;
+        this.integracionRepository = integracionRepository;
+    }
 
     @Autowired
     PersonaAyudaRepositorio personaAyudaRepositorio;
@@ -56,27 +61,39 @@ public class PersonaConroler {
         return ResponseEntity.ok(success(personas).total(page.getTotalElements()).build());
     }
 
+    @RequestMapping(value = "/persona/todas")
+    public ResponseEntity<AppResponse<Persona>> listarTodasPersonas() {
+        List<Persona> personas = personaRepositorio.findAll();
+        return ResponseEntity.ok(success(personas).total(personas.size()).build());
+    }
+
+    @RequestMapping(value = "/integracion")
+    public ResponseEntity<AppResponse<Integracion>> listarIntegracion() {
+        List<Integracion> integracions = integracionRepository.findAll();
+        return ResponseEntity.ok(success(integracions).total(integracions.size()).build());
+    }
+
     @RequestMapping(value = "/persona/ci/{ci}")
-    public  ResponseEntity<AppResponse<Persona>> obtenerPersonaPorCI(@PathVariable("ci") String ci) {
+    public ResponseEntity<AppResponse<Persona>> obtenerPersonaPorCI(@PathVariable("ci") String ci) {
         Persona persona = personaRepositorio.findByCi(ci);
         return ResponseEntity.ok(success(persona).build());
     }
 
     @RequestMapping(value = "/persona/{tipoPersona}")
-    public  ResponseEntity<AppResponse<Persona>> obtenerPersonaPorTipoPersona(@PathVariable("tipoPersona") String tipoPersona) {
+    public ResponseEntity<AppResponse<Persona>> obtenerPersonaPorTipoPersona(@PathVariable("tipoPersona") String tipoPersona) {
         List<Persona> personas = personaRepositorio.findByTipoPersonaOrderByPrimerApellidoAsc(tipoPersona);
         return ResponseEntity.ok(success(personas).total(personas.size()).build());
     }
 
 
-    @PostMapping (value = "/persona")
-    public ResponseEntity<AppResponse<Persona>> insertarPersona (@Valid @RequestBody Persona persona){
+    @PostMapping(value = "/persona")
+    public ResponseEntity<AppResponse<Persona>> insertarPersona(@Valid @RequestBody Persona persona) {
         personaRepositorio.saveAndFlush(persona);
         return ResponseEntity.ok(success(persona).build());
     }
 
-    @PostMapping (value = "/Persona/insrtList")
-    public ResponseEntity<AppResponse<Persona>> insertarListPersona (@Valid @RequestBody List<Persona> personas){
+    @PostMapping(value = "/Persona/insrtList")
+    public ResponseEntity<AppResponse<Persona>> insertarListPersona(@Valid @RequestBody List<Persona> personas) {
         for (Persona persona : personas) {
             personaRepositorio.saveAndFlush(persona);
         }

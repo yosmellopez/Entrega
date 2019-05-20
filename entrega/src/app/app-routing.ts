@@ -8,6 +8,9 @@ import {LoginComponent} from './components/login/login.component';
 import {RouteInfo} from './modelo';
 import {AdminGuard} from "./guards/admin.guard";
 import {UserRouteAccessService} from "./guards/user-route-access-service";
+import {RegistradorComponent} from "./registrador/registrador.component";
+import {RegistradorModule} from "./registrador/registrador.module";
+import {RegistradorGuard} from "./guards/registrador.guard";
 
 const routes: Routes = [
     {path: '', redirectTo: '/login', pathMatch: 'full'},
@@ -18,15 +21,25 @@ const routes: Routes = [
         children: [{path: 'usuario', loadChildren: './usuario/usuario.module#UsuarioModule'}],
         canActivate: [UserRouteAccessService],
         data:{
+            roles:['Visualizador','Registrador','Administrador']
+        }
+    },
+    {
+        path:'',
+        component:RegistradorComponent,
+        children: [{path:'registrador',loadChildren:'./registrador/registrador.module#RegistradorModule'}],
+        canActivate:[RegistradorGuard, AdminGuard],
+        data:{
             roles:['Registrador','Administrador']
         }
-    }, {
+    },
+    {
         path: '',
         component: AdminComponent,
         children: [{path: 'admin', loadChildren: './admin/admin.module#AdminModule'}],
         canActivate: [AdminGuard],
         data: {
-            roles: ['Registrador','Administrador']
+            roles: ['Administrador']
         }
     }
 ];
@@ -44,14 +57,29 @@ export const APP_RUTAS: RouteInfo[] = [{
             title: 'Solicitud',
             icon: 'supervisor_account',
             class: 'waves-effect waves-cyan',
-        }, {
+        },{
+            path: '/registrador/tramite',
+            title: 'Tramites',
+            icon: 'supervisor_account',
+            class: 'waves-effect waves-cyan',
+        },{
             path: '/admin/solicitante',
             title: 'Solicitante',
             icon: 'supervisor_account',
             class: 'waves-effect waves-cyan',
-        }, {
+        },{
             path: '/admin/parcela',
             title: 'Parcelas',
+            icon: 'supervisor_account',
+            class: 'waves-effect waves-cyan',
+        },{
+            path: '/registrador/bienhechurias',
+            title: 'Bienhechuria',
+            icon: 'supervisor_account',
+            class: 'waves-effect waves-cyan',
+        },{
+            path: '/registrador/regulacion',
+            title: 'Regulación',
             icon: 'supervisor_account',
             class: 'waves-effect waves-cyan',
         }]
@@ -98,7 +126,7 @@ export const APP_RUTAS: RouteInfo[] = [{
             icon: 'supervisor_account',
             class: 'waves-effect waves-cyan',
         }, {
-            path: '/admin/tipoDeUso',
+            path: '/admin/tipoUso',
             title: 'Tipo de Uso',
             icon: 'supervisor_account',
             class: 'waves-effect waves-cyan',

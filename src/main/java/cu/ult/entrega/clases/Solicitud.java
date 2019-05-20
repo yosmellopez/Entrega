@@ -75,10 +75,10 @@ public class Solicitud implements Serializable {
     private String detallesAproDesa;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey (name = "fk_solicitud_municipio"))
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_solicitud_municipio"))
     private Municipio municipio;
 
-    @Column(name = "detallesMT")
+    @Column(name = "detalles_mt")
     private String detallesMT;
 
     public Long getId() {
@@ -133,7 +133,9 @@ public class Solicitud implements Serializable {
         return lineasDeProduccion;
     }
 
-    public void setLineasDeProduccion(List<LineaDeProduccion> lineasDeProduccion) {this.lineasDeProduccion = lineasDeProduccion;}
+    public void setLineasDeProduccion(List<LineaDeProduccion> lineasDeProduccion) {
+        this.lineasDeProduccion = lineasDeProduccion;
+    }
 
     public Double getAreaSolicitada() {
         return areaSolicitada;

@@ -67,7 +67,6 @@ export class UsuarioService {
             observe: "response",
             headers: {"Authorization": this.token}
         });
-
     }
 }
 

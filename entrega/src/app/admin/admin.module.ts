@@ -12,13 +12,9 @@ import {SolicitudComponent} from "./solicitud/solicitud.component";
 import {SolicitanteComponent} from "./solicitante/solicitante.component";
 import {ParcelaComponent} from "./parcela/parcela.component";
 import {LineadeproduccionComponent} from "./lineadeproduccion/lineadeproduccion.component";
-import {TipoDeSuperficieComponent} from "./tipo-de-superficie/tipo-de-superficie.component";
-import {TipoDeUsoComponent} from "./tipo-de-uso/tipo-de-uso.component";
 import {ProvinciaWindowComponent} from "./provincia/provincia-window/provincia-window.component";
 import {MunicipioWindowComponent} from "./municipio/municipio-window/municipio-window.component";
 import {PipesModule} from "../pipes/pipes.module";
-import { TipoDeSuperficieWindowComponent } from './tipo-de-superficie/tipo-de-superficie-window/tipo-de-superficie-window.component';
-import { TipoDeUsoWindowComponent } from './tipo-de-uso/tipo-de-uso-window/tipo-de-uso-window.component';
 import { ConsejoPopularWindowComponent } from './consejo-popular/consejo-popular-window/consejo-popular-window.component';
 import { DetallesSolicitudComponent } from './solicitud/detalles-solicitud/detalles-solicitud.component';
 import { SolicitudWindowComponent } from './solicitud/solicitud-window/solicitud-window.component';
@@ -26,6 +22,10 @@ import { PersonaWindowsComponent } from './solicitante/persona-windows/persona-w
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { UsuarioWindowComponent } from './usuarios/usuario-window/usuario-window.component';
 import { PersonaAyudaWindowsComponent } from './solicitante/persona-ayuda-windows/persona-ayuda-windows.component';
+import { TipoSuperficieComponent } from './tipo-superficie/tipo-superficie.component';
+import { TipoUsoComponent } from './tipo-uso/tipo-uso.component';
+import { TipoSuperficieWindowComponent } from './tipo-superficie/tipo-de-superficie-window/tipo-superficie-window.component';
+import { TipoUsoWindowComponent } from './tipo-uso/tipo-uso-window/tipo-uso-window.component';
 
 @NgModule({
     imports: [
@@ -46,12 +46,12 @@ import { PersonaAyudaWindowsComponent } from './solicitante/persona-ayuda-window
         SolicitanteComponent,
         ParcelaComponent,
         LineadeproduccionComponent,
-        TipoDeSuperficieComponent,
-        TipoDeUsoComponent,
+        TipoSuperficieComponent,
+        TipoUsoComponent,
         ProvinciaWindowComponent,
         MunicipioWindowComponent,
-        TipoDeSuperficieWindowComponent,
-        TipoDeUsoWindowComponent,
+        TipoSuperficieWindowComponent,
+        TipoUsoWindowComponent,
         ConsejoPopularWindowComponent,
         DetallesSolicitudComponent,
         SolicitudWindowComponent,
@@ -60,7 +60,7 @@ import { PersonaAyudaWindowsComponent } from './solicitante/persona-ayuda-window
         UsuarioWindowComponent,
         PersonaAyudaWindowsComponent,
     ],
-    entryComponents: [ProvinciaWindowComponent, MunicipioWindowComponent, TipoDeSuperficieWindowComponent, TipoDeUsoWindowComponent, ConsejoPopularWindowComponent, DetallesSolicitudComponent,SolicitudWindowComponent, PersonaWindowsComponent, UsuarioWindowComponent]
+    entryComponents: [ProvinciaWindowComponent, MunicipioWindowComponent, TipoSuperficieWindowComponent, TipoUsoWindowComponent, ConsejoPopularWindowComponent, DetallesSolicitudComponent,SolicitudWindowComponent, PersonaWindowsComponent, UsuarioWindowComponent]
 })
 export class AdminModule {
 }

@@ -5,6 +5,8 @@
  */
 package cu.ult.entrega.clases;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,6 +34,7 @@ public class Regulaciones implements Serializable {
     @Column(name = "regulacion")
     private String regulacion;
     
+    @JsonIgnore
     @ManyToMany(mappedBy = "regulaciones")
     private Set<Parcela> parcelas = new HashSet<>();
  

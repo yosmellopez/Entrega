@@ -1,17 +1,37 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FloatLabelType,  MAT_DATE_FORMATS, MAT_DIALOG_DATA, MatCheckbox, MatDialog,  MatDialogRef, MatStepper,  MatTableDataSource} from '@angular/material';
-import {   ConsejoPopular, LineaDeProduccion, Municipio, Parcela, Persona, PersonaAyuda,  Provincia,  Solicitud,TipoDeUso} from '../../../modelo';
-import { FormControl,  FormGroup,   Validators} from '@angular/forms';
+
+import {
+    MAT_DATE_FORMATS,
+    MAT_DIALOG_DATA,
+    MatDialog,
+    MatDialogRef,
+    MatStepper,
+    MatTableDataSource
+} from '@angular/material';
+import {
+    ConsejoPopular, Integracion,
+    LineaDeProduccion,
+    Municipio,
+    Parcela,
+    Persona, PersonaAyuda,
+    Solicitud,
+    TipoUso
+} from '../../../modelo';
+import {
+    FormArray,
+    FormControl,
+    FormGroup,
+    Validators
+} from '@angular/forms';
 import { Information, MensajeError } from '../../../mensaje/window.mensaje';
 import { ConsejoPopularService } from '../../../servicios/consejo-popular.service';
-import { TipoDeUsoService } from '../../../servicios/tipo-de-uso.service';
+import { TipoUsoService } from '../../../servicios/tipo-uso.service';
 import { SolicitudService } from '../../../servicios/solicitud.service';
 import { PersonaService } from '../../../servicios/persona.service';
 import { Observable, ReplaySubject } from 'rxjs/index';
 import { PersonaWindowsComponent } from '../../solicitante/persona-windows/persona-windows.component';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { MunicipioService } from '../../../servicios/municipio.service';
-
 
 export const MY_FORMATS = {
     parse: {
@@ -45,25 +65,17 @@ export class SolicitudWindowComponent implements OnInit {
     insertar = false;
     solicitud: Solicitud;
     consejoPopulares: ConsejoPopular[] = [];
-    tipoDeUso: TipoDeUso;
+    tipoUso: TipoUso;
     persona: Persona;
     personas: Persona[] = [];
     tipoPersona: string;
     listPersonaAyuda: PersonaAyuda[] = [];
     indexStepper: number = 0;
     municipio: Municipio;
-    //datePipe: DatePipe = new DatePipe(undefined);
     ci: string;
+    organizaciones: Integracion[] = [];
 
-    organizaciones = [{name: 'PCC', activo: false},
-        {name: 'CTC', activo: false},
-        {name: 'ANAP', activo: false},
-        {name: 'MTT', activo: false},
-        {name: 'CDR', activo: false},
-        {name: 'ACRC', activo: false},
-        {name: 'FMC', activo: false}];
-
-    displayedColumnsParcela: string[] = ['contador', 'zonaCatastral', 'parcela', 'divicion','area', 'acciones'];
+    displayedColumnsParcela: string[] = ['contador', 'zonaCatastral', 'parcela', 'divicion', 'area', 'acciones'];
     displayedColumnsLinea: string[] = ['contador', 'lineaDeProduccion', 'areaDedicada', 'acciones'];
     displayedColumnsPersonaAyuda: string[] = ['contador', 'ci', 'nombre', 'primerApellido', 'segundoApellido', 'parentesco', 'acciones'];
     dataSourceParcela = new MatTableDataSource<Parcela>();
@@ -72,11 +84,10 @@ export class SolicitudWindowComponent implements OnInit {
     public personasFiltradas: ReplaySubject<Persona[]> = new ReplaySubject<Persona[]>(1);
     public consejoPopularFiltrados: ReplaySubject<ConsejoPopular[]> = new ReplaySubject<ConsejoPopular[]>(1);
 
-    constructor(public dialogRef: MatDialogRef<SolicitudWindowComponent>, @Inject(MAT_DIALOG_DATA){id, municipio, tipoDecreto = '300', tipoSolicitud = 'Nueva', fechaSolicitud = new Date(), numExpediente, persona, parcelas, lineasDeProduccion, areaSolicitada, estado = 'Por Tramitar', detallesmt}: Solicitud, private service: SolicitudService, private consejoPopularService: ConsejoPopularService, private tipodeUsoService: TipoDeUsoService, private personaService: PersonaService, private municipioService: MunicipioService, private dialog: MatDialog) {
+    constructor(public dialogRef: MatDialogRef<SolicitudWindowComponent>, @Inject(MAT_DIALOG_DATA){id, municipio, tipoDecreto = '300', tipoSolicitud = 'Nueva', fechaSolicitud = new Date(), numExpediente, persona, parcelas, lineasDeProduccion, areaSolicitada, estado = 'Por Tramitar', detallesMT}: Solicitud, private service: SolicitudService, private consejoPopularService: ConsejoPopularService, private tipodeUsoService: TipoUsoService, private personaService: PersonaService, private municipioService: MunicipioService, private dialog: MatDialog) {
         this.insertar = id == null;
         this.municipio = municipio;
         this.idSolicitud = id;
-
         if (this.insertar) {
             this.persona = new Persona();
             this.persona.tipoPersona = 'Natural';
@@ -86,7 +97,6 @@ export class SolicitudWindowComponent implements OnInit {
             this.lineasProduccion = lineasDeProduccion;
             this.listPersonaAyuda = persona.personasAyuda;
         }
-
         //this.tipoPersona = this.persona.tipoPersona;
         //this.checked = false;
 
@@ -97,7 +107,7 @@ export class SolicitudWindowComponent implements OnInit {
             fechaSolicitud: new FormControl(fechaSolicitud),
             numExpediente: new FormControl(numExpediente, [Validators.required]),
             areaSolicitada: new FormControl(areaSolicitada, [Validators.required]),
-            detallesMT: new FormControl(detallesmt, [Validators.required]),
+            detallesMT: new FormControl(detallesMT, [Validators.required]),
             estado: new FormControl(estado),
         });
 
@@ -110,11 +120,11 @@ export class SolicitudWindowComponent implements OnInit {
             segundoApellido: new FormControl(this.persona.segundoApellido, [Validators.required]),
             sexo: new FormControl(this.persona.sexo, [Validators.required]),
             dirParticular: new FormControl(this.persona.dirParticular, [Validators.required]),
-            edad: new FormControl(this.persona.edad, [Validators.required]),
+            edad: new FormControl(this.persona.edad, []),
             movil: new FormControl(this.persona.movil, [Validators.required, Validators.maxLength(8)]),
             telFijo: new FormControl(this.persona.telFijo, [Validators.required, Validators.maxLength(8)]),
             situacionLaboral: new FormControl(this.persona.situacionLaboral, [Validators.required]),
-            integracion: new FormControl(this.persona.integracion),
+            integraciones: new FormArray([]),
             asociado: new FormControl(this.persona.asociado, [Validators.required]),
             parentesco: new FormControl('Vinculacion', [Validators.required]),
         });
@@ -131,17 +141,17 @@ export class SolicitudWindowComponent implements OnInit {
         this.formParcela = new FormGroup({
             contador: new FormControl(0, []),
             consejoPopular: new FormControl('', [Validators.required]),
-            tipoDeUso: new FormControl('', [Validators.required]),
+            tipoUso: new FormControl('', [Validators.required]),
             zonaCatastral: new FormControl('', [Validators.required]),
             parcela: new FormControl('', [Validators.required]),
-            divicion: new FormControl(''),
+            divicion: new FormControl('', []),
             direccion: new FormControl('', [Validators.required]),
             area: new FormControl('', [Validators.required]),
-            limiteN: new FormControl(''),
-            limiteS: new FormControl(''),
-            limiteE: new FormControl(''),
-            limiteW: new FormControl(''),
-            condicActual: new FormControl('')
+            limiteN: new FormControl('', []),
+            limiteS: new FormControl('', []),
+            limiteE: new FormControl('', []),
+            limiteW: new FormControl('', []),
+            condicActual: new FormControl('', [])
         });
 
         this.formLineaProduccion = new FormGroup({
@@ -155,15 +165,12 @@ export class SolicitudWindowComponent implements OnInit {
             if (this.formPersona.get('ci').valid) {
                 if (this.ci != value) {
                     this.ci = value;
-                    console.log(value);
-
                     this.personaService.obtenerPorCI(value).subscribe(resp => {
                         if (resp.body.success && resp.body.elemento) {
                             this.formPersona.patchValue(resp.body.elemento);
                         } else {
                             if (this.formPersona.get('tipoPersona').value == 'Natural') {
                                 this.formPersona.get('edad').setValue(this.obtenerEdad());
-                                this.formPersona.get('sexo').setValue(this.obtenerSexo());
                             }
                         }
                     });
@@ -182,14 +189,14 @@ export class SolicitudWindowComponent implements OnInit {
 
             this.consejoPopularService.listarConsejoPopularNoDefinido('No Definido').subscribe(resp => {
                 if (resp.body.success) {
+                    this.consejoPopulares = resp.body.elementos;
                     this.formParcela.get('consejoPopular').setValue(resp.body.elemento);
                 }
             });
 
-            this.tipodeUsoService.listarTipoDeUsoNoDefinido('No Definido').subscribe(resp => {
+            this.tipodeUsoService.listarTipoUsoPorNombre('Ociosa').subscribe(resp => {
                 if (resp.body.success) {
-                    console.log(resp.body.elemento);
-                    this.formParcela.get('tipoDeUso').setValue(resp.body.elemento);
+                    this.formParcela.get('tipoUso').setValue(resp.body.elemento);
                 }
                 console.log(this.formParcela.value);
             });
@@ -209,16 +216,6 @@ export class SolicitudWindowComponent implements OnInit {
             console.log(this.formSolicitud.value);
 
         } else {
-            const arrOrganizaciones = this.persona.integracion.split(',');
-            console.log(arrOrganizaciones);
-            for (let cont in arrOrganizaciones) {
-                for (let organizacion of this.organizaciones) {
-                    if (arrOrganizaciones[cont] == organizacion.name) {
-                        organizacion.activo = true;
-                    }
-
-                }
-            }
 
             this.dataSourceParcela= new MatTableDataSource<Parcela>(this.parcelas);
 
@@ -229,12 +226,25 @@ export class SolicitudWindowComponent implements OnInit {
 
         this.listarTipoPersonaJuridica();
 
+        this.personaService.listarIntegraciones().subscribe(integraciones => {
+            this.organizaciones = integraciones;
+            console.log(integraciones);
+            const formArray = <FormArray>this.formPersona.get('integraciones') as FormArray;
+            this.persona.integraciones.forEach(integracion => {
+                formArray.push(new FormControl(integracion));
+            });
+        });
+
         this.consejoPopularService.listarTodasConsejoPopular().subscribe(resp => {
             if (resp.body.success) {
                 this.consejoPopulares = resp.body.elementos;
                 this.consejoPopularFiltrados.next(this.consejoPopulares);
             }
         });
+
+       /* this.personaService.listarTodasPersona().subscribe(resp => {
+            this.personas = resp.body.elementos;
+        });*/
     }
 
     abrirVentana() {
@@ -244,11 +254,7 @@ export class SolicitudWindowComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result != false) {
-                console.log(result);
-                this.dialog.open(Information, {
-                    width: '400px',
-                    data: {mensaje: 'Se ha insertado la persona juridica:' + result.elemento.nombre}
-                });
+                this.dialog.open(Information, {width: '400px', data: {mensaje: 'Se ha insertado la persona juridica: ' + result.elemento.nombre}});
                 this.listarTipoPersonaJuridica();
             }
         });
@@ -256,25 +262,31 @@ export class SolicitudWindowComponent implements OnInit {
 
 
     addParcela() {
-        let esta = false;
         if (this.formParcela.valid) {
-            for (var cont in this.parcelas) {
-                if (this.parcelas[cont].zonaCatastral == this.formParcela.get('zonaCatastral').value && this.parcelas[cont].parcela == this.formParcela.get('parcela').value && this.parcelas[cont].divicion == this.formParcela.get('divicion').value) {
-                    esta = true;
-                    break;
-                }
-            }
-
-            if (esta != true) {
-                this.formParcela.get('contador').setValue(this.formParcela.get('contador').value + 1);
-                this.parcelas.push(this.formParcela.value);
+            if (this.dataSourceParcela.data.length === 0) {
+                const parcela = this.formParcela.value as Parcela;
+                this.parcelas.push(parcela);
                 this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
-            } else {
-                this.dialog.open(MensajeError, {
-                    width: '400px',
-                    data: {mensaje: 'La parcela ya se encuentra en la lista:'}
-                })
             }
+            /*else {
+                           for (var cont in this.parcelas) {
+                               if (this.parcelas[cont].zonaCatastral == this.formParcela.get('zonaCatastral').value && this.parcelas[cont].parcela == this.formParcela.get('parcela').value && this.parcelas[cont].divicion == this.formParcela.get('divicion').value) {
+                                   esta = true;
+                                   break;
+                               }
+                           }
+
+                           if (esta != true) {
+                               this.formParcela.get('contador').setValue(this.formParcela.get('contador').value + 1);
+                               this.parcelas.push(this.formParcela.value);
+                               this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
+                           } else {
+                               this.dialog.open(MensajeError, {
+                                   width: '400px',
+                                   data: {mensaje: 'La parcela ya se encuentra en la lista:'}
+                               })
+                           }
+                       }*/
         }
     }
 
@@ -305,8 +317,6 @@ export class SolicitudWindowComponent implements OnInit {
         if (this.formPersonaAyuda.valid) {
             const value = this.formPersonaAyuda.get('ci').value;
             const esta = this.listPersonaAyuda.some(personaAyuda => personaAyuda.ci == value);
-            console.log(esta);
-
             if (!esta) {
                 this.formPersonaAyuda.get('contador').setValue(this.formPersonaAyuda.get('contador').value + 1);
                 this.listPersonaAyuda.push(this.formPersonaAyuda.value);
@@ -324,9 +334,7 @@ export class SolicitudWindowComponent implements OnInit {
         this.personaService.listarPorTipoPersona('Juridica').subscribe(resp => {
             if (resp.body.success) {
                 this.personas = resp.body.elementos;
-                console.log(this.personas);
                 this.personasFiltradas.next(this.personas);
-                console.log(this.personasFiltradas);
             }
         });
     }
@@ -344,16 +352,14 @@ export class SolicitudWindowComponent implements OnInit {
     }
 
     obtenerEdad(): number {
-        var str = new String(this.ci);
+        let str = new String(this.ci);
         const anio: number = parseInt(str.charAt(0) + '' + str.charAt(1));
         const mes: number = parseInt(str.charAt(2) + '' + str.charAt(3));
         const dia: number = parseInt(str.charAt(4) + '' + str.charAt(5));
-        var anioA: number = new Date().getFullYear() - 2000;
-        var mesA: number = new Date().getMonth() + 1;
-        var diaA: number = new Date().getDate();
-
-
-        var edad: number;
+        let anioA: number = new Date().getFullYear() - 2000;
+        let mesA: number = new Date().getMonth() + 1;
+        let diaA: number = new Date().getDate();
+        let edad: number;
 
         if (mes == mesA) {
             if (diaA > dia || diaA == dia) {
@@ -368,59 +374,17 @@ export class SolicitudWindowComponent implements OnInit {
         }
 
         str = new String(edad);
-
         if (str.length == 3) {
             edad = parseInt(str.slice(1));
         }
-
         return edad;
-    }
-
-    obtenerSexo(): string {
-        var str = new String(this.ci);
-        const sexoCI: number = parseInt(str.charAt(9));
-        if (sexoCI % 2 === 0) {
-            return 'M';
-        } else {
-            return 'F';
-        }
-    }
-
-    agregarIntgra(valor: string) {
-        if (!this.formPersona.get('integracion').value) {
-            this.formPersona.get('integracion').setValue(valor);
-        } else {
-            this.formPersona.get('integracion').setValue(this.formPersona.get('integracion').value + ',' + valor);
-        }
-        console.log(this.formPersona.get('integracion').value);
-    }
-
-    quitarIntgra(valor: string) {
-        var str = this.formPersona.get('integracion').value;
-        var arregIntegra = str.split(',');
-        console.log(arregIntegra);
-
-        for (var cont in arregIntegra) {
-            console.log(cont);
-            if (arregIntegra[cont] == valor) {
-                arregIntegra.splice(cont, 1);
-                break;
-            }
-            console.log(arregIntegra[cont]);
-        }
-
-        this.formPersona.get('integracion').setValue(arregIntegra.toString());
-
-        //arrayIntegracion.split(,);
-        console.log(arregIntegra);
-        console.log(this.formPersona.get('integracion').value);
     }
 
     insertarSolicitud(): void {
         if (this.formSolicitud.valid && this.formPersona.valid && this.formPersonaAyuda.valid && this.formParcela.valid && this.formLineaProduccion.valid) {
-            const solicitud = this.formSolicitud.value;
+            const solicitud = this.formSolicitud.value as Solicitud;
             solicitud.persona = {...this.formPersona.value};
-            solicitud.persona.personasAyuda = [...this.listPersonaAyuda]
+            solicitud.persona.personasAyuda = [...this.listPersonaAyuda];
             solicitud.parcelas = [...this.parcelas];
             solicitud.lineasDeProduccion = [...this.lineasProduccion];
             this.solicitud = solicitud;
@@ -448,14 +412,12 @@ export class SolicitudWindowComponent implements OnInit {
             }
         }
         else {
-            const solicitud = this.formSolicitud.value;
+            const solicitud = this.formSolicitud.value as Solicitud;
             solicitud.persona = {...this.formPersona.value};
-            solicitud.persona.perosnas = [...this.listPersonaAyuda];
+            solicitud.persona.personasAyuda = [...this.listPersonaAyuda];
             solicitud.parcelas = [...this.parcelas];
             solicitud.lineasDeProduccion = [...this.lineasProduccion];
             this.solicitud = solicitud;
-            console.log(this.solicitud);
-            console.log(this.listPersonaAyuda);
         }
     }
 
@@ -471,6 +433,16 @@ export class SolicitudWindowComponent implements OnInit {
         this.dialogRef.close(false);
     }
 
+    onChange(event) {
+        const integraciones = <FormArray>this.formPersona.get('integraciones') as FormArray;
+        if (event.checked) {
+            integraciones.push(new FormControl(event.source.value))
+        } else {
+            const i = integraciones.controls.findIndex(x => x.value === event.source.value);
+            integraciones.removeAt(i);
+        }
+    }
+
     resetForm(form: string) {
         if (form == 'Persona') {
             this.formPersona.get('nombre').reset();
@@ -482,5 +454,10 @@ export class SolicitudWindowComponent implements OnInit {
             this.formPersona.get('movil').reset();
             this.formPersona.get('situacionLaboral').reset();
         }
+    }
+
+    tieneIntegracion(organizacion: Integracion): boolean {
+        return this.persona.integraciones.some(value => value.id === organizacion.id);
+
     }
 }

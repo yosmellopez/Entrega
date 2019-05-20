@@ -27,7 +27,7 @@
                 </mat-form-field>
             </div>
         </div>
-        <button class="btn btn-login btn-danger btn-float waves-effect waves-circle waves-float" style="padding-top: 10px">
+        <button class="btn btn-login btn-float waves-effect waves-circle waves-float" [ngClass]="form.valid?'btn-success':'btn-danger'" style="padding-top: 10px">
             <i class="material-icons">arrow_forward</i>
         </button>
     </form>

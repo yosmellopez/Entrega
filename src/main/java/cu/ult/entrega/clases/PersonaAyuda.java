@@ -12,6 +12,7 @@ import java.util.Objects;
 public class PersonaAyuda implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,6 +36,7 @@ public class PersonaAyuda implements Serializable {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_persona_ayuda_persona"))
     @JsonBackReference
     private Persona persona;
+
 
     public Long getId() {
         return id;

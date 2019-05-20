@@ -1,22 +1,22 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {animate, state, style, transition, trigger} from "@angular/animations";
-import {SelectionModel} from "@angular/cdk/collections";
-import {catchError, map, startWith, switchMap} from "rxjs/internal/operators";
-import {merge} from "rxjs/index";
-import {MatDialog, MatPaginator, MatSort, MatTable, MatTableDataSource} from "@angular/material";
-import {Municipio, Parcela, Solicitud} from "../../modelo";
-import {SolicitudService} from "../../servicios/solicitud.service";
-import {Information} from "../../mensaje/window.mensaje";
-import {MunicipioWindowComponent} from "../municipio/municipio-window/municipio-window.component";
-import {DetallesSolicitudComponent} from "./detalles-solicitud/detalles-solicitud.component";
-import {BlockScrollStrategy} from "@angular/cdk/overlay";
-import {SolicitudWindowComponent} from "./solicitud-window/solicitud-window.component";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { SelectionModel } from '@angular/cdk/collections';
+import { catchError, map, startWith, switchMap } from 'rxjs/internal/operators';
+import { merge } from 'rxjs/index';
+import { MatDialog, MatPaginator, MatSort, MatTable, MatTableDataSource } from '@angular/material';
+import { Municipio, Parcela, Solicitud } from '../../modelo';
+import { SolicitudService } from '../../servicios/solicitud.service';
+import { Information } from '../../mensaje/window.mensaje';
+import { MunicipioWindowComponent } from '../municipio/municipio-window/municipio-window.component';
+import { DetallesSolicitudComponent } from './detalles-solicitud/detalles-solicitud.component';
+import { BlockScrollStrategy } from '@angular/cdk/overlay';
+import { SolicitudWindowComponent } from './solicitud-window/solicitud-window.component';
 
 
 @Component({
-  selector: 'app-solicitud',
-  templateUrl: './solicitud.component.html',
-  styleUrls: ['./solicitud.component.css'],
+    selector: 'app-solicitud',
+    templateUrl: './solicitud.component.html',
+    styleUrls: ['./solicitud.component.css'],
     animations: [
         trigger('detailExpand', [
             state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
@@ -27,13 +27,12 @@ import {SolicitudWindowComponent} from "./solicitud-window/solicitud-window.comp
 })
 
 
-
 export class SolicitudComponent implements OnInit {
     dataSource: MatTableDataSource<Solicitud> = new MatTableDataSource<Solicitud>();
-    parcelas:Parcela[] = [];
+    parcelas: Parcela[] = [];
     total: number = 0;
     pageSize: number = 10;
-    displayedColumns = ['index', 'numExpediente', 'fechaSolicitud','areaSolicitada','estado', 'acciones'];
+    displayedColumns = ['index', 'numExpediente', 'fechaSolicitud', 'areaSolicitada', 'estado', 'acciones'];
     selection = new SelectionModel<Solicitud>(false, []);
     url: string = '';
     nombre: string = '';
@@ -52,7 +51,7 @@ export class SolicitudComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.sort.active = 'id';
-        this.sort.direction = "desc";
+        this.sort.direction = 'desc';
         this.paginator.pageSize = this.pageSize;
         this.inicializarElementos();
         this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
@@ -61,7 +60,7 @@ export class SolicitudComponent implements OnInit {
                 startWith({}),
                 switchMap(() => {
                     this.isLoadingResults = true;
-                    return this.servicio.listarSolicitud('Por Tramitar',this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+                    return this.servicio.listarSolicitud('Por Tramitar', this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
                 }),
                 map(data => {
                     this.total = data.body.total;
@@ -73,7 +72,6 @@ export class SolicitudComponent implements OnInit {
                 })
             )
             .subscribe(datos => {
-                console.log(datos);
                 this.dataSource = new MatTableDataSource(datos);
                 this.paginator.length = this.total;
                 this.table.dataSource = this.dataSource;
@@ -82,11 +80,11 @@ export class SolicitudComponent implements OnInit {
             });
     }
 
-    abrirVentanaDetalles(event: Event, solicitud: Solicitud):void {
+    abrirVentanaDetalles(event: Event, solicitud: Solicitud): void {
         event.stopPropagation();
 
         let dialogRef = this.dialog.open(DetallesSolicitudComponent, {
-            width: '1400px',disableClose: true, data: solicitud,
+            width: '1400px', disableClose: true, data: solicitud,
         });
 
         dialogRef.afterClosed().subscribe(result => {
@@ -130,34 +128,34 @@ export class SolicitudComponent implements OnInit {
         });
     }
 
-   /* eliminarTipoDeSuperficie(event: Event, tipoDeSuperficie: TipoDeSuperficie): void {
-        event.stopPropagation();
-        let dialogRef = this.dialog.open(Confirm, {
-            width: '400px',
-            data: {mensaje: 'Desea eliminar la provincia:<br>- ' + tipoDeSuperficie.nombre},
-        });
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                this.servicio.eliminarTipoDeSuperficie(tipoDeSuperficie.id).subscribe(resp => {
-                    if (resp.body.success) {
-                        this.dialog.open(Information, {
-                            width: '400px',
-                            data: {mensaje: 'Se ha eliminado el tipo de superficie.'}
-                        });
-                        this.selection.clear();
-                        this.paginator.page.emit();
-                    }
-                });
-            }
-        });
-    }*/
+    /* eliminarTipoSuperficie(event: Event, tipoDeSuperficie: TipoSuperficie): void {
+         event.stopPropagation();
+         let dialogRef = this.dialog.open(Confirm, {
+             width: '400px',
+             data: {mensaje: 'Desea eliminar la provincia:<br>- ' + tipoDeSuperficie.nombre},
+         });
+         dialogRef.afterClosed().subscribe(result => {
+             if (result) {
+                 this.servicio.eliminarTipoSuperficie(tipoDeSuperficie.id).subscribe(resp => {
+                     if (resp.body.success) {
+                         this.dialog.open(Information, {
+                             width: '400px',
+                             data: {mensaje: 'Se ha eliminado el tipo de superficie.'}
+                         });
+                         this.selection.clear();
+                         this.paginator.page.emit();
+                     }
+                 });
+             }
+         });
+     }*/
 
     private inicializarElementos(): void {
-        this.paginator._intl.itemsPerPageLabel = "Registros por página";
-        this.paginator._intl.firstPageLabel = "Primera página";
-        this.paginator._intl.lastPageLabel = "Última página";
-        this.paginator._intl.nextPageLabel = "Página siguiente";
-        this.paginator._intl.previousPageLabel = "Página anterior";
+        this.paginator._intl.itemsPerPageLabel = 'Registros por página';
+        this.paginator._intl.firstPageLabel = 'Primera página';
+        this.paginator._intl.lastPageLabel = 'Última página';
+        this.paginator._intl.nextPageLabel = 'Página siguiente';
+        this.paginator._intl.previousPageLabel = 'Página anterior';
         this.paginator._intl.getRangeLabel = (page: number, pageSize: number, length: number) => {
             if (length == 0 || pageSize == 0) {
                 return `0 de ${length}`;

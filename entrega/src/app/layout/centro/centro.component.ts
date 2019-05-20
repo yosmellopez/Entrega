@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {Rol, RouteInfo} from "../../modelo";
-import {APP_RUTAS} from "../../app-routing";
-import {AccountService} from "../../guards/account.service";
-import {RouterLink} from "@angular/router";
-import {forEach} from "@angular/router/src/utils/collection";
+import { Component, OnInit } from '@angular/core';
+import { Rol, RouteInfo } from '../../modelo';
+import { APP_RUTAS } from '../../app-routing';
+import { AccountService } from '../../guards/account.service';
+import { RouterLink } from '@angular/router';
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
     selector: 'app-centro',
@@ -13,32 +13,27 @@ import {forEach} from "@angular/router/src/utils/collection";
 export class CentroComponent implements OnInit {
     rutas: RouteInfo[] = APP_RUTAS;
     rutasUsuario: RouteInfo[] = []
-    nameRol:string;
+    nameRol: string;
 
     constructor(private accountService: AccountService) {
     }
 
     ngOnInit() {
-        document.body.setAttribute("class", "sw-toggled");
+        document.body.setAttribute('class', 'sw-toggled');
         //this.rutasUsuario = this.rutas;
 
         this.accountService.identity().then(account => {
-           this.nameRol= account.rol.name
-           this.cargaRutasDeUsuario();
+            this.nameRol = account.rol.name
+            this.cargaRutasDeUsuario();
         });
     }
 
-    cargaRutasDeUsuario(){
-        let cont:number = 0;
-        for(let index in this.rutas) {
-            for (let index2 in this.rutas[index].authority){
-                if (this.rutas[index].authority[index2] === this.nameRol){
-                    console.log(this.rutas[index])
-                    this.rutasUsuario[cont] = this.rutas[index];
-                    cont = cont+1;
-                }
-            }
-        }
+    cargaRutasDeUsuario() {
+        this.rutas.forEach(ruta => {
+            ruta.authority.forEach(authority => {
+                if (authority === this.nameRol)
+                    this.rutasUsuario.push(ruta);
+            });
+        });
     }
-
 }

@@ -26,7 +26,7 @@ public class Http401UnauthorizedEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         this.log.debug("Pre-authenticated entry point called. Rejecting access");
 //        response.sendError(401, "Acceso denegado al recurso existente. Debe estar autenticado para acceder a este");
-        System.out.println(rutaSistema(request.getRequestURI()));
+//        System.out.println(rutaSistema(request.getRequestURI()));
         response.sendRedirect(rutaSistema(request.getRequestURI()));
     }
     

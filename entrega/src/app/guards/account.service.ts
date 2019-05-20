@@ -4,7 +4,7 @@ import { Observable, Subject } from 'rxjs';
 
 import { SERVER_URL } from '../contantes';
 import { Usuario } from '../modelo';
-import {Router} from "@angular/router";
+import { Router } from '@angular/router';
 
 
 @Injectable({providedIn: 'root'})
@@ -14,7 +14,7 @@ export class AccountService {
     private authenticationState = new Subject<any>();
     token = '';
 
-    constructor(private http: HttpClient, private router:Router) {
+    constructor(private http: HttpClient, private router: Router) {
         this.token = localStorage.getItem('user_token');
 
     }
@@ -91,6 +91,7 @@ export class AccountService {
                     this.userIdentity = null;
                     this.authenticated = false;
                 }
+                this.authenticated = true;
                 this.authenticationState.next(this.userIdentity);
                 return this.userIdentity;
             })
@@ -126,11 +127,11 @@ export class AccountService {
         return this.http.delete(SERVER_URL + `api/mailLists`, {params: {email: email}, observe: 'response'});
     }
 
-    logout():void {
+    logout(): void {
         this.userIdentity = null;
         this.authenticated = false;
         this.authenticationState.next(this.userIdentity);
-        this.router.navigate(["/login"])
+        this.router.navigate(['/login'])
 
     }
 }
