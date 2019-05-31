@@ -23,6 +23,7 @@ import {DateFormat} from "./modelo";
 import {DateAdapter} from "@angular/material";
 import {AdminGuard} from "./guards/admin.guard";
 import {UserRouteAccessService} from "./guards/user-route-access-service";
+import {RegistradorComponent} from "./registrador/registrador.component";
 
 
 
@@ -36,7 +37,8 @@ import {UserRouteAccessService} from "./guards/user-route-access-service";
         UsuarioComponent,
         AdminComponent,
         HeaderComponent,
-        CentroComponent
+        CentroComponent,
+        RegistradorComponent
     ],
     imports: [
         BrowserModule,

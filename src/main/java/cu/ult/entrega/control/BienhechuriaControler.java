@@ -4,6 +4,7 @@ package cu.ult.entrega.control;
 import cu.ult.entrega.clases.Bienhechuria;
 import cu.ult.entrega.clases.Municipio;
 import cu.ult.entrega.clases.Provincia;
+import cu.ult.entrega.clases.Regulaciones;
 import cu.ult.entrega.excepcion.MunicipioException;
 import cu.ult.entrega.repositorio.BienhechuriaRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,12 @@ public class BienhechuriaControler {
         Page<Bienhechuria> page = bienhechuriaRepositorio.findAll(p);
         List<Bienhechuria> bienhechuria = page.getContent();
         return ResponseEntity.ok(success(bienhechuria).total(page.getTotalElements()).build());
+    }
+
+    @RequestMapping(value = "/bienhechuria/todas")
+    public ResponseEntity<AppResponse<Bienhechuria>> listarAllBienhechuria() {
+        List<Bienhechuria> bienhechurias = bienhechuriaRepositorio.findAll();
+        return ResponseEntity.ok(success(bienhechurias).total(bienhechurias.size()).build());
     }
 
     @PostMapping(value = "/bienhechuria")

@@ -10,7 +10,7 @@ import {HttpClient} from "@angular/common/http";
 export class ParcelaService {
 
     private token: string = '';
-    private ParcelaUrl = SERVER_URL + 'api/Parcela';
+    private ParcelaUrl = SERVER_URL + 'api/parcela';
 
     constructor(private http: HttpClient) {
         this.token = localStorage.getItem('user_token');
@@ -34,7 +34,7 @@ export class ParcelaService {
         });
     }
 
-        insertarParcela(parcela: Parcela): Observable<Respuesta<Parcela>> {
+    insertarParcela(parcela: Parcela): Observable<Respuesta<Parcela>> {
         console.log(parcela);
         return this.http.post<AppResponse<Parcela>>(this.ParcelaUrl, parcela, {
             observe: 'response',

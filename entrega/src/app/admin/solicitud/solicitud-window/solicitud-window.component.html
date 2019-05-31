@@ -91,7 +91,7 @@
                         <div class="row">
                             <div class="col-xs-3">
                                 <mat-form-field>
-                                    <input type="number" #inputCIP matInput maxlength="11" placeholder="CI" formControlName="ci" pattern="[0-9]">
+                                    <input type="text" #inputCIP matInput maxlength="11" placeholder="CI" formControlName="ci" (keypress)="onKey($event,inputCIP.value)">
                                     <mat-error *ngIf="formPersona.controls['ci'].errors?.required">
                                         Debe insertar el NIT de la persona.
                                     </mat-error>
@@ -329,9 +329,48 @@
         </mat-step>
         <mat-step [stepControl]="formParcela" errorMessage="Inserte almenos una parcela">
             <ng-template matStepLabel>Parcelas</ng-template>
-            <button type="button" mat-mini-fab color="primary" style="margin-right: 10px;" matTooltip="Añadir Parcela" (click)="addParcela()">
-                <mat-icon>add</mat-icon>
-            </button>
+            <form [formGroup]="formParcela" (submit)="addParcela()">
+                <mat-form-field class="middle-width">
+                    <input type="number" matInput placeholder="ZC" formControlName="zonaCatastral">
+                    <mat-error *ngIf="formParcela.controls['zonaCatastral'].errors?.required">Debe insertar el numero de zona catastral</mat-error>
+                </mat-form-field>
+                <mat-form-field class="middle-width">
+                    <input type="number" matInput placeholder="Parcela" formControlName="parcela">
+                    <mat-error *ngIf="formParcela.controls['parcela'].errors?.required">Debe insertar el numero de parcela</mat-error>
+                </mat-form-field>
+                <mat-form-field class="middle-width">
+                    <input type="number" matInput placeholder="División" formControlName="divicion">
+                </mat-form-field>
+                <mat-form-field class="middle-width">
+                    <input type="number" matInput placeholder="Área(Ha)" formControlName="area">
+                    <mat-error *ngIf="formParcela.controls['area'].errors?.required">Debe insertar el área de la parcela</mat-error>
+                </mat-form-field>
+                <mat-form-field class="middle-width">
+                    <input type="text" matInput placeholder="Direccion" formControlName="direccion">
+                    <mat-error *ngIf="formParcela.controls['direccion'].errors?.required">Debe proporcionar la dirección de la parcela</mat-error>
+                </mat-form-field>
+                <mat-form-field class="middle-width">
+                    <input type="text" matInput placeholder="Condición Actual" formControlName="condicActual">
+                </mat-form-field>
+
+                <mat-form-field class="middle-width">
+                    <input type="text" matInput placeholder="Limite Norte" formControlName="limiteN">
+                </mat-form-field>
+
+                <mat-form-field class="middle-width">
+                    <input type="text" matInput placeholder="Limite Sur" formControlName="limiteS">
+                </mat-form-field>
+                <mat-form-field class="middle-width">
+                    <input type="text" matInput placeholder="Limite Este" formControlName="limiteE">
+                </mat-form-field>
+                <mat-form-field class="middle-width">
+                    <input type="text" matInput placeholder="Limite Oeste" formControlName="limiteW">
+                </mat-form-field>
+                <button type="submit" mat-mini-fab color="primary" style="margin-right: 10px;" matTooltip="Añadir Parcela">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </form>
+
             <div class="example-container mat-elevation-z8" style="top: 10px;position:relative;">
                 <table mat-table [dataSource]="dataSourceParcela">
                     <!-- Position Column -->

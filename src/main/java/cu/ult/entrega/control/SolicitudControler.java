@@ -61,12 +61,12 @@ public class SolicitudControler {
 
     @GetMapping(value = "/solicitud/estado")
     public ResponseEntity<AppResponse<Solicitud>> listarSolicitudesEstado(Pageable pageable, @RequestParam("estado") String estado) {
-        Page<Solicitud> page = solicitudRepositorio.findByEstado(estado, pageable);
+        Page<Solicitud> page = solicitudRepositorio.findByEstadoIsNot(estado, pageable);
         return ResponseEntity.ok(success(page.getContent()).total(page.getTotalElements()).build());
     }
 
     @RequestMapping(value = "/solicitud/una/{numExp}")
-    public ModelAndView obtenerSolicitud(@PathVariable("numExp") String numExp, ModelMap map) {
+    public ModelAndView obtenerSolicitud(@PathVariable("numExp") Integer numExp, ModelMap map) {
 
         Solicitud solicitud = solicitudRepositorio.findByNumExpediente(numExp);
         map.put("solicitu", solicitud);
@@ -79,6 +79,12 @@ public class SolicitudControler {
 
         map.put("response", HttpStatus.OK);
         return new ModelAndView(new MappingJackson2JsonView(), map);
+    }
+
+    @GetMapping(value = "/solicitud/persona/{id}")
+    public ResponseEntity<AppResponse<Solicitud>> listarAllSolicitudPerso(@PathVariable("id") long id) {
+        List<Solicitud> solicitudes = solicitudRepositorio.findByPersona_Id(id);
+        return ResponseEntity.ok(success(solicitudes).total(solicitudes.size()).build());
     }
 
     @RequestMapping(value = "/solicitud/ultima")

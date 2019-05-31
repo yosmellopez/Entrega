@@ -1,25 +1,501 @@
 <div class="card">
     <div class="card-header ch-alt m-b-20 bgm-green">
         <h2>Tramites</h2>
+
+        <button class="btn btn-float waves-circle waves-float" mat-fab color="primary" (click)="geneReportAsigFecha($event)" matTooltip="Nuevo Tipo De Solicitud">
+            <i class="zmdi zmdi-file-plus zmdi-hc-fw"></i>
+        </button>
     </div>
     <div class="card-body card-padding">
-        <mat-card class="example-card">
-            <mat-card-content style="min-height: 625px;">
-                <mat-tab-group dynamicHeight>
-                    <mat-tab label="Investigación">
-                    </mat-tab>
-                    <mat-tab label="Medición">
-                    </mat-tab>
-                    <mat-tab label="Regulaciones">
-                    </mat-tab>
-                    <mat-tab label="Línea de Producción">
-                    </mat-tab>
-                    <mat-tab label="Bienhechurías">
-                    </mat-tab>
-                    <mat-tab label="Aprobar Solicitud">
-                    </mat-tab>
-                </mat-tab-group>
-            </mat-card-content>
-        </mat-card>
+        <mat-tab-group dynamicHeight>
+            <mat-tab label="Investigación">
+                <div class="card">
+                    <div class="card-header bgm-bluegray">
+                        <h2>
+                            <small>Muestra el listado de los solicitantes que necesitan ser investigado.</small>
+                        </h2>
+                    </div>
+                    <div class="card-body card-padding">
+                        <table mat-table [dataSource]="dataSourceSolicInvest" matSort matSortActive="ci" matSortDisableClear matSortDirection="asc" style="width: 100%">
+                            <ng-container matColumnDef="index">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> No.</th>
+                                <td mat-cell *matCellDef="let element;let i = index"> {{i+1}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="numExpediente">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>N. de Solicitud</th>
+                                <td mat-cell *matCellDef="let element"> {{element.numExpediente}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="tipoSolicitud">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Solicitud</th>
+                                <td mat-cell *matCellDef="let element"> {{element.tipoSolicitud}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="ci">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> CI</th>
+                                <td mat-cell *matCellDef="let element"> {{element.persona.ci}}</td>
+                            </ng-container>
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="nombre_y_apellido">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre y Apellidos</th>
+                                <td mat-cell *matCellDef="let element"> {{element.persona.nombre+' '+ element.persona.primerApellido+' '+element.persona.segundoApellido}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="acciones" stickyEnd>
+                                <th mat-header-cell *matHeaderCellDef style="text-align: center;">Acciones</th>
+                                <td mat-cell *matCellDef="let element" align="center">
+                                    <button mat-mini-fab color="accent" (click)="abrirVentPersoDetalles($event,element.persona)"
+                                            [matTooltip]="'Detalles Persona - ' + element.nombre">
+                                        <mat-icon>mode_edit</mat-icon>
+                                    </button>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="expandedDetail">
+                                <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumnsInvest.length">
+                                    <div class="example-element-detail"
+                                         [@detailExpand]="element.expandido ? 'expanded' : 'collapsed'">
+                                        <div class="element-description">
+                                            <span class="element-description-attribution">{{element.detalles}}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsInvest"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsInvest;"></tr>
+                        </table>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Medición">
+                <div class="card">
+                    <div class="card-header bgm-bluegray">
+                        <h2>
+                            <small>Muestra el listado de las parcelas que nesecitan la medicion de catastro.</small>
+                        </h2>
+                    </div>
+                    <div class="card-body card-padding">
+                        <table mat-table [dataSource]="dataSourceSolicMedCatas" matSort matSortActive="ci" matSortDisableClear matSortDirection="asc" style="width: 100%">
+                            <ng-container matColumnDef="index">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> No.</th>
+                                <td mat-cell *matCellDef="let element;let i = index"> {{i+1}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="numExpediente">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>N. de Solicitud</th>
+                                <td mat-cell *matCellDef="let element"> {{element.numExpediente}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="ci">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> CI</th>
+                                <td mat-cell *matCellDef="let element"> {{element.ci}}</td>
+                            </ng-container>
+
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="nombre_y_apellido">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre y Apellidos</th>
+                                <td mat-cell *matCellDef="let element"> {{element.nombre_y_apellido}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="parcela">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Parcela</th>
+                                <td mat-cell *matCellDef="let element"> {{element.parcela}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="direccion">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Dirección</th>
+                                <td mat-cell *matCellDef="let element"> {{element.direccion}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="areaParc">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Area(Ha)</th>
+                                <td mat-cell *matCellDef="let element"> {{element.areaParc}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="modificada">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Modificada</th>
+                                <td mat-cell *matCellDef="let element"> <mat-icon *ngIf="element.nombreCP!='No Definido'">done</mat-icon></td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="acciones" stickyEnd>
+                                <th mat-header-cell *matHeaderCellDef style="text-align: center;">Acciones</th>
+                                <td mat-cell *matCellDef="let element" align="center">
+                                    <button mat-mini-fab color="accent" (click)="abrirVentActParcela($event,element.idParcela, element.numExpediente)"
+                                            [matTooltip]="'Detalles Persona - ' + element.nombre">
+                                        <mat-icon>mode_edit</mat-icon>
+                                    </button>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="expandedDetail">
+                                <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumnsMedCatas.length">
+                                    <div class="example-element-detail"
+                                         [@detailExpand]="element.expandido ? 'expanded' : 'collapsed'">
+                                        <div class="element-description">
+                                            <span class="element-description-attribution">{{element.detalles}}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsMedCatas"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsMedCatas;"></tr>
+                        </table>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Regulaciones">
+                <br>
+                <mat-card>
+                    <mat-card-header>
+                        <form [formGroup]="formRegParcela" class="full-width">
+                            <mat-form-field class="middle-width">
+                                <mat-select matInput placeholder="Seleccione la solicitud" formControlName="solicitud">
+                                    <mat-option *ngFor="let solicitud of solicitudesMedicRegul" [value]="solicitud">
+                                        {{solicitud.numExpediente}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field class="middle-width">
+                                <mat-select matInput placeholder="Seleccione la parcela" formControlName="parcela">
+                                    <mat-option *ngFor="let parcela of parcelasReg" [value]="parcela">
+                                        {{parcela.parcela+'/'+parcela.divicion}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </form>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="card">
+                                    <div class="card-header bgm-bluegray">
+                                        <h2>Regulaciones</h2>
+                                    </div>
+                                    <div class="card-body card-padding">
+                                        <div class="media-demo">
+                                            <a *ngFor="let regulacion of regulacionesElemen" (click)="selecRegulacion($event, regulacion)" [routerLink]="" class="list-group-item {{regulacion.activa}}"><div class="media" >
+                                                <div class="media-body">
+                                                    {{regulacion.regulacion}}
+                                                </div>
+                                            </div></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <br>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button mat-mini-fab color="accent" (click)="asignaRegulaciones($event)" [matTooltip]="'Asignar Regulaciones'">
+                                            <mat-icon>arrow_forward</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button mat-mini-fab color="accent" (click)="eliminaRegulaciones($event)" [matTooltip]="'Eliminar Regulaciones'">
+                                            <mat-icon>arrow_back</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button mat-mini-fab color="accent" (click)="guardParceRegulAsig($event)" [matTooltip]="'Guardar'">
+                                            <mat-icon>save</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="card">
+                                    <div class="card-header bgm-bluegray">
+                                        <h2>Regulaciones Asignadas</h2>
+                                    </div>
+                                    <div class="card-body card-padding">
+                                        <div class="media-demo">
+                                            <a *ngFor="let regulacion of regulacionesAsigParcela" (click)="selecRegulacion($event, regulacion)" [routerLink]="" class="list-group-item {{regulacion.activa}}"><div class="media" >
+                                                <div class="media-body">
+                                                    {{regulacion.regulacion}}
+                                                </div>
+                                            </div></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </mat-tab>
+            <mat-tab label="Línea de Producción">
+                <div class="card">
+                    <div class="card-header bgm-bluegray">
+                        <h2>
+                            <small>Muestra el listado de las Líneas de Producción a aprobar o denegar.</small>
+                        </h2>
+                    </div>
+                    <div class="card-body card-padding">
+                        <table mat-table [dataSource]="dataSourceSolicADLineasProduc" matSort matSortActive="numExpediente" matSortDisableClear matSortDirection="asc" style="width: 100%">
+                            <ng-container matColumnDef="index">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> No.</th>
+                                <td mat-cell *matCellDef="let element;let i = index"> {{i+1}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="numExpediente">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>N. de Solicitud</th>
+                                <td mat-cell *matCellDef="let element"> {{element.numExpediente}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="lineaDeProduccion">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Linea de Producción</th>
+                                <td mat-cell *matCellDef="let element"> {{element.lineaDeProduccion}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="areaDedic">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Área(Ha)</th>
+                                <td mat-cell *matCellDef="let element"> {{element.areaDedicada}}</td>
+                            </ng-container>
+
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="aprobaDesa">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+                                <td mat-cell *matCellDef="let element"> {{element.aprobado}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="acciones" stickyEnd>
+                                <th mat-header-cell *matHeaderCellDef style="text-align: center;">Acciones</th>
+                                <td mat-cell *matCellDef="let element" align="center">
+                                    <button mat-mini-fab color="accent" (click)="abrirVentAproDenegLP($event, element.id, element.numExpediente)"
+                                            [matTooltip]="'Detalles Persona - ' + element.nombre">
+                                        <mat-icon>mode_edit</mat-icon>
+                                    </button>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="expandedDetail">
+                                <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumnsADLineasProduc.length">
+                                    <div class="example-element-detail"
+                                         [@detailExpand]="element.expandido ? 'expanded' : 'collapsed'">
+                                        <div class="element-description">
+                                            <span class="element-description-attribution">{{element.detalles}}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsADLineasProduc"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsADLineasProduc;"></tr>
+                        </table>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Bienhechurías">
+                <mat-card>
+                    <mat-card-header>
+                        <form [formGroup]="formBienParcela" class="full-width">
+                            <mat-form-field class="middle-width">
+                                <mat-select matInput placeholder="Seleccione la solicitud" formControlName="solicitud">
+                                    <mat-option *ngFor="let solicitud of solicitudBienhech" [value]="solicitud">
+                                        {{solicitud.numExpediente}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="middle-width">
+                                <mat-select matInput placeholder="Seleccione la parcela" formControlName="parcela">
+                                    <mat-option *ngFor="let parcela of parcelasBien" [value]="parcela">
+                                        {{parcela.parcela+'/'+parcela.divicion}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </form>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <form [formGroup]="formParcelaBienhechu" (submit)="asignarBienhechuria()">
+                            <mat-form-field class="middle-width">
+                                <mat-select matInput placeholder="Seleccione la bienhechuría" formControlName="bienhechuria">
+                                    <mat-option *ngFor="let bienhechuria of bienhechurias" [value]="bienhechuria">
+                                        {{bienhechuria.nombre}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <button mat-mini-fab color="primary" style="margin-right: 10px;" matTooltip="Nueva Bienhechuría" (click)="abrirVentanaBienhechuria()">
+                                <mat-icon>add</mat-icon>
+                            </button>
+
+                            <mat-form-field class="middle-width">
+                                <input type="number" matInput placeholder="Cantidad" formControlName="cantidad">
+                                <mat-error *ngIf="formParcelaBienhechu.controls['cantidad'].errors?.required">Debe insertar la cantidad</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field class="middle-width">
+                                <input type="number" matInput placeholder="Precio" formControlName="precio">
+                                <mat-error *ngIf="formParcelaBienhechu.controls['precio'].errors?.required">Debe insertar el precio</mat-error>
+                            </mat-form-field>
+
+                            <button *ngIf="editarBien === false" type="submit" mat-mini-fab color="primary" style="margin-right: 10px;" [matTooltip]="'Asignar Bienhechuría'">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                            <button *ngIf="editarBien === true" type="submit" mat-mini-fab color="accent" [matTooltip]="'Actualizar bienhechuría asignada'">
+                                <mat-icon>mode_edit</mat-icon>
+                            </button>
+                        </form>
+                        <div class="example-container mat-elevation-z5" style="top: 10px;position:relative;">
+                            <table mat-table [dataSource]="dataSourceParcelaBienhechu" matSort matSortActive="bienhechuria" matSortDisableClear matSortDirection="asc" style="width: 100%">
+                                <ng-container matColumnDef="index">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> No.</th>
+                                    <td mat-cell *matCellDef="let element;let i = index"> {{i+1}}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="bienhechuria">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Bienhechuría</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.bienhechuria.nombre}}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="cant">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.cantidad}}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="precio">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Precio</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.precio}}</td>
+                                </ng-container>
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="importe">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.cantidad*element.precio}}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="acciones" stickyEnd>
+                                    <th mat-header-cell *matHeaderCellDef style="text-align: center;">Acciones</th>
+                                    <td mat-cell *matCellDef="let element" align="center">
+                                        <button mat-mini-fab color="accent" (click)="editarBienhechuria($event,element)"
+                                                [matTooltip]="'Editar bienhechuría - ' + element.bienhechuria">
+                                            <mat-icon>mode_edit</mat-icon>
+                                        </button>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="expandedDetail">
+                                    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumnsParcelaBienhechu.length">
+                                        <div class="example-element-detail"
+                                             [@detailExpand]="element.expandido ? 'expanded' : 'collapsed'">
+                                            <div class="element-description">
+                                                <span class="element-description-attribution">{{element.detalles}}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumnsParcelaBienhechu"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumnsParcelaBienhechu;"></tr>
+                            </table>
+                        </div>
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <br><br><br><br>
+                        <button mat-raised-button cdkFocusInitial (click)="guardParceBienhechuAsig($event)" color="primary">
+                            <mat-icon>check_circle</mat-icon>
+                            Guardar
+                        </button>
+                    </mat-card-actions>
+                </mat-card>
+            </mat-tab>
+            <mat-tab label="Aprobar Solicitud">
+                <mat-card>
+                    <mat-card-header>
+                        <form [formGroup]="formSeletAprueba" class="full-width">
+                            <mat-form-field class="middle-width">
+                                <mat-select matInput placeholder="Seleccione quién aprueba" formControlName="aprueba">
+                                    <mat-option [value]="'CA'">Comisión Agraria</mat-option>
+                                    <mat-option [value]="'PCC'">PCC</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </form>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="card">
+                            <div class="card-header bgm-bluegray">
+                                <h2>
+                                    Listado de Solicitudes
+                                    <small>Muestra el listado de las solicitudes a aprobar o denegar por {{aproDengPor}}.</small>
+                                </h2>
+                            </div>
+                            <div class="card-body card-padding">
+                                <table mat-table [dataSource]="dataSourceSoliciAprobar" matSort matSortActive="numExpediente" matSortDisableClear matSortDirection="asc" style="width: 100%">
+                                    <ng-container matColumnDef="index">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> No.</th>
+                                        <td mat-cell *matCellDef="let element;let i = index"> {{i+1}}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="numExpediente">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>N. de Expediente</th>
+                                        <td mat-cell *matCellDef="let element"> {{element.numExpediente}}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="tipoSolicitud">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de Solicitud</th>
+                                        <td mat-cell *matCellDef="let element"> {{element.tipoSolicitud}}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="areaSolicitada">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Área(Ha)</th>
+                                        <td mat-cell *matCellDef="let element"> {{element.areaSolicitada}}</td>
+                                    </ng-container>
+
+                                    <!-- Name Column -->
+                                    <ng-container matColumnDef="ci">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+                                        <td mat-cell *matCellDef="let element"> {{element.persona.ci}}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="nombre_y_apellido">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Detalles</th>
+                                        <td mat-cell *matCellDef="let element"> {{element.persona.nombre+' '+ element.persona.primerApellido+' '+element.persona.segundoApellido}}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="acciones" stickyEnd>
+                                        <th mat-header-cell *matHeaderCellDef style="text-align: center;">Acciones</th>
+                                        <td mat-cell *matCellDef="let element" align="center">
+                                            <button mat-mini-fab color="accent" (click)="editarConsejoPopular($event,element)"
+                                                    [matTooltip]="'Aprobar, Denegar solicitud - ' + element.numExpediente">
+                                                <mat-icon>spellcheck</mat-icon>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="expandedDetail">
+                                        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumnsSoliciAprobar.length">
+                                            <div class="example-element-detail"
+                                                 [@detailExpand]="element.expandido ? 'expanded' : 'collapsed'">
+                                                <div class="element-description">
+                                                    <span class="element-description-attribution">{{element.detalles}}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumnsSoliciAprobar"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumnsSoliciAprobar;"></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </mat-tab>
+        </mat-tab-group>
     </div>
 </div>

@@ -1,0 +1,50 @@
+<form class="form" [formGroup]="formEstadoParc" (submit)="modificarEstadoParc()">
+    <h1 mat-dialog-title style="margin: 0 0">Modificar Estado de la Parcela
+        <button type="button" mat-icon-button class="close-button" (click)="onNoClick()">
+            <mat-icon style="font-size: 25px">close</mat-icon>
+        </button>
+        <hr>
+    </h1>
+    <div mat-dialog-content style="min-height: 7em;">
+        <mat-form-field class="full-width">
+            <mat-select matInput placeholder="Tipo de tenencia" formControlName="tipoDeTenencia">
+                <mat-option [value]="'En Usufructo'">En Usufructo</mat-option>
+                <mat-option [value]="'En Propiedad'">En Propiedad</mat-option>
+            </mat-select>
+            <mat-error *ngIf="formEstadoParc.controls['tipoDeTenencia'].errors?.required">Debe seleccionar el tipo de tenencia.</mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+            <mat-select matInput placeholder="Grado de explotación" formControlName="gradoDeExplotacion">
+                <mat-option [value]="'B'">B</mat-option>
+                <mat-option [value]="'R'">R</mat-option>
+                <mat-option [value]="'M'">M</mat-option>
+            </mat-select>
+            <mat-error *ngIf="formEstadoParc.controls['gradoDeExplotacion'].errors?.required">Debe seleccionar el grado de explotación.</mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+            <input matInput #input placeholder="Número de certificado" formControlName="noCertTenInscrito">
+            <mat-error *ngIf="formEstadoParc.controls['noCertTenInscrito'].errors?.required">Debe insertar el número de certificado.</mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+            <textarea matInput placeholder="Nombre del municipio" formControlName="cultOActivAgroDediAct"></textarea>
+            <mat-error *ngIf="formEstadoParc.controls['cultOActivAgroDediAct'].errors?.required">Debe insertar cultivos o actividad agropecuaria a que la dedica actualmente.</mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+            <input type="number" matInput placeholder="Área Vacía" formControlName="areaVacia">
+        </mat-form-field>
+        <mat-form-field class="full-width">
+            <textarea matInput placeholder="De existir causas" formControlName="existirCausas"></textarea>
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="boton-theme">
+        <span class="spacer"></span>
+        <button type="submit" mat-raised-button cdkFocusInitial color="primary">
+            <mat-icon>check_circle</mat-icon>
+            Modificar
+        </button>
+        <button type="button" mat-raised-button (click)="onNoClick()" color="warn">
+            <mat-icon>cancel</mat-icon>
+            Cancelar
+        </button>
+    </div>
+</form>

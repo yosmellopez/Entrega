@@ -50,11 +50,15 @@ public class TipoUsoControler {
         return ResponseEntity.ok(success(tipoUsos).total(page.getTotalElements()).build());
     }
 
+    @RequestMapping(value = "/tipoUso/todas")
+    public ResponseEntity<AppResponse<TipoUso>> listarAllTipoUso() {
+        List<TipoUso> tipoUsos = tipoUsoRepositorio.findAll();
+        return ResponseEntity.ok(success(tipoUsos).total(tipoUsos.size()).build());
+    }
+
     @RequestMapping(value = "/tipoUso/porNombre/{nombre}")
     public ResponseEntity<AppResponse<TipoUso>> obtenerTipoUsoPorNombre(@PathVariable("nombre") String nombre) {
-//        System.out.println(nombre);
-        TipoUso tipoUso = tipoUsoRepositorio.findByNombre(nombre).orElseThrow(() -> new EntityNotFoundException("No se encontro este nombre"));
-//        System.out.println(tipoUso);
+        TipoUso tipoUso = tipoUsoRepositorio.findByNombre(nombre).orElseThrow(() -> new EntityNotFoundException("No se encontro este tipo de uso"));
         return ResponseEntity.ok(success(tipoUso).total(1).build());
     }
 

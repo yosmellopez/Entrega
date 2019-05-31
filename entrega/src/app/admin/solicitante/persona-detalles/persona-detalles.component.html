@@ -1,0 +1,168 @@
+<div class="card">
+    <div class="card-header ch-alt m-b-20 bgm-green">
+        <h2>Informacion {{stadoPersona+' '+persona.nombre+' '+persona.primerApellido+' '+persona.segundoApellido}}
+        </h2>
+        <button type="button" mat-icon-button class="close-button" (click)="onNoClick()">
+            <mat-icon style="font-size: 25px">close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content>
+        <mat-card class="example-card">
+            <mat-card-title>
+                <div class="card-header ch-alt m-b-20 bgm-blue" style="padding: 10px 10px;">
+                    <h2>Datos de la solicitud </h2>
+                </div>
+            </mat-card-title>
+            <mat-card-content>
+                <table mat-table [dataSource]="dataSourceSolic" style="width: 100%">
+                    <ng-container matColumnDef="index">
+                        <th mat-header-cell *matHeaderCellDef> No.</th>
+                        <td mat-cell *matCellDef="let element;let i = index"> {{i+1}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="numExpediente">
+                        <th mat-header-cell *matHeaderCellDef>Num. Expediente</th>
+                        <td mat-cell *matCellDef="let element"> {{element.numExpediente}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="tipoSolicitud">
+                        <th mat-header-cell *matHeaderCellDef>Tipo de solicitud</th>
+                        <td mat-cell *matCellDef="let element"> {{element.tipoSolicitud}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="areaSolicitada">
+                        <th mat-header-cell *matHeaderCellDef>Área solicitada</th>
+                        <td mat-cell *matCellDef="let element"> {{element.areaSolicitada}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="estado">
+                        <th mat-header-cell *matHeaderCellDef>Estado</th>
+                        <td mat-cell *matCellDef="let element"> {{element.estado}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="aprobadoCAgraria">
+                        <th mat-header-cell *matHeaderCellDef>Apro. Denga. CA</th>
+                        <td mat-cell *matCellDef="let element"> {{element.aprobadoCAgraria}}</td>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="aprobadoPCC">
+                        <th mat-header-cell *matHeaderCellDef>Apro. Denega. PCC</th>
+                        <td mat-cell *matCellDef="let element"> {{element.aprobadoPCC}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="acciones" stickyEnd>
+                        <th mat-header-cell *matHeaderCellDef style="text-align: center;">Acciones</th>
+                        <td mat-cell *matCellDef="let element" align="center">
+                            <button mat-mini-fab color="accent" (click)="abrirVentanaDetallSolic($event,element)" [matTooltip]="'Información- ' + element.numExpediente">
+                                <mat-icon>info</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayColumnsSolicitud"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayColumnsSolicitud"></tr>
+                </table>
+            </mat-card-content>
+        </mat-card>
+        <mat-card class="example-card">
+            <mat-card-title>
+                <div class="card-header ch-alt m-b-20 bgm-blue" style="padding: 10px 10px;">
+                    <h2>Lista de parcelas {{stadoPersona}}.</h2>
+                </div>
+            </mat-card-title>
+            <mat-card-content>
+                <table mat-table [dataSource]="dataSourceParcela" style="width: 100%">
+                    <ng-container matColumnDef="index">
+                        <th mat-header-cell *matHeaderCellDef> No.</th>
+                        <td mat-cell *matCellDef="let element;let i = index"> {{i+1}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="zonaCatastral">
+                        <th mat-header-cell *matHeaderCellDef>Zona Catastral</th>
+                        <td mat-cell *matCellDef="let element"> {{element.parcela.zonaCatastral}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="parcela">
+                        <th mat-header-cell *matHeaderCellDef>Parcela</th>
+                        <td mat-cell *matCellDef="let element"> {{element.parcela.parcela+'/'+element.parcela.divicion}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="direccion">
+                        <th mat-header-cell *matHeaderCellDef>Dirección</th>
+                        <td mat-cell *matCellDef="let element"> {{element.parcela.direccion}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="fechaAlta">
+                        <th mat-header-cell *matHeaderCellDef> Divicion</th>
+                        <td mat-cell *matCellDef="let element"> {{element.fechaAlta|date:'dd/MM/yyyy'}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="tipoDeTenencia">
+                        <th mat-header-cell *matHeaderCellDef>Tipo de Tenencia</th>
+                        <td mat-cell *matCellDef="let element"> {{element.tipoDeTenencia}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="areaVacia">
+                        <th mat-header-cell *matHeaderCellDef>Área vacía</th>
+                        <td mat-cell *matCellDef="let element"> {{element.areaVacia}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="acciones" stickyEnd>
+                        <th mat-header-cell *matHeaderCellDef style="text-align: center;">Acciones</th>
+                        <td mat-cell *matCellDef="let element" align="center">
+                            <button mat-mini-fab color="accent" (click)="abrirEstadoParcela($event,element)" [matTooltip]="'Editar estado parcela - ' +element.parcela+'/'+ element.divicion">
+                                <mat-icon>mode_edit</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayColumnsParcela"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayColumnsParcela"></tr>
+                </table>
+            </mat-card-content>
+        </mat-card>
+        <mat-card class="example-card">
+            <mat-card-title>
+                <div class="card-header ch-alt m-b-20 bgm-blue" style="padding: 10px 10px;">
+                    <h2>Lista de persona ayuda.</h2>
+                </div>
+            </mat-card-title>
+            <mat-card-content>
+                <table mat-table [dataSource]="dataSourcePersonaAyuda" style="width: 100%">
+                    <ng-container matColumnDef="index">
+                        <th mat-header-cell *matHeaderCellDef> No.</th>
+                        <td mat-cell *matCellDef="let element;let i = index"> {{i+1}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ci">
+                        <th mat-header-cell *matHeaderCellDef> Carnet de Identidad</th>
+                        <td mat-cell *matCellDef="let element"> {{element.ci}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="nombre_y_apellido">
+                        <th mat-header-cell *matHeaderCellDef>Área Dedicada</th>
+                        <td mat-cell *matCellDef="let element"> {{element.nombre+' '+element.primerApellido+' '+element.segundoApellido}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="parentesco">
+                        <th mat-header-cell *matHeaderCellDef>Parentesco</th>
+                        <td mat-cell *matCellDef="let element"> {{element.parentesco}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="acciones" stickyEnd>
+                        <th mat-header-cell *matHeaderCellDef style="text-align: center;">Acciones</th>
+                        <td mat-cell *matCellDef="let element" align="center">
+                            <button mat-mini-fab color="accent" (click)="editarParcela($event,element)" [matTooltip]="'Editar persona ayuda - ' + element.nombre">
+                                <mat-icon>mode_edit</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayColumnsPersonaAyuda"></tr>
+                    <tr mat-row *matRowDef="let row; columns:displayColumnsPersonaAyuda"></tr>
+                </table>
+            </mat-card-content>
+        </mat-card>
+    </mat-dialog-content>
+</div>

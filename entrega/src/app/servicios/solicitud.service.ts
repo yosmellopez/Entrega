@@ -42,6 +42,14 @@ export class SolicitudService {
         });
     }
 
+    listarAllSolicitudPerso(idPersona:number): Observable<Respuesta<Solicitud>> {
+        //let constUrl = `${this.solicitudUrl}/persona/${idPersona}`;
+        return this.http.get<AppResponse<Solicitud>>(`${this.solicitudUrl}/persona/${idPersona}`, {
+            observe: 'response',
+            headers: {'Authorization': this.token}
+        });
+    }
+
     insertarSolicitud(solicitud: Solicitud): Observable<Respuesta<Solicitud>> {
         console.log(solicitud);
         return this.http.post<AppResponse<Solicitud>>(this.solicitudUrl, solicitud, {

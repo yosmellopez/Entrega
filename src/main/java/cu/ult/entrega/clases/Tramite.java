@@ -5,6 +5,8 @@
  */
 package cu.ult.entrega.clases;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
@@ -69,7 +71,8 @@ public class Tramite implements Serializable {
     @Column (name = "fechaAprobadoPCC")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaAprobadoPCC;
-    
+
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "solicitud_id")
     private Solicitud solicitud;
@@ -188,6 +191,13 @@ public class Tramite implements Serializable {
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
+    }
+
+    public Tramite() {
+    }
+
+    public Tramite(Solicitud solicitud) {
+        this.solicitud = solicitud;
     }
 
     @Override

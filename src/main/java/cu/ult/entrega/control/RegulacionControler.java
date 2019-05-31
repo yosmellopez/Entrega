@@ -38,6 +38,12 @@ public class RegulacionControler {
         return ResponseEntity.ok(success(regulacion).total(page.getTotalElements()).build());
     }
 
+    @RequestMapping(value = "/regulacion/todas")
+    public ResponseEntity<AppResponse<Regulaciones>> listarAllRegulacion() {
+        List<Regulaciones> regulaciones = regulacionRepositorio.findAll();
+        return ResponseEntity.ok(success(regulaciones).total(regulaciones.size()).build());
+    }
+
     @PostMapping(value = "/regulacion")
     public ResponseEntity<AppResponse<Regulaciones>> insertarRegulacion(@Valid @RequestBody Regulaciones regulacion) {
         regulacionRepositorio.saveAndFlush(regulacion);

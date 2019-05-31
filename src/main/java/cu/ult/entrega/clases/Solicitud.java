@@ -213,6 +213,9 @@ public class Solicitud implements Serializable, EntidadClonable<Solicitud> {
         this.detallesMT = detallesMT;
     }
 
+    public Solicitud() {
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;

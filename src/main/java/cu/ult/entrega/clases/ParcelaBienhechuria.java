@@ -17,7 +17,7 @@ public class ParcelaBienhechuria implements Serializable {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "bienhechuria_id", foreignKey = @ForeignKey(name = "fk_bienhechuria_parcela"), insertable = false, updatable = false)
-    private Bienhechuria bienhechurías;
+    private Bienhechuria bienhechuria;
 
     @Column(name = "cantidad")
     private Integer cantidad;
@@ -48,12 +48,12 @@ public class ParcelaBienhechuria implements Serializable {
         this.parcela = parcela;
     }
 
-    public Bienhechuria getBienhechurías() {
-        return bienhechurías;
+    public Bienhechuria getBienhechuria() {
+        return bienhechuria;
     }
 
-    public void setBienhechurías(Bienhechuria bienhechurías) {
-        this.bienhechurías = bienhechurías;
+    public void setBienhechuria(Bienhechuria bienhechuria) {
+        this.bienhechuria = bienhechuria;
     }
 
     public Integer getCantidad() {
@@ -79,7 +79,7 @@ public class ParcelaBienhechuria implements Serializable {
         ParcelaBienhechuria that = (ParcelaBienhechuria) o;
         return Objects.equals(getParcelaBienhechuriaPK(), that.getParcelaBienhechuriaPK()) &&
                 Objects.equals(getParcela(), that.getParcela()) &&
-                Objects.equals(getBienhechurías(), that.getBienhechurías()) &&
+                Objects.equals(getBienhechuria(), that.getBienhechuria()) &&
                 Objects.equals(getCantidad(), that.getCantidad()) &&
                 Objects.equals(getPrecio(), that.getPrecio());
     }
@@ -87,15 +87,15 @@ public class ParcelaBienhechuria implements Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(getParcelaBienhechuriaPK(), getParcela(), getBienhechurías(), getCantidad(), getPrecio());
+        return Objects.hash(getParcelaBienhechuriaPK(), getParcela(), getBienhechuria(), getCantidad(), getPrecio());
     }
 
     @Override
     public String toString() {
-        return "ParcelaBienhechuria{" +
+        return "ParcelaBienhechuriaRepositorio{" +
                 "parcelaBienhechuriaPK=" + parcelaBienhechuriaPK +
                 ", parcela=" + parcela +
-                ", bienhechurías=" + bienhechurías +
+                ", bienhechuria=" + bienhechuria +
                 ", cantidad=" + cantidad +
                 ", precio=" + precio +
                 '}';

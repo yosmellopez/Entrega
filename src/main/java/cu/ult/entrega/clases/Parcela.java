@@ -64,7 +64,6 @@ public class Parcela implements Serializable {
     @Column(name = "condicActual")
     private String condicActual;
 
-    @JsonIgnore
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "Parcelas_Regulaciones",
             joinColumns = {@JoinColumn(name = "parcela_id")},

@@ -85,6 +85,7 @@ export class Persona {
     situacionLaboral: string;
     integraciones: Integracion[] = [];
     estadoCivil: string;
+    personaParcelas:PersonaParcelas[]=[];
     personasAyuda: PersonaAyuda[] = [];
     asociado: Persona;
 
@@ -95,6 +96,20 @@ export class Persona {
             //this.nombre = value.nombre ? value.nombre : "";
         }
     }
+}
+
+export class PersonaParcelas {
+    parcela:Parcela;
+    fechaAlta:Date;
+    tipoDeTenencia:string;
+    fechaBaja:Date;
+    detallesBaja:string;
+    gradoDeExplotacion:string;
+    noCertTenInscrito:number;
+    cultOActivAgroDediAct:string;
+    areaVacia:number;
+    existirCausas:string;
+    personaParcelaPK:{parcelaId:number,personaId:number};
 }
 
 export class Solicitud {
@@ -110,7 +125,8 @@ export class Solicitud {
     areaSolicitada: number;
     tramite: Tramite;
     estado: string;
-    fechaAproDes: Date;
+    aprobadoCAgraria:string;
+    aprobadoPCC:string;
     detallesMT: string;
     detallesAproDesa: string;
 }
@@ -119,10 +135,9 @@ export class Parcela {
     id: number = null;
     consejoPopular: ConsejoPopular;
     direccion: string;
-    persona: Persona;
-    zonaCatastral: number;
-    parcela: number;
-    divicion: number;
+    zonaCatastral: string;
+    parcela: string;
+    divicion: string;
     tipoUso: TipoUso;
     area: number;
     limiteN: string;
@@ -131,6 +146,13 @@ export class Parcela {
     limiteW: string;
     regulaciones: Regulacion[]=[];
     condicActual: string;
+    parcelaBienhechurias:ParcelaBienhechuria[]=[];
+}
+
+export class ParcelaBienhechuria {
+    bienhechuria:Bienhechuria;
+    cantidad:number;
+    precio:number;
 }
 
 export class LineaDeProduccion {
@@ -138,6 +160,7 @@ export class LineaDeProduccion {
     solicitud: Solicitud;
     lineaDeProduccion: string;
     areaDedicada: number;
+    aprobado:boolean;
     estudioSuelo: string;
 }
 
@@ -149,6 +172,11 @@ export class Bienhechuria {
 export class Regulacion {
     id: number;
     regulacion: string;
+
+    constructor(id: number, regulacion: string){
+        this.id = id;
+        this.regulacion = regulacion;
+    }
 }
 
 export class Tramite {
@@ -161,6 +189,8 @@ export class Tramite {
     fechaEntregaRegulaciones: Date;
     fechaConcEmpAgric: Date;
     fechaEntregValoBienchurías: Date;
+    fechaAprobadoCAgraria: Date;
+    fechaAprobadoPCC: Date;
     solicitud: Solicitud;
 }
 
@@ -227,3 +257,5 @@ export class DateFormat extends NativeDateAdapter {
         return isNaN(timestamp) ? null : new Date(timestamp);
     }
 }
+
+

@@ -24,6 +24,14 @@ export class BienhechuriaService {
         });
     }
 
+    listarAllBienhechuria(): Observable<Respuesta<Bienhechuria>> {
+        let constUrl = `${this.bienhechuriaUrl}/todas`;
+        return this.http.get<AppResponse<Bienhechuria>>(constUrl, {
+            observe: "response",
+            headers: {"Authorization": this.token}
+        });
+    }
+
     insertarBienhechuria(bienhechuria: Bienhechuria): Observable<Respuesta<Bienhechuria>> {
         return this.http.post<AppResponse<Bienhechuria>>(this.bienhechuriaUrl, bienhechuria, {
             observe: "response",

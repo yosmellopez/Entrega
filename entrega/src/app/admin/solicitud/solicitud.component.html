@@ -25,16 +25,19 @@
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Núm. de Exp.</th>
                         <td mat-cell *matCellDef="let element"> {{element.numExpediente}}</td>
                     </ng-container>
+
                     <!-- Name Column -->
                     <ng-container matColumnDef="fechaSolicitud">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de Solic.</th>
                         <td mat-cell *matCellDef="let element"> {{element.fechaSolicitud|date:'dd/MM/yyyy'}}</td>
                     </ng-container>
+
                     <!-- Name Column -->
                     <ng-container matColumnDef="areaSolicitada">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Área (Ha)</th>
                         <td mat-cell *matCellDef="let element"> {{element.areaSolicitada}}</td>
                     </ng-container>
+
                     <!-- Name Column -->
                     <ng-container matColumnDef="estado">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>

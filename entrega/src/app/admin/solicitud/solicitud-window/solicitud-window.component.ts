@@ -73,13 +73,7 @@ export class SolicitudWindowComponent implements OnInit {
     municipio: Municipio;
     ci: string;
     organizaciones: Integracion[] = [];
-    // organizaciones = [{name: 'PCC', activo: false},
-    //     {name: 'CTC', activo: false},
-    //     {name: 'ANAP', activo: false},
-    //     {name: 'MTT', activo: false},
-    //     {name: 'CDR', activo: false},
-    //     {name: 'ACRC', activo: false},
-    //     {name: 'FMC', activo: false}];
+
 
     displayedColumnsParcela: string[] = ['contador', 'zonaCatastral', 'parcela', 'divicion', 'area', 'acciones'];
     displayedColumnsLinea: string[] = ['contador', 'lineaDeProduccion', 'areaDedicada', 'acciones'];
@@ -203,10 +197,11 @@ export class SolicitudWindowComponent implements OnInit {
                 this.formParcela.get('consejoPopular').setValue(resp.body.elemento);
             }
         });
-        this.tipodeUsoService.listarTipoUsoNoDefinido('No Definido').subscribe(resp => {
+        this.tipodeUsoService.listarTipoUsoPorNombre('Ociosa').subscribe(resp => {
             if (resp.body.success) {
                 this.formParcela.get('tipoUso').setValue(resp.body.elemento);
             }
+            console.log(this.formParcela.value);
         });
         this.municipioService.obtenerMunicipioPorCodigo('02').subscribe(resp => {
             if (resp.body.success) {
@@ -248,31 +243,26 @@ export class SolicitudWindowComponent implements OnInit {
 
 
     addParcela() {
+        let esta = false;
+        console.log(this.formParcela.value);
         if (this.formParcela.valid) {
-            if (this.dataSourceParcela.data.length === 0) {
-                const parcela = this.formParcela.value as Parcela;
-                this.parcelas.push(parcela);
-                this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
+            for (var cont in this.parcelas) {
+                if (this.parcelas[cont].zonaCatastral == this.formParcela.get('zonaCatastral').value && this.parcelas[cont].parcela == this.formParcela.get('parcela').value && this.parcelas[cont].divicion == this.formParcela.get('divicion').value) {
+                    esta = true;
+                    break;
+                }
             }
-            /*else {
-                           for (var cont in this.parcelas) {
-                               if (this.parcelas[cont].zonaCatastral == this.formParcela.get('zonaCatastral').value && this.parcelas[cont].parcela == this.formParcela.get('parcela').value && this.parcelas[cont].divicion == this.formParcela.get('divicion').value) {
-                                   esta = true;
-                                   break;
-                               }
-                           }
 
-                           if (esta != true) {
-                               this.formParcela.get('contador').setValue(this.formParcela.get('contador').value + 1);
-                               this.parcelas.push(this.formParcela.value);
-                               this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
-                           } else {
-                               this.dialog.open(MensajeError, {
-                                   width: '400px',
-                                   data: {mensaje: 'La parcela ya se encuentra en la lista:'}
-                               })
-                           }
-                       }*/
+            if (esta != true) {
+               this.formParcela.get('contador').setValue(this.formParcela.get('contador').value + 1);
+               this.parcelas.push(this.formParcela.value);
+               this.dataSourceParcela = new MatTableDataSource<Parcela>(this.parcelas);
+            } else {
+               this.dialog.open(MensajeError, {
+                   width: '400px',
+                   data: {mensaje: 'La parcela ya se encuentra en la lista:'}
+               })
+            }
         }
     }
 
@@ -444,5 +434,23 @@ export class SolicitudWindowComponent implements OnInit {
 
     tieneIntegracion(organizacion: Integracion): boolean {
         return this.persona.integraciones.some(value => value.id === organizacion.id);
+    }
+
+    onKey(event:any, valor:string):boolean{
+        console.log(isNaN(event.key));
+        if (isNaN(event.key)) {
+            return false;
+        }else if (valor.length == 2){
+            if (event.key != 1 && event.key !=0 ){return false;}
+        }else if (valor.length == 3){
+            let srt: number = parseInt(valor.charAt(2));
+            console.log(srt);
+            if ((srt == 0 && event.key == 0)||(srt == 1 && event.key > 2)){return false;}
+        }else if (valor.length == 4){
+            if (event.key > 3){return false;}
+        }else if (valor.length == 5){
+            let srt: number = parseInt(valor.charAt(4));
+            if ((srt == 0 && event.key == 0)||(srt == 3 && event.key > 1)){return false;}
+        }
     }
 }

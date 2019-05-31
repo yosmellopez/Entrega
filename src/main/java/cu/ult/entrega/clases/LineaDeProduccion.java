@@ -39,7 +39,10 @@ public class LineaDeProduccion implements Serializable {
     
     @Column (name = "lineaDeProduccion")
     private String lineaDeProduccion;
-    
+
+    @Column (name = "aprobado")
+    private Boolean aprobado;
+
     @Column (name = "areaDedicada")
     private Double areaDedicada;
     
@@ -68,6 +71,14 @@ public class LineaDeProduccion implements Serializable {
 
     public void setLineaDeProduccion(String lineaDeProduccion) {
         this.lineaDeProduccion = lineaDeProduccion;
+    }
+
+    public Boolean getAprobado() {
+        return aprobado;
+    }
+
+    public void setAprobado(Boolean aprobado) {
+        this.aprobado = aprobado;
     }
 
     public Double getAreaDedicada() {

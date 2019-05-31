@@ -24,6 +24,15 @@ export class RegulacionService {
         });
     }
 
+    listarAllRegulacion(): Observable<Respuesta<Regulacion>> {
+        let constUrl = `${this.regulacionUrl}/todas`;
+        return this.http.get<AppResponse<Regulacion>>(constUrl, {
+            observe: "response",
+            headers: {"Authorization": this.token}
+        });
+    }
+
+
     insertarRegulacion(regulacion: Regulacion): Observable<Respuesta<Regulacion>> {
         return this.http.post<AppResponse<Regulacion>>(this.regulacionUrl, regulacion, {
             observe: "response",

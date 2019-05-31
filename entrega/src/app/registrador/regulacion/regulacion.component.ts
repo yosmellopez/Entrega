@@ -77,7 +77,7 @@ export class RegulacionComponent implements OnInit {
 
     abrirVentana() {
         let dialogRef = this.dialog.open(RegulacionWindowComponent, {
-            width: '400px', disableClose: true, data: new Regulacion(),
+            width: '400px', disableClose: true, data: new Regulacion(null,''),
         });
 
         dialogRef.afterClosed().subscribe(result => {

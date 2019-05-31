@@ -13,5 +13,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Pablo Caram Local
  */
 public interface ParcelaRepositorio extends JpaRepository<Parcela, Long>{
+
+    public Parcela findByZonaCatastralAndParcelaAndDivicion (Integer zonaCatastral, Integer parcela, Integer divicion);
     
 }

@@ -1,0 +1,35 @@
+<form class="form" [formGroup]="formAprobDenegLP" (submit)="aproDenLineaDeProduccion()">
+    <h1 mat-dialog-title style="margin: 0 0">Aprobar Denegar Línea de Producción
+        <button type="button" mat-icon-button class="close-button" (click)="onNoClick()">
+            <mat-icon style="font-size: 25px">close</mat-icon>
+        </button>
+        <hr>
+    </h1>
+    <div mat-dialog-content style="min-height: 7em;">
+        <br>
+        <section>
+            <mat-slide-toggle
+                [color]="color"
+                [checked]="checked"
+                (change)="onChange($event)">
+                {{checked?'Aprobada':'Denegada'}}
+            </mat-slide-toggle>
+        </section>
+        <br>
+        <mat-form-field class="full-width">
+            <textarea matInput placeholder="Detalles del estudio del suelo" formControlName="estudioSuelo"></textarea>
+            <mat-error *ngIf="formAprobDenegLP.controls['estudioSuelo'].errors?.required">Debe insertar el detalle de la aprobacion o la denegacion.</mat-error>
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="boton-theme">
+        <span class="spacer"></span>
+        <button type="submit" mat-raised-button cdkFocusInitial color="primary">
+            <mat-icon>check_circle</mat-icon>
+            {{checked?'Aprobada':'Denegada'}}
+        </button>
+        <button type="button" mat-raised-button (click)="onNoClick()" color="warn">
+            <mat-icon>cancel</mat-icon>
+            Cancelar
+        </button>
+    </div>
+</form>

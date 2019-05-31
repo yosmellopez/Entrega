@@ -11,6 +11,12 @@ import {RegitradorRoutes} from "./registrador-routing.module";
 import { BienhechuriaWindowComponent } from './bienhechurias/bienhechuria-window/bienhechuria-window.component';
 import { RegulacionWindowComponent } from './regulacion/regulacion-window/regulacion-window.component';
 import { TramiteComponent } from './tramite/tramite.component';
+import {PersonaDetallesComponent} from "../admin/solicitante/persona-detalles/persona-detalles.component";
+import {AdminModule} from "../admin/admin.module";
+import { EstadoParcelaWindowComponent } from './tramite/estado-parcela-window/estado-parcela-window.component';
+import { ActuParcelaWindowComponent } from './tramite/actu-parcela-window/actu-parcela-window.component';
+import { AprobarDenegarLPWindowComponent } from './tramite/aprobar-denegar-lpwindow/aprobar-denegar-lpwindow.component';
+import { AprobarDenegarSolicitudWindowsComponent } from './tramite/aprobar-denegar-solicitud-windows/aprobar-denegar-solicitud-windows.component';
 
 @NgModule({
     imports: [
@@ -20,15 +26,20 @@ import { TramiteComponent } from './tramite/tramite.component';
         ReactiveFormsModule,
         FormsModule,
         MensajeModule,
-        PipesModule
+        PipesModule,
+        AdminModule
     ],
-    declarations: [
+    declarations:[
         RegulacionComponent,
         BienhechuriasComponent,
         BienhechuriaWindowComponent,
         RegulacionWindowComponent,
-        TramiteComponent
+        TramiteComponent,
+        EstadoParcelaWindowComponent,
+        ActuParcelaWindowComponent,
+        AprobarDenegarLPWindowComponent,
+        AprobarDenegarSolicitudWindowsComponent,
     ],
-    entryComponents:[BienhechuriaWindowComponent,RegulacionWindowComponent]
+    entryComponents:[BienhechuriaWindowComponent,RegulacionWindowComponent,PersonaDetallesComponent,EstadoParcelaWindowComponent,ActuParcelaWindowComponent,AprobarDenegarLPWindowComponent]
 })
 export class RegistradorModule { }

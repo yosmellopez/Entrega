@@ -12,7 +12,7 @@
                     {{consejoP.nombre}}
                 </mat-option>
             </mat-select>
-            <mat-error *ngIf="formPersona.controls['consejoPopular'].errors?.required">Debe seleccionar el consejo popular.</mat-error>
+            <mat-error *ngIf="formParcela.controls['consejoPopular'].errors?.required">Debe seleccionar el consejo popular.</mat-error>
         </mat-form-field>
         <mat-form-field class="middle-width">
             <mat-select matInput placeholder="Seleccione el tipo de uso" formControlName="tipoUso" [compareWith]="compararTiposDeUso">
@@ -20,7 +20,7 @@
                     {{tipoDeUso.nombre}}
                 </mat-option>
             </mat-select>
-            <mat-error *ngIf="formPersona.controls['consejoPopular'].errors?.required">Debe seleccionar el tipo de uso.</mat-error>
+            <mat-error *ngIf="formParcela.controls['consejoPopular'].errors?.required">Debe seleccionar el tipo de uso.</mat-error>
         </mat-form-field>
 
         <mat-form-field class="middle-width">
@@ -71,4 +71,3 @@
         </button>
     </div>
 </form>
-
