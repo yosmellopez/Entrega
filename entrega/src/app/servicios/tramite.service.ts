@@ -122,6 +122,22 @@ export class TramiteService {
         });
     }
 
+    aprobarDenegarSolicCA (id:number, solicitud:Solicitud): Observable<Respuesta<Solicitud>> {
+        let constUrl = `${this.tipoTramiteUrl}/aprobarDenegarSolicCA/${id}`;
+        return this.http.put<AppResponse<Solicitud>>(constUrl, solicitud, {
+            observe: "response",
+            headers: {"Authorization": this.token}
+        });
+    }
+
+    aprobarDenegarSolicPCC (id:number, solicitud:Solicitud): Observable<Respuesta<Solicitud>> {
+        let constUrl = `${this.tipoTramiteUrl}/aprobarDenegarSolicPCC/${id}`;
+        return this.http.put<AppResponse<Solicitud>>(constUrl, solicitud, {
+            observe: "response",
+            headers: {"Authorization": this.token}
+        });
+    }
+
     isertarIniciTramit(idMatTab:number,elementos:Solicitud[]): Observable<Respuesta<Solicitud>> {
         console.log(elementos)
         let constUrl = `${this.tipoTramiteUrl}/iniciTramit/${idMatTab}`;

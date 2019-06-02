@@ -40,6 +40,6 @@ import { AprobarDenegarSolicitudWindowsComponent } from './tramite/aprobar-deneg
         AprobarDenegarLPWindowComponent,
         AprobarDenegarSolicitudWindowsComponent,
     ],
-    entryComponents:[BienhechuriaWindowComponent,RegulacionWindowComponent,PersonaDetallesComponent,EstadoParcelaWindowComponent,ActuParcelaWindowComponent,AprobarDenegarLPWindowComponent]
+    entryComponents:[BienhechuriaWindowComponent,RegulacionWindowComponent,PersonaDetallesComponent,EstadoParcelaWindowComponent,ActuParcelaWindowComponent,AprobarDenegarLPWindowComponent,AprobarDenegarSolicitudWindowsComponent]
 })
 export class RegistradorModule { }

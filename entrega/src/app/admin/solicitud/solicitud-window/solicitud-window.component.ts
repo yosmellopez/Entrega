@@ -167,7 +167,43 @@ export class SolicitudWindowComponent implements OnInit {
                     this.ci = value;
                     this.personaService.obtenerPorCI(value).subscribe(resp => {
                         if (resp.body.success && resp.body.elemento) {
-                            this.formPersona.patchValue(resp.body.elemento);
+                            if (resp.body.elemento.personaParcelas){
+                                let dialogRef = this.dialog.open(Information, {
+                                    width: '400px',
+                                    data: {mensaje: 'El solicitante que intenta introducir al sistema es Poseedor por lo tanto el tipo de solicitud será ampliación:'}
+                                })
+
+                                dialogRef.afterClosed().subscribe(value => {
+                                    this.formSolicitud.get('tipoSolicitud').setValue('Ampliacion');
+                                    this.persona = resp.body.elemento
+                                    this.listPersonaAyuda = resp.body.elemento.personasAyuda;
+                                    this.formPersona.patchValue(resp.body.elemento);
+                                    this.dataSourcePersonaAyuda = new MatTableDataSource<PersonaAyuda>(this.listPersonaAyuda);
+                                })
+                            }else {
+                                this.service.obtenerSolicitudesIdPers(resp.body.elemento.id).subscribe(respSP=>{
+                                    if (respSP.body.success && respSP.body.elementos){
+                                        this.dialog.open(Information, {
+                                            width: '400px',
+                                            data: {mensaje: 'El solicitante que intenta introducir al sistema tiene una solicitud en tramite:'}
+                                        })
+                                        this.formPersona.get('ci').setValue('');
+                                    }else{
+                                        let dialogRef = this.dialog.open(Information, {
+                                            width: '400px',
+                                            data: {mensaje: 'El solicitante que intenta introducir al sistema tiene solicitudes denegadas:'}
+                                        })
+
+                                        dialogRef.afterClosed().subscribe(value => {
+                                            this.formSolicitud.get('tipoSolicitud').setValue('Nueva');
+                                            this.persona = resp.body.elemento
+                                            this.listPersonaAyuda = resp.body.elemento.personasAyuda;
+                                            this.formPersona.patchValue(resp.body.elemento);
+                                            this.dataSourcePersonaAyuda = new MatTableDataSource<PersonaAyuda>(this.listPersonaAyuda);
+                                        })
+                                    }
+                                });
+                            }
                         } else {
                             if (this.formPersona.get('tipoPersona').value == 'Natural') {
                                 this.formPersona.get('edad').setValue(this.obtenerEdad());
@@ -360,6 +396,7 @@ export class SolicitudWindowComponent implements OnInit {
         if (this.formSolicitud.valid && this.formPersona.valid && this.formPersonaAyuda.valid && this.formParcela.valid && this.formLineaProduccion.valid) {
             const solicitud = this.formSolicitud.value as Solicitud;
             solicitud.persona = {...this.formPersona.value};
+            solicitud.persona.id = this.persona.id;
             solicitud.persona.personasAyuda = [...this.listPersonaAyuda];
             solicitud.parcelas = [...this.parcelas];
             solicitud.lineasDeProduccion = [...this.lineasProduccion];

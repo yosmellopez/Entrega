@@ -94,7 +94,7 @@ public class ConfiguracionWeb implements WebMvcConfigurer, ApplicationContextAwa
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         JasperReportsViewResolver reportsViewResolver = new JasperReportsViewResolver();
-        reportsViewResolver.setPrefix("classpath:reportes/");
+        reportsViewResolver.setPrefix("/WEB-INF/reportes/");
         reportsViewResolver.setSuffix(".jasper");
         reportsViewResolver.setViewClass(JasperReportsMultiFormatView.class);
         reportsViewResolver.setOrder(1);

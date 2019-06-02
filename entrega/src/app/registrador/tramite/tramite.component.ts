@@ -20,6 +20,8 @@ import {DetallesSolicitudComponent} from "../../admin/solicitud/detalles-solicit
 import {PersonaDetallesComponent} from "../../admin/solicitante/persona-detalles/persona-detalles.component";
 import {ActuParcelaWindowComponent} from "./actu-parcela-window/actu-parcela-window.component";
 import {AprobarDenegarLPWindowComponent} from "./aprobar-denegar-lpwindow/aprobar-denegar-lpwindow.component";
+import {AprobarDenegarSolicitudWindowsComponent} from "./aprobar-denegar-solicitud-windows/aprobar-denegar-solicitud-windows.component";
+import {ReporteService} from "../../servicios/reporte.service";
 
 export class ParcelaElement {
     idParcela:number;
@@ -129,7 +131,7 @@ export class TramiteComponent implements OnInit {
 
     @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
-    constructor(private dialog:MatDialog, private sevice:TramiteService, private regulacionService:RegulacionService,private bienhechuriaService:BienhechuriaService) {
+    constructor(private dialog:MatDialog, private sevice:TramiteService, private regulacionService:RegulacionService,private bienhechuriaService:BienhechuriaService, private report:ReporteService) {
 
         this.formRegParcela = new FormGroup({
             solicitud: new FormControl([]),
@@ -478,12 +480,41 @@ export class TramiteComponent implements OnInit {
         });
     }
 
+    abrirVentAproDeneSolicitud(event:Event, solicitud:Solicitud){
+        event.stopPropagation();
+
+        let editDialogRef = this.dialog.open(AprobarDenegarSolicitudWindowsComponent, {
+            width: '1400px', disableClose: true, data: solicitud
+        });
+
+        editDialogRef.afterClosed().subscribe(result => {
+            var aprobada = '';
+            if (result != false && result.success) {
+                if ((result.elemento.aprobadoCAgraria == 'Aprobada'&& result.elemento.aprobadoPCC =='') || (result.elemento.aprobadoCAgraria == '' && result.elemento.aprobadoPCC =='Aprobada')){
+                    aprobada = 'Aprobado'
+                } else {
+                    aprobada = 'Denegado'
+                }
+                this.dialog.open(Information, {
+                    width: '400px',
+                    data: {mensaje: 'Se ha'+aprobada+' la solicitud - '+result.elemento.numExpediente}
+                });
+            }
+        });
+    }
+
+
+
     geneReportAsigFecha(event:Event):void{
         event.stopPropagation();
         switch(this.tabGroup.selectedIndex) {
             case 0: {
+                this.report.listarReporte('pdf').subscribe(value => {
+                    console.log(value.body);
+                });
                 this.sevice.isertarIniciTramit(0, this.solicitudInvest).subscribe(value => {
                     if (value.body.success){
+
                        this.listarSolicitudInvest();
                     }
                 });

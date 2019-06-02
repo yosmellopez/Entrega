@@ -470,7 +470,7 @@
                                     <ng-container matColumnDef="acciones" stickyEnd>
                                         <th mat-header-cell *matHeaderCellDef style="text-align: center;">Acciones</th>
                                         <td mat-cell *matCellDef="let element" align="center">
-                                            <button mat-mini-fab color="accent" (click)="editarConsejoPopular($event,element)"
+                                            <button mat-mini-fab color="accent" (click)="abrirVentAproDeneSolicitud($event,element)"
                                                     [matTooltip]="'Aprobar, Denegar solicitud - ' + element.numExpediente">
                                                 <mat-icon>spellcheck</mat-icon>
                                             </button>

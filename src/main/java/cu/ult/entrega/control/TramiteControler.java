@@ -198,6 +198,59 @@ public class TramiteControler {
         return ResponseEntity.ok(success(currenLineaDeProduccion).build());
     }
 
+    @PutMapping(value = "/tramite/aprobarDenegarSolicCA/{id}")
+    public ResponseEntity<AppResponse<Solicitud>> aprobarDenegarSolicCA(@PathVariable("id") Optional<Solicitud> optional, @Valid @RequestBody Solicitud solicitud) {
+        Date fecha = new Date();
+        Solicitud currentSolicitud = optional.orElseThrow(() -> new EntityNotFoundException("Solicitud no encontrada"));
+
+        currentSolicitud.setAprobadoCAgraria(solicitud.getAprobadoCAgraria());
+        if (solicitud.getAprobadoCAgraria() == "Aprobada"){
+            currentSolicitud.setEstado("Lista para llevar al buró del partido");
+        }else{
+            currentSolicitud.setEstado("Expediente Denegado");
+        }
+        currentSolicitud.setDetallesAproDesa(solicitud.getDetallesAproDesa());
+        currentSolicitud.getTramite().setFechaAprobadoCAgraria(fecha);
+        solicitudRepositorio.saveAndFlush(currentSolicitud);
+
+        return ResponseEntity.ok(success(currentSolicitud).build());
+    }
+
+    @PutMapping(value = "/tramite/aprobarDenegarSolicPCC/{id}")
+    public ResponseEntity<AppResponse<Solicitud>> aprobarDenegarSolicPCC(@PathVariable("id") Optional<Solicitud> optional, @Valid @RequestBody Solicitud solicitud) {
+        Date fecha = new Date();
+        Solicitud currentSolicitud = optional.orElseThrow(() -> new EntityNotFoundException("Solicitud no encontrada"));
+
+        currentSolicitud.setAprobadoPCC(solicitud.getAprobadoPCC());
+        currentSolicitud.setDetallesAproDesa(solicitud.getDetallesAproDesa());
+        currentSolicitud.getTramite().setFechaAprobadoPCC(fecha);
+
+        if (solicitud.getAprobadoPCC() == "Aprobada"){
+            currentSolicitud.setEstado("Expediente");
+
+            for (Parcela parcela: solicitud.getParcelas()){
+                PersonaParcela personaParcela = new PersonaParcela();
+                personaParcela.setPersona(solicitud.getPersona());
+                personaParcela.setParcela(parcela);
+                personaParcela.setPersonaParcelaPK(new PersonaParcelaPK(parcela.getId(), solicitud.getPersona().getId()));
+                personaParcela.setFechaAlta(fecha);
+                personaParcela.setTipoDeTenencia("En Usufructo");
+                personaParcela.setNoCertTenInscrito(-1);
+                personaParcela.setAreaVacia(-1);
+                personaParcela.setGradoDeExplotacion('-');
+                personaParcela.setExistirCausas("-");
+                personaParcela.setCultOActivAgroDediAct("-");
+
+                personaParcelasRepositorio.saveAndFlush(personaParcela);
+            }
+        }else{
+            currentSolicitud.setEstado("Expediente Denegado");
+        }
+        solicitudRepositorio.saveAndFlush(currentSolicitud);
+
+        return ResponseEntity.ok(success(currentSolicitud).build());
+    }
+
     @PutMapping(value = "/tramite/iniciTramit/{idMatTab}")
     public ResponseEntity<AppResponse<Solicitud>> isertarIniciTramit(@PathVariable("idMatTab")Integer idMatTab, @RequestBody List<Solicitud> solicitudes) {
        Date fecha = new Date();

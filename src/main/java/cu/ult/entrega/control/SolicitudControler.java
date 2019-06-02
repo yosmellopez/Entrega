@@ -110,15 +110,26 @@ public class SolicitudControler {
         for (Parcela parcela : parcelas) {
             parcelasGuardadas.add(parcelaRepositorio.saveAndFlush(parcela));
         }
+
         solicitud.setParcelas(parcelasGuardadas);
 
-        solicitud.setPersona(personaRepositorio.saveAndFlush(persona));
+        solicitud.setPersona(solicitud.getPersona());
 
         solicitudRepositorio.saveAndFlush(solicitud);
 
         for (PersonaAyuda personaAyuda : personasAyuda) {
-            personaAyuda.setPersona(solicitud.getPersona());
-            personaAyudaRepositorio.saveAndFlush(personaAyuda);
+            if (personaAyuda.getId()!=null){
+                PersonaAyuda currentPersoAyu = personaAyudaRepositorio.getOne(personaAyuda.getId());
+                currentPersoAyu.setCi(personaAyuda.getCi());
+                currentPersoAyu.setNombre(personaAyuda.getNombre());
+                currentPersoAyu.setPrimerApellido(personaAyuda.getPrimerApellido());
+                currentPersoAyu.setSegundoApellido(personaAyuda.getSegundoApellido());
+                currentPersoAyu.setParentesco(personaAyuda.getParentesco());
+                personaAyudaRepositorio.saveAndFlush(currentPersoAyu);
+            }else{
+                personaAyuda.setPersona(solicitud.getPersona());
+                personaAyudaRepositorio.saveAndFlush(personaAyuda);
+            }
         }
 
         for (LineaDeProduccion lineaDeProduccion : lineasDeProduccion) {

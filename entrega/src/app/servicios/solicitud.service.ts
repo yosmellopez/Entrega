@@ -25,6 +25,14 @@ export class SolicitudService {
         });
     }
 
+    obtenerSolicitudesIdPers(idPers:number):Observable<Respuesta<Solicitud>>{
+        let constUrl = `${this.solicitudUrl}/porPersona{idPers}`;
+        return this.http.get<AppResponse<Solicitud>>(constUrl,{
+            observe: 'response',
+            headers: {'Authorization': this.token}
+        })
+    }
+
     obtenerUltimSolicitud(): Observable<Respuesta<Solicitud>> {
         let constUrl = `${this.solicitudUrl}/ultima`;
         return this.http.get<AppResponse<Solicitud>>(constUrl, {

@@ -58,7 +58,7 @@ export class SolicitudComponent implements OnInit {
                 startWith({}),
                 switchMap(() => {
                     this.isLoadingResults = true;
-                    return this.servicio.listarSolicitud('Aprobada', this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+                    return this.servicio.listarSolicitud('Expediente', this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
                 }),
                 map(data => {
                     this.total = data.body.total;
