@@ -94,8 +94,8 @@ public class ConfiguracionWeb implements WebMvcConfigurer, ApplicationContextAwa
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         JasperReportsViewResolver reportsViewResolver = new JasperReportsViewResolver();
-        reportsViewResolver.setPrefix("/WEB-INF/reportes/");
-        reportsViewResolver.setSuffix(".jasper");
+        reportsViewResolver.setPrefix("classpath:reportes/");
+        reportsViewResolver.setSuffix(".jrxml");
         reportsViewResolver.setViewClass(JasperReportsMultiFormatView.class);
         reportsViewResolver.setOrder(1);
         registry.viewResolver(viewResolver());
@@ -106,6 +106,8 @@ public class ConfiguracionWeb implements WebMvcConfigurer, ApplicationContextAwa
     public ViewResolver viewResolver() {
         ThymeleafViewResolver resolver = new ThymeleafViewResolver();
         resolver.setTemplateEngine(templateEngine());
+        resolver.setOrder(0);
+        resolver.setExcludedViewNames(new String[]{"reporteConcilMedicion"});
         return resolver;
     }
 

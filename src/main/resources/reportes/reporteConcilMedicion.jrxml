@@ -5,8 +5,7 @@
 		<![CDATA[cGVyc29uYSAsMzY4LDE5OSw5ZDE5MjUzZi1hYzBkLTRlYTMtYjBhYy0yMGQyZGY0NjkyNDg7cGFy
 Y2VsYSAsMTY3LDQ3Miw2ZDRjOWQ1Ni0wZTliLTRlYjQtYWM2Zi00OGJkNTQ2YTU0N2U7c29saWNp
 dHVkICwxNjcsMTUsYjNjYmI4NGYtNWNhNy00OGMyLTkyYmItM2IyNmZjMWQzYmU3O3NvbGljaXR1
-ZF9wYXJjZWxhICwxNSw0MDgsMTgyZDE2NjgtN2RiMS00NTRjLTg1N2ItNzZmYjdlNGE2NzcyOw==
-]]>
+ZF9wYXJjZWxhICwxNSw0MDgsMTgyZDE2NjgtN2RiMS00NTRjLTg1N2ItNzZmYjdlNGE2NzcyOw==]]>
 	</property>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="385"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="615"/>
@@ -24,55 +23,18 @@ ZF9wYXJjZWxhICwxNSw0MDgsMTgyZDE2NjgtN2RiMS00NTRjLTg1N2ItNzZmYjdlNGE2NzcyOw==
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
 	<style name="Detail" fontName="Arial" fontSize="12"/>
-	<queryString language="SQL">
-		<![CDATA[SELECT solicitud.area_solicitada,
-	persona.primer_apellido,
-	persona.nombre,
-	persona.segundo_apellido,
-	persona.ci,
-	parcela.direccion,
-	persona.dir_particular,
-	solicitud.area_solicitada
-FROM solicitud_parcela
-	INNER JOIN solicitud ON 
-	 solicitud_parcela.solicitud_id = solicitud.id 
-	INNER JOIN persona ON 
-	 solicitud.persona_id = persona.id 
-	INNER JOIN parcela ON 
-	 solicitud_parcela.parcela_id = parcela.id]]>
+	<queryString>
+		<![CDATA[]]>
 	</queryString>
-	<field name="area_solicitada" class="java.lang.Double">
+	<field name="areaSolicitada" class="java.lang.Double">
 		<property name="com.jaspersoft.studio.field.label" value="area_solicitada"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="solicitud"/>
 	</field>
-	<field name="primer_apellido" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.label" value="primer_apellido"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
-	</field>
-	<field name="nombre" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
-	</field>
-	<field name="segundo_apellido" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.label" value="segundo_apellido"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
-	</field>
-	<field name="ci" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.label" value="ci"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
-	</field>
-	<field name="direccion" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.label" value="direccion"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="parcela"/>
-	</field>
-	<field name="dir_particular" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.label" value="dir_particular"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="persona"/>
-	</field>
-	<field name="COLUMN_8" class="java.lang.Double">
-		<property name="com.jaspersoft.studio.field.label" value="area_solicitada"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="solicitud"/>
-	</field>
+	<field name="persona" class="cu.ult.entrega.clases.Persona"/>
+	<variable name="index" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$V{index}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -93,7 +55,7 @@ FROM solicitud_parcela
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="100" splitType="Stretch">
+		<band height="50" splitType="Stretch">
 			<line>
 				<reportElement positionType="FixRelativeToBottom" x="0" y="49" width="750" height="1" uuid="d69c6691-e92e-45c5-bf2d-c1dc15dabb91"/>
 				<graphicElement>
@@ -216,44 +178,52 @@ FROM solicitud_parcela
 				</textElement>
 				<text><![CDATA[Fecha de Conciliación:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="30" y="50" width="110" height="20" uuid="912db1b0-2637-4a9c-8590-35e053f3d9f0"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{ci}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="140" y="50" width="92" height="20" uuid="54772630-6eb3-4bda-9906-58099e5566d9"/>
-				<textElement textAlignment="Left"/>
-				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="232" y="50" width="88" height="20" uuid="2cc15de0-3738-4ecf-96e1-90ccd38fc5a7"/>
-				<textFieldExpression><![CDATA[$F{primer_apellido}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="320" y="50" width="90" height="20" uuid="a8072b04-b7c6-48e0-890f-15a21726fa2a"/>
-				<textFieldExpression><![CDATA[$F{segundo_apellido}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="480" y="50" width="140" height="20" uuid="d73989bb-9771-4193-aad3-0071935794ea"/>
-				<textFieldExpression><![CDATA[$F{dir_particular}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="410" y="50" width="70" height="20" uuid="defd6fee-0a45-4ebb-842f-ecd775d82d58"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{area_solicitada}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="620" y="50" width="130" height="20" uuid="d753f5b2-079b-4be6-92ba-344195ff1ae4"/>
-				<textFieldExpression><![CDATA[$F{direccion}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="0" y="50" width="30" height="20" uuid="780447b7-b319-4bc9-a7ec-453b5cfdc8eb"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$V{COLUMN_NUMBER}]]></textFieldExpression>
-			</textField>
 		</band>
 	</columnHeader>
+	<detail>
+		<band height="21">
+			<textField>
+				<reportElement x="0" y="0" width="30" height="20" uuid="780447b7-b319-4bc9-a7ec-453b5cfdc8eb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{index}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="30" y="0" width="110" height="20" uuid="912db1b0-2637-4a9c-8590-35e053f3d9f0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{persona}.getCi()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="140" y="0" width="92" height="20" uuid="54772630-6eb3-4bda-9906-58099e5566d9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{persona}.getNombre()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="232" y="0" width="88" height="20" uuid="2cc15de0-3738-4ecf-96e1-90ccd38fc5a7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{persona}.getPrimerApellido()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="320" y="0" width="90" height="20" uuid="a8072b04-b7c6-48e0-890f-15a21726fa2a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{persona}.getSegundoApellido()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="410" y="0" width="70" height="20" uuid="defd6fee-0a45-4ebb-842f-ecd775d82d58"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{areaSolicitada}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="480" y="0" width="140" height="20" uuid="d73989bb-9771-4193-aad3-0071935794ea"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{persona}.getDirParticular()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="620" y="0" width="130" height="20" uuid="d753f5b2-079b-4be6-92ba-344195ff1ae4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Una direccion"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
 	<columnFooter>
 		<band height="20" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout"/>

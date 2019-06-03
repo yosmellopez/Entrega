@@ -129,20 +129,6 @@
             <artifactId>itextpdf</artifactId>
             <version>5.5.13</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/ar.com.fdvs/DynamicJasper -->
-        <dependency>
-            <groupId>ar.com.fdvs</groupId>
-            <artifactId>DynamicJasper</artifactId>
-            <version>3.0.5</version>
-        </dependency>
-
-        <!-- Excel XLS View -->
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>3.14</version>
-        </dependency>
     </dependencies>
 
     <build>

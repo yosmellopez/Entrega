@@ -1,5 +1,6 @@
 package cu.ult.entrega.control;
 
+import cu.ult.entrega.clases.Solicitud;
 import cu.ult.entrega.repositorio.SolicitudRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,17 +10,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
+import java.util.Optional;
+
 @Controller
 public class ReporteControler {
 
+    private final SolicitudRepositorio solicitudRepositorio;
+
     @Autowired
-    private SolicitudRepositorio solicitudRepositorio;
+    public ReporteControler(SolicitudRepositorio solicitudRepositorio) {
+        this.solicitudRepositorio = solicitudRepositorio;
+    }
 
     @RequestMapping(value = "/reporteConcilMedicion", method = {RequestMethod.GET, RequestMethod.POST})
-    public ModelAndView investigacion()  {
-
+    public ModelAndView investigacion() {
+        Optional<Solicitud> optional = solicitudRepositorio.findAll().parallelStream().findFirst();
         ModelMap map = new ModelMap();
         map.put("datasource", solicitudRepositorio.findAll());
+//        map.put("solicitud", optional.get());
         map.put("format", "pdf");
         return new ModelAndView("reporteConcilMedicion", map);
 

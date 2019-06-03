@@ -1,34 +1,32 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {ConsejoPopularService} from "../../../servicios/consejo-popular.service";
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material";
-import {ReplaySubject} from "rxjs/index";
-import {ConsejoPopular, Parcela, TipoUso} from "../../../modelo";
-import {TipoUsoService} from "../../../servicios/tipo-uso.service";
-import {ParcelaService} from "../../../servicios/parcela.service";
-import {ParcelaWindow} from "../../../admin/parcela/parcela-window/parcela-window.component";
-import {MensajeError} from "../../../mensaje/window.mensaje";
-import {TramiteService} from "../../../servicios/tramite.service";
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ConsejoPopularService } from '../../../servicios/consejo-popular.service';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
+import { ReplaySubject } from 'rxjs/index';
+import { ConsejoPopular, Parcela, TipoUso } from '../../../modelo';
+import { TipoUsoService } from '../../../servicios/tipo-uso.service';
+import { MensajeError } from '../../../mensaje/window.mensaje';
+import { TramiteService } from '../../../servicios/tramite.service';
 
 @Component({
-  selector: 'app-actu-parcela-window',
-  templateUrl: './actu-parcela-window.component.html',
-  styleUrls: ['./actu-parcela-window.component.css']
+    selector: 'app-actu-parcela-window',
+    templateUrl: './actu-parcela-window.component.html',
+    styleUrls: ['./actu-parcela-window.component.css']
 })
 export class ActuParcelaWindowComponent implements OnInit {
     isLoadingResults = false;
-    parcela:Parcela;
-    idParcela:number
-    numExp:number;
+    parcela: Parcela;
+    idParcela: number
+    numExp: number;
     formParcela: FormGroup;
     insertar = false;
     consejoPopulares: ConsejoPopular[] = [];
-    tiposDeUso:TipoUso[] = [];
+    tiposDeUso: TipoUso[] = [];
 
     public consejoPopularFiltrados: ReplaySubject<ConsejoPopular[]> = new ReplaySubject<ConsejoPopular[]>(1);
     public tiposDeUsoFiltrados: ReplaySubject<TipoUso[]> = new ReplaySubject<TipoUso[]>(1);
 
-    constructor(public dialogRef: MatDialogRef<ActuParcelaWindowComponent>, @Inject(MAT_DIALOG_DATA){parcela}: Parcela, @Inject(MAT_DIALOG_DATA){numExp}, private service:TramiteService, private consejoPopularService: ConsejoPopularService, private tipodeUsoService: TipoUsoService, private dialog:MatDialog) {
+    constructor(public dialogRef: MatDialogRef<ActuParcelaWindowComponent>, @Inject(MAT_DIALOG_DATA) parcela: Parcela, @Inject(MAT_DIALOG_DATA){numExp}, private service: TramiteService, private consejoPopularService: ConsejoPopularService, private tipodeUsoService: TipoUsoService, private dialog: MatDialog) {
         this.parcela = parcela;
         this.insertar = this.parcela.id === null;
         this.idParcela = this.parcela.id;
@@ -52,10 +50,6 @@ export class ActuParcelaWindowComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log(this.numExp);
-
-        console.log(this.formParcela.value);
-
         this.consejoPopularService.listarTodasConsejoPopular().subscribe(resp => {
             if (resp.body.success) {
                 this.consejoPopulares = resp.body.elementos;
@@ -74,12 +68,12 @@ export class ActuParcelaWindowComponent implements OnInit {
     insertarParcela(): void {
         if (this.formParcela.valid) {
             this.isLoadingResults = true;
-            this.service.modifParcela(this.idParcela,this.formParcela.value, this.numExp).subscribe(resp => {
+            this.service.modifParcela(this.idParcela, this.formParcela.value, this.numExp).subscribe(resp => {
                 let appResp = resp.body;
                 if (appResp.success) {
                     this.dialogRef.close(resp.body);
                 } else {
-                    this.dialog.open(MensajeError, {width: "400px", data: {mensaje: appResp.msg}});
+                    this.dialog.open(MensajeError, {width: '400px', data: {mensaje: appResp.msg}});
                 }
                 this.isLoadingResults = false;
             });
@@ -96,7 +90,7 @@ export class ActuParcelaWindowComponent implements OnInit {
         return inicio && fin && inicio.id === fin.id;
     }
 
-    compararTiposDeUso(inicio:TipoUso, fin: TipoUso) {
+    compararTiposDeUso(inicio: TipoUso, fin: TipoUso) {
         return inicio && fin && inicio.id === fin.id;
     }
 
