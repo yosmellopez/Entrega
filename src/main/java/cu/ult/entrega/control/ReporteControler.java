@@ -25,10 +25,8 @@ public class ReporteControler {
 
     @RequestMapping(value = "/reporteConcilMedicion", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView investigacion() {
-        Optional<Solicitud> optional = solicitudRepositorio.findAll().parallelStream().findFirst();
         ModelMap map = new ModelMap();
         map.put("datasource", solicitudRepositorio.findAll());
-//        map.put("solicitud", optional.get());
         map.put("format", "pdf");
         return new ModelAndView("reporteConcilMedicion", map);
 
