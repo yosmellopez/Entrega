@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource} from '@angular/material';
 import {LineaDeProduccion, Parcela, Persona, Solicitud} from '../../../modelo';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
     selector: 'app-detalles-solicitud',
@@ -18,7 +18,7 @@ export class DetallesSolicitudComponent implements OnInit {
     lineasDeProduccion: LineaDeProduccion[] = [];
 
 
-    constructor(public dialogRef: MatDialogRef<DetallesSolicitudComponent>, @Inject(MAT_DIALOG_DATA){id, numExpediente, persona, parcelas, lineasDeProduccion}: Solicitud) {
+    constructor(public dialogRef: MatDialogRef<DetallesSolicitudComponent>, @Inject(MAT_DIALOG_DATA) {id, numExpediente, persona, parcelas, lineasDeProduccion}: Solicitud) {
         this.parcelas = parcelas;
         this.solicitante[0] = persona;
         this.lineasDeProduccion = lineasDeProduccion;

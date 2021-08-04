@@ -1,14 +1,17 @@
-import {Component, OnInit, Inject, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {MunicipioService} from "../../servicios/municipio.service";
 import {Municipio} from "../../modelo";
 
-import {MatDialog, MatPaginator, MatSort, MatTable, MatTableDataSource} from "@angular/material";
 import {Confirm, Information} from "../../mensaje/window.mensaje";
 import {SelectionModel} from "@angular/cdk/collections";
-import {merge} from "rxjs/index";
+import {merge} from "rxjs";
 import {catchError, map, startWith, switchMap} from "rxjs/internal/operators";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {MunicipioWindowComponent} from "./municipio-window/municipio-window.component";
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
     selector: 'app-Municipio',

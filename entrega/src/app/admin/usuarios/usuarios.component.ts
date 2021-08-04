@@ -1,18 +1,21 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatPaginator, MatSort, MatTable, MatTableDataSource} from "@angular/material";
 import {catchError, map, startWith, switchMap} from "rxjs/internal/operators";
-import {Municipio, Usuario} from "../../modelo";
+import {Usuario} from "../../modelo";
 import {Confirm, Information} from "../../mensaje/window.mensaje";
-import {merge} from "rxjs/index";
+import {merge} from "rxjs";
 import {SelectionModel} from "@angular/cdk/collections";
 import {UsuarioService} from "../../servicios/usuario.service";
 import {UsuarioWindowComponent} from "./usuario-window/usuario-window.component";
 import {animate, state, style, transition, trigger} from "@angular/animations";
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-usuarios',
-  templateUrl: './usuarios.component.html',
-  styleUrls: ['./usuarios.component.css'],
+    selector: 'app-usuarios',
+    templateUrl: './usuarios.component.html',
+    styleUrls: ['./usuarios.component.css'],
     animations: [
         trigger('detailExpand', [
             state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
@@ -26,7 +29,7 @@ export class UsuariosComponent implements OnInit {
     dataSource: MatTableDataSource<Usuario> = new MatTableDataSource<Usuario>();
     total: number = 0;
     pageSize: number = 10;
-    displayedColumns = ['index', 'email', 'name', 'lastname','rol', 'acciones'];
+    displayedColumns = ['index', 'email', 'name', 'lastname', 'rol', 'acciones'];
     selection = new SelectionModel<Usuario>(true, []);
     url: string = '';
     nombre: string = '';

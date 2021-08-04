@@ -1,7 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {MatDialog, MatPaginator, MatSort, MatTable, MatTableDataSource} from "@angular/material";
-import {MunicipioWindowComponent} from "../../admin/municipio/municipio-window/municipio-window.component";
 import {Information} from "../../mensaje/window.mensaje";
 import {catchError, map, startWith, switchMap} from "rxjs/internal/operators";
 import {SelectionModel} from "@angular/cdk/collections";
@@ -9,11 +7,15 @@ import {Regulacion} from "../../modelo";
 import {RegulacionService} from "../../servicios/regulacion.service";
 import {merge} from "rxjs/index";
 import {RegulacionWindowComponent} from "./regulacion-window/regulacion-window.component";
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-regulacion',
-  templateUrl: './regulacion.component.html',
-  styleUrls: ['./regulacion.component.css'],
+    selector: 'app-regulacion',
+    templateUrl: './regulacion.component.html',
+    styleUrls: ['./regulacion.component.css'],
     animations: [
         trigger('detailExpand', [
             state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
@@ -33,7 +35,6 @@ export class RegulacionComponent implements OnInit {
     nombre: string = '';
     resultsLength = 0;
     isLoadingResults = true;
-    isRateLimitReached = false;
     expandedElement: Regulacion;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -77,7 +78,7 @@ export class RegulacionComponent implements OnInit {
 
     abrirVentana() {
         let dialogRef = this.dialog.open(RegulacionWindowComponent, {
-            width: '400px', disableClose: true, data: new Regulacion(null,''),
+            width: '400px', disableClose: true, data: new Regulacion(null, ''),
         });
 
         dialogRef.afterClosed().subscribe(result => {
@@ -92,7 +93,7 @@ export class RegulacionComponent implements OnInit {
         });
     }
 
-    editarRegulacion(event: Event, regulacion:Regulacion): void {
+    editarRegulacion(event: Event, regulacion: Regulacion): void {
         event.stopPropagation();
         let editDialogRef = this.dialog.open(RegulacionWindowComponent, {
             width: '400px', data: regulacion, disableClose: true

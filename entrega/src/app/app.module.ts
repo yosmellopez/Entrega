@@ -16,15 +16,11 @@ import {LoginComponent} from './components/login/login.component';
 import {AppRoutingModule} from "./app-routing";
 import {UsuarioComponent} from "./usuario/usuario.component";
 import {AdminComponent} from "./admin/admin.component";
-import {HeaderComponent} from "./layout/header/header.component";
 import {PipesModule} from "./pipes/pipes.module";
-import {CentroComponent} from './layout/centro/centro.component';
 import {DateFormat} from "./modelo";
-import {DateAdapter} from "@angular/material";
-import {AdminGuard} from "./guards/admin.guard";
-import {UserRouteAccessService} from "./guards/user-route-access-service";
 import {RegistradorComponent} from "./registrador/registrador.component";
-
+import {DateAdapter} from '@angular/material/core';
+import {LayoutModule} from './layout/layout.module';
 
 
 @NgModule({
@@ -36,8 +32,6 @@ import {RegistradorComponent} from "./registrador/registrador.component";
         LoginComponent,
         UsuarioComponent,
         AdminComponent,
-        HeaderComponent,
-        CentroComponent,
         RegistradorComponent
     ],
     imports: [
@@ -51,6 +45,7 @@ import {RegistradorComponent} from "./registrador/registrador.component";
         FormsModule,
         MensajeModule,
         PipesModule,
+        LayoutModule
     ],
     providers: [{provide: DateAdapter, useClass: DateFormat}],
     bootstrap: [AppComponent],

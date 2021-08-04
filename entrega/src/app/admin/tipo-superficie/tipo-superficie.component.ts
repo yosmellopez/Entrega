@@ -1,13 +1,16 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatPaginator, MatSort, MatTable, MatTableDataSource} from "@angular/material";
 import {SelectionModel} from "@angular/cdk/collections";
 import {TipoSuperficieService} from "../../servicios/tipo-superficie.service";
 import {catchError, map, startWith, switchMap} from "rxjs/internal/operators";
-import {merge} from "rxjs/index";
+import {merge} from "rxjs";
 import {Confirm, Information} from "../../mensaje/window.mensaje";
 import {TipoSuperficieWindowComponent} from "./tipo-de-superficie-window/tipo-superficie-window.component";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {TipoSuperficie} from "../../modelo";
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
     selector: 'app-tipo-de-superficie',

@@ -1,12 +1,12 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ConsejoPopularService } from '../../../servicios/consejo-popular.service';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
-import { ReplaySubject } from 'rxjs/index';
-import { ConsejoPopular, Parcela, TipoUso } from '../../../modelo';
-import { TipoUsoService } from '../../../servicios/tipo-uso.service';
-import { MensajeError } from '../../../mensaje/window.mensaje';
-import { TramiteService } from '../../../servicios/tramite.service';
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {ConsejoPopularService} from '../../../servicios/consejo-popular.service';
+import {ReplaySubject} from 'rxjs';
+import {ConsejoPopular, Parcela, TipoUso} from '../../../modelo';
+import {TipoUsoService} from '../../../servicios/tipo-uso.service';
+import {MensajeError} from '../../../mensaje/window.mensaje';
+import {TramiteService} from '../../../servicios/tramite.service';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
     selector: 'app-actu-parcela-window',
@@ -26,7 +26,12 @@ export class ActuParcelaWindowComponent implements OnInit {
     public consejoPopularFiltrados: ReplaySubject<ConsejoPopular[]> = new ReplaySubject<ConsejoPopular[]>(1);
     public tiposDeUsoFiltrados: ReplaySubject<TipoUso[]> = new ReplaySubject<TipoUso[]>(1);
 
-    constructor(public dialogRef: MatDialogRef<ActuParcelaWindowComponent>, @Inject(MAT_DIALOG_DATA) parcela: Parcela, @Inject(MAT_DIALOG_DATA){numExp}, private service: TramiteService, private consejoPopularService: ConsejoPopularService, private tipodeUsoService: TipoUsoService, private dialog: MatDialog) {
+    constructor(public dialogRef: MatDialogRef<ActuParcelaWindowComponent>, @Inject(MAT_DIALOG_DATA) parcela: Parcela,
+                @Inject(MAT_DIALOG_DATA) {numExp},
+                private service: TramiteService,
+                private consejoPopularService: ConsejoPopularService,
+                private tipodeUsoService: TipoUsoService,
+                private dialog: MatDialog) {
         this.parcela = parcela;
         this.insertar = this.parcela.id === null;
         this.idParcela = this.parcela.id;

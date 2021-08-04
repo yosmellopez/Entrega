@@ -1,26 +1,18 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { TramiteService } from '../../servicios/tramite.service';
-import { MatDialog, MatTabGroup, MatTableDataSource } from '@angular/material';
-import {
-    Bienhechuria,
-    LineaDeProduccion,
-    Parcela,
-    ParcelaBienhechuria,
-    Persona,
-    Regulacion,
-    Solicitud
-} from '../../modelo';
-import { RegulacionService } from '../../servicios/regulacion.service';
-import { BienhechuriaService } from '../../servicios/bienhechuria.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Information, MensajeError } from '../../mensaje/window.mensaje';
-import { PersonaWindowsComponent } from '../../admin/solicitante/persona-windows/persona-windows.component';
-import { BienhechuriaWindowComponent } from '../bienhechurias/bienhechuria-window/bienhechuria-window.component';
-import { DetallesSolicitudComponent } from '../../admin/solicitud/detalles-solicitud/detalles-solicitud.component';
-import { PersonaDetallesComponent } from '../../admin/solicitante/persona-detalles/persona-detalles.component';
-import { ActuParcelaWindowComponent } from './actu-parcela-window/actu-parcela-window.component';
-import { AprobarDenegarLPWindowComponent } from './aprobar-denegar-lpwindow/aprobar-denegar-lpwindow.component';
-import { AprobarDenegarSolicitudWindowsComponent } from './aprobar-denegar-solicitud-windows/aprobar-denegar-solicitud-windows.component';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {TramiteService} from '../../servicios/tramite.service';
+import {Bienhechuria, LineaDeProduccion, Parcela, ParcelaBienhechuria, Persona, Regulacion, Solicitud} from '../../modelo';
+import {RegulacionService} from '../../servicios/regulacion.service';
+import {BienhechuriaService} from '../../servicios/bienhechuria.service';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Information, MensajeError} from '../../mensaje/window.mensaje';
+import {BienhechuriaWindowComponent} from '../bienhechurias/bienhechuria-window/bienhechuria-window.component';
+import {PersonaDetallesComponent} from '../../admin/solicitante/persona-detalles/persona-detalles.component';
+import {ActuParcelaWindowComponent} from './actu-parcela-window/actu-parcela-window.component';
+import {AprobarDenegarLPWindowComponent} from './aprobar-denegar-lpwindow/aprobar-denegar-lpwindow.component';
+import {AprobarDenegarSolicitudWindowsComponent} from './aprobar-denegar-solicitud-windows/aprobar-denegar-solicitud-windows.component';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatTabGroup} from '@angular/material/tabs';
+import {MatDialog} from '@angular/material/dialog';
 
 export class ParcelaElement {
     idParcela: number;

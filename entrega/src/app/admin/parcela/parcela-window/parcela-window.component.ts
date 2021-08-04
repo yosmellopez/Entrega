@@ -1,12 +1,12 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ConsejoPopular, Parcela, TipoUso} from '../../../modelo';
-import { ConsejoPopularService } from '../../../servicios/consejo-popular.service';
-import { TipoUsoService } from '../../../servicios/tipo-uso.service';
-import {ReplaySubject} from "rxjs/index";
+import {ConsejoPopularService} from '../../../servicios/consejo-popular.service';
+import {TipoUsoService} from '../../../servicios/tipo-uso.service';
+import {ReplaySubject} from "rxjs";
 import {MensajeError} from "../../../mensaje/window.mensaje";
 import {ParcelaService} from "../../../servicios/parcela.service";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
     selector: 'app-parcela-window',
@@ -15,16 +15,30 @@ import {ParcelaService} from "../../../servicios/parcela.service";
 })
 export class ParcelaWindow implements OnInit {
     isLoadingResults = false;
-    idParcela:number
+    idParcela: number
     formParcela: FormGroup;
     insertar = false;
     consejoPopulares: ConsejoPopular[] = [];
-    tiposDeUso:TipoUso[] = [];
+    tiposDeUso: TipoUso[] = [];
 
     public consejoPopularFiltrados: ReplaySubject<ConsejoPopular[]> = new ReplaySubject<ConsejoPopular[]>(1);
     public tiposDeUsoFiltrados: ReplaySubject<TipoUso[]> = new ReplaySubject<TipoUso[]>(1);
 
-    constructor(public dialogRef: MatDialogRef<ParcelaWindow>, @Inject(MAT_DIALOG_DATA){id, consejoPopular, tipoUso, zonaCatastral, parcela, divicion, direccion, area, limiteN, limiteS, limiteE, limiteW, condicActual}: Parcela,private service:ParcelaService, private consejoPopularService: ConsejoPopularService, private tipodeUsoService: TipoUsoService, private dialog:MatDialog) {
+    constructor(public dialogRef: MatDialogRef<ParcelaWindow>, @Inject(MAT_DIALOG_DATA) {
+        id,
+        consejoPopular,
+        tipoUso,
+        zonaCatastral,
+        parcela,
+        divicion,
+        direccion,
+        area,
+        limiteN,
+        limiteS,
+        limiteE,
+        limiteW,
+        condicActual
+    }: Parcela, private service: ParcelaService, private consejoPopularService: ConsejoPopularService, private tipodeUsoService: TipoUsoService, private dialog: MatDialog) {
         this.insertar = id === null;
         this.idParcela = id;
 
@@ -97,7 +111,7 @@ export class ParcelaWindow implements OnInit {
         return inicio && fin && inicio.id === fin.id;
     }
 
-    compararTiposDeUso(inicio:TipoUso, fin: TipoUso) {
+    compararTiposDeUso(inicio: TipoUso, fin: TipoUso) {
         return inicio && fin && inicio.id === fin.id;
     }
 

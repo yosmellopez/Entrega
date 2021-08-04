@@ -1,11 +1,9 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { LineaDeProduccion, PersonaParcelas } from '../../../modelo';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
-import { EstadoParcelaWindowComponent } from '../estado-parcela-window/estado-parcela-window.component';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { LineaProducElement } from '../tramite.component';
-import { MensajeError } from '../../../mensaje/window.mensaje';
-import { TramiteService } from '../../../servicios/tramite.service';
+import {Component, Inject, OnInit} from '@angular/core';
+import {LineaDeProduccion} from '../../../modelo';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MensajeError} from '../../../mensaje/window.mensaje';
+import {TramiteService} from '../../../servicios/tramite.service';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
     selector: 'app-aprobar-denegar-lpwindow',
@@ -21,7 +19,7 @@ export class AprobarDenegarLPWindowComponent implements OnInit {
     lineaDeProduc: LineaDeProduccion;
     isLoadingResults = false;
 
-    constructor(public dialogRef: MatDialogRef<AprobarDenegarLPWindowComponent>, @Inject(MAT_DIALOG_DATA) lineaDeProduccion: LineaDeProduccion, @Inject(MAT_DIALOG_DATA){numExp}, private service: TramiteService, private dialog: MatDialog) {
+    constructor(public dialogRef: MatDialogRef<AprobarDenegarLPWindowComponent>, @Inject(MAT_DIALOG_DATA) lineaDeProduccion: LineaDeProduccion, @Inject(MAT_DIALOG_DATA) {numExp}, private service: TramiteService, private dialog: MatDialog) {
         this.numExpediente = numExp;
         this.lineaDeProduc = lineaDeProduccion;
         this.idLineaP = this.lineaDeProduc.id;

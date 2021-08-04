@@ -1,14 +1,14 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material";
 import {Bienhechuria} from "../../../modelo";
 import {BienhechuriaService} from "../../../servicios/bienhechuria.service";
 import {MensajeError} from "../../../mensaje/window.mensaje";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-bienhechuria-window',
-  templateUrl: './bienhechuria-window.component.html',
-  styleUrls: ['./bienhechuria-window.component.css']
+    selector: 'app-bienhechuria-window',
+    templateUrl: './bienhechuria-window.component.html',
+    styleUrls: ['./bienhechuria-window.component.css']
 })
 export class BienhechuriaWindowComponent implements OnInit {
 
@@ -16,7 +16,7 @@ export class BienhechuriaWindowComponent implements OnInit {
     idBienhechuria: number;
     form: FormGroup;
     insertar = false;
-    bienhechuria:Bienhechuria;
+    bienhechuria: Bienhechuria;
 
 
     constructor(public dialogRef: MatDialogRef<BienhechuriaWindowComponent>, @Inject(MAT_DIALOG_DATA) {id, nombre}: Bienhechuria,

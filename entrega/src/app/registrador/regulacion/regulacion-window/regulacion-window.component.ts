@@ -1,23 +1,22 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {BienhechuriaWindowComponent} from "../../bienhechurias/bienhechuria-window/bienhechuria-window.component";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {BienhechuriaService} from "../../../servicios/bienhechuria.service";
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material";
 import {Bienhechuria, Regulacion} from "../../../modelo";
 import {MensajeError} from "../../../mensaje/window.mensaje";
 import {RegulacionService} from "../../../servicios/regulacion.service";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-regulacion-window',
-  templateUrl: './regulacion-window.component.html',
-  styleUrls: ['./regulacion-window.component.css']
+    selector: 'app-regulacion-window',
+    templateUrl: './regulacion-window.component.html',
+    styleUrls: ['./regulacion-window.component.css']
 })
 export class RegulacionWindowComponent implements OnInit {
     isLoadingResults = false;
     idRegulacion: number;
     form: FormGroup;
     insertar = false;
-    bienhechuria:Bienhechuria;
+    bienhechuria: Bienhechuria;
 
 
     constructor(public dialogRef: MatDialogRef<BienhechuriaWindowComponent>, @Inject(MAT_DIALOG_DATA) {id, regulacion}: Regulacion,

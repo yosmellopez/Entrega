@@ -8,8 +8,9 @@ import {CentroComponent} from "./centro/centro.component";
     imports: [
         CommonModule,
         RouterModule
-    ], exports: [HeaderComponent,CentroComponent],
-    declarations: [HeaderComponent,CentroComponent]
+    ],
+    exports: [HeaderComponent, CentroComponent],
+    declarations: [HeaderComponent, CentroComponent]
 })
 export class LayoutModule {
 }

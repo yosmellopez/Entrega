@@ -1,17 +1,11 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import {
-    FormBuilder,
-    FormControl,
-    FormGroup,
-    FormGroupDirective,
-    NgForm,
-    Validators
-} from '@angular/forms';
-import { ErrorStateMatcher, MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
-import { ReplaySubject } from 'rxjs/index';
-import { Rol, Usuario } from '../../../modelo';
-import { UsuarioService } from '../../../servicios/usuario.service';
-import { MensajeError } from '../../../mensaje/window.mensaje';
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import {ReplaySubject} from 'rxjs';
+import {Rol, Usuario} from '../../../modelo';
+import {UsuarioService} from '../../../servicios/usuario.service';
+import {MensajeError} from '../../../mensaje/window.mensaje';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {ErrorStateMatcher} from '@angular/material/core';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
     isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {

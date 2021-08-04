@@ -1,20 +1,21 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {MatDialog, MatPaginator, MatSort, MatTable, MatTableDataSource} from "@angular/material";
-import {MunicipioWindowComponent} from "../../admin/municipio/municipio-window/municipio-window.component";
-import {Confirm, Information} from "../../mensaje/window.mensaje";
+import {Information} from "../../mensaje/window.mensaje";
 import {catchError, map, startWith, switchMap} from "rxjs/internal/operators";
-import {Bienhechuria, Municipio} from "../../modelo";
+import {Bienhechuria} from "../../modelo";
 import {SelectionModel} from "@angular/cdk/collections";
-import {MunicipioService} from "../../servicios/municipio.service";
-import {merge} from "rxjs/index";
+import {merge} from "rxjs";
 import {BienhechuriaService} from "../../servicios/bienhechuria.service";
 import {BienhechuriaWindowComponent} from "./bienhechuria-window/bienhechuria-window.component";
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-bienhechurias',
-  templateUrl: './bienhechurias.component.html',
-  styleUrls: ['./bienhechurias.component.css'],
+    selector: 'app-bienhechurias',
+    templateUrl: './bienhechurias.component.html',
+    styleUrls: ['./bienhechurias.component.css'],
     animations: [
         trigger('detailExpand', [
             state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
@@ -34,7 +35,6 @@ export class BienhechuriasComponent implements OnInit {
     nombre: string = '';
     resultsLength = 0;
     isLoadingResults = true;
-    isRateLimitReached = false;
     expandedElement: Bienhechuria;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -93,7 +93,7 @@ export class BienhechuriasComponent implements OnInit {
         });
     }
 
-    editarBienhechuria(event: Event, bienhechuria:Bienhechuria): void {
+    editarBienhechuria(event: Event, bienhechuria: Bienhechuria): void {
         event.stopPropagation();
         let editDialogRef = this.dialog.open(BienhechuriaWindowComponent, {
             width: '400px', data: bienhechuria, disableClose: true

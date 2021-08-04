@@ -1,9 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Rol, RouteInfo, Usuario } from '../../modelo';
-import { APP_RUTAS } from '../../app-routing';
-import { AccountService } from '../../guards/account.service';
-import { RouterLink } from '@angular/router';
-import { forEach } from '@angular/router/src/utils/collection';
+import {Component, OnInit} from '@angular/core';
+import {RouteInfo, Usuario} from '../../modelo';
+import {APP_RUTAS} from '../../app-routing';
+import {AccountService} from '../../guards/account.service';
 
 export declare function notify(message, type);
 
