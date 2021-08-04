@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/entrega
+    username: postgres
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        temp:
+          use_jdbc_metadata_defaults: false
+  thymeleaf:
+    cache: false
+
+server:
+  port: 8060
+  servlet:
+    context-path: /Entrega
+
+application:
+  base64-secret: ODY5ZjEwZjhiMWRmMTNkY2JlNmQyMWI0YWE0ZDQzZTdiNGE0Yjc1OGVkMTFkMmQyYWEyMjU0MGU5MTlkYTg0MTY1ZGY1YTMxYjY2YzRhMmFjZTJlZDYwMjk2M2NlMzYyYzI3Y2U3MzBmNjM5NmUwODE2YTkwYmIxYjE1MWUxMDY=
+  refreshTokenExpTime: 1000
+  tokenExpirationTime: 1000
+  tokenIssuer: 1000
+  tokenSigningKey: 1000

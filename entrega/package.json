@@ -27,7 +27,6 @@
     "material-design-iconic-font": "^2.2.0",
     "material-design-icons": "^3.0.1",
     "ngx-mat-select-search": "^1.7.3",
-    "node-sass": "^4.12.0",
     "npm-check-updates": "^3.1.9",
     "roboto-fontface": "^0.10.0",
     "rxjs": "~6.5.2",
